@@ -1,3 +1,5 @@
+import { ContainerBuilder, MessageFlags, SeparatorBuilder, TextDisplayBuilder } from 'discord.js';
+import { BotClient } from '../../../bot/client';
 import { UserService } from '../../user/services/user.service';
 import { LogService } from '../../../shared/logs/logs.service';
 import { toParisDayYMD } from '../../../shared/time/day-split';
@@ -5,6 +7,8 @@ import { PayrollConfigRepository } from '../repositories/payroll-config.reposito
 import PayrollRunModel from '../models/payroll-run.model';
 
 const LOG_FEATURE = '💰 Paie';
+const ACCENT_COLOR = 0xf1c40f;
+const fmt = (n: number) => n.toLocaleString('fr-FR');
 
 export interface ActivityScore {
   userId: string;
@@ -68,7 +72,7 @@ export class PayrollService {
    * Le marqueur de semaine est posé avant tout versement : en cas de crash au milieu de
    * la paie, mieux vaut personne payé et un rattrapage manuel que tout le monde payé deux fois.
    */
-  static async run(scores: ActivityScore[]): Promise<Payslip[]> {
+  static async run(client: BotClient, scores: ActivityScore[]): Promise<Payslip[]> {
     const config = await PayrollConfigRepository.get();
     if (!config?.enabled) return [];
 
@@ -94,9 +98,10 @@ export class PayrollService {
       return [];
     }
 
-    for (const slip of payslips) {
+    for (const [index, slip] of payslips.entries()) {
       await UserService.updateUserMoney(slip.userId, slip.total, `Salaire ${weekKey}`, 'mint')
         .catch(err => console.error(`[Payroll] Versement impossible pour ${slip.userId}:`, err));
+      await this.sendPayslip(client, slip, index + 1, payslips.length);
     }
 
     const top3 = payslips
@@ -110,5 +115,34 @@ export class PayrollService {
     ).catch(() => {});
 
     return payslips;
+  }
+
+  private static async sendPayslip(
+    client: BotClient,
+    slip: Payslip,
+    rank: number,
+    qualified: number,
+  ): Promise<void> {
+    const user = await client.users.fetch(slip.userId).catch(() => null);
+    if (!user) return;
+
+    const container = new ContainerBuilder()
+      .setAccentColor(ACCENT_COLOR)
+      .addTextDisplayComponents(new TextDisplayBuilder().setContent(
+        `# 💰 Ta paie de la semaine\n-# ${fmt(slip.points)} points d'activité · ${rank}ᵉ sur ${qualified} qualifié${qualified > 1 ? 's' : ''}`,
+      ))
+      .addSeparatorComponents(new SeparatorBuilder().setDivider(true))
+      .addTextDisplayComponents(new TextDisplayBuilder().setContent(
+        [
+          `Base fixe — **${fmt(slip.base)}** 💰`,
+          `Part d'activité — **${fmt(slip.variable)}** 💰`,
+          '',
+          `## **${fmt(slip.total)}** 💰 versés`,
+          '-# Voc et messages comptent · rendez-vous lundi prochain',
+        ].join('\n'),
+      ));
+
+    await user.send({ components: [container], flags: MessageFlags.IsComponentsV2 })
+      .catch(() => {});
   }
 }
