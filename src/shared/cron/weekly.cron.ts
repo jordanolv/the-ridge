@@ -19,7 +19,7 @@ const CRON_EXPRESSION = '0 0 0 * * 1'; // lundi minuit Paris
 export async function runWeekly(client: BotClient): Promise<void> {
   const scores = await ActivityRolesService.collectAndReset();
 
-  await PayrollService.run(scores).catch(err => console.error('[Weekly] Erreur paie:', err));
+  await PayrollService.run(client, scores).catch(err => console.error('[Weekly] Erreur paie:', err));
   await ActivityRolesService.apply(client, scores).catch(err => console.error('[Weekly] Erreur rôles:', err));
   await WeeklyRecapService.post(client, scores).catch(err => console.error('[Weekly] Erreur récap:', err));
 }
