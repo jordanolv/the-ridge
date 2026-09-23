@@ -11,6 +11,7 @@ import UserModel from '../../user/models/user.model';
 import AppConfigModel from '../../discord/models/app-config.model';
 import { getGuildId } from '../../../shared/guild';
 import { LevelingService } from '../../leveling/services/leveling.service';
+import { awardExpeditions } from '../../peak-hunters/services/expedition.service';
 
 export interface CreateEventInput {
   name: string;
@@ -29,6 +30,7 @@ export interface EndEventInput {
   attendedParticipants: string[];
   rewardAmount?: number;
   xpAmount?: number;
+  expeditionAmount?: number;
 }
 
 export class PartyService {
@@ -205,10 +207,11 @@ export class PartyService {
       attendedParticipants: data.attendedParticipants,
       rewardAmount: data.rewardAmount ?? 0,
       xpAmount: data.xpAmount ?? 0,
+      expeditionAmount: data.expeditionAmount ?? 0,
     });
 
     if (data.attendedParticipants.length > 0) {
-      await this.distributeRewards(client, updated, data.attendedParticipants, data.rewardAmount ?? 0, data.xpAmount ?? 0);
+      await this.distributeRewards(client, updated, data.attendedParticipants, data.rewardAmount ?? 0, data.xpAmount ?? 0, data.expeditionAmount ?? 0);
     }
 
     try {
@@ -231,6 +234,7 @@ export class PartyService {
     const rewardLine = [
       data.rewardAmount ? `💰 ${data.rewardAmount}/pers` : null,
       data.xpAmount ? `⭐ ${data.xpAmount} XP/pers` : null,
+      data.expeditionAmount ? `🏔️ ${data.expeditionAmount} expédition(s)/pers` : null,
     ].filter(Boolean).join(' · ') || 'Aucune récompense';
     const logMessage = `**${event.eventInfo.name}** — ${event.eventInfo.game}\n` +
       `👥 Présents : ${attendedList}\n${rewardLine}`;
@@ -247,6 +251,7 @@ export class PartyService {
     attendedParticipants: string[],
     rewardAmount: number,
     xpAmount: number,
+    expeditionAmount: number,
   ): Promise<void> {
     await Promise.all(attendedParticipants.map(async participantId => {
       try {
@@ -272,12 +277,16 @@ export class PartyService {
         if (xpAmount > 0) {
           await LevelingService.giveXpDirectly(client, participantId, xpAmount);
         }
+
+        if (expeditionAmount > 0) {
+          await awardExpeditions(participantId, expeditionAmount);
+        }
       } catch (err) {
         console.error(`[Party] Erreur distribution ${participantId}:`, err);
       }
     }));
 
-    await this.sendRewardsEmbed(client, event, attendedParticipants, rewardAmount, xpAmount);
+    await this.sendRewardsEmbed(client, event, attendedParticipants, rewardAmount, xpAmount, expeditionAmount);
   }
 
   private static async sendRewardsEmbed(
@@ -286,6 +295,7 @@ export class PartyService {
     attendedParticipants: string[],
     moneyPerParticipant: number,
     xpPerParticipant: number,
+    expeditionsPerParticipant: number,
   ): Promise<void> {
     try {
       if (!event.discord.threadId) return;
@@ -303,6 +313,7 @@ export class PartyService {
       const rewardParts: string[] = [];
       if (moneyPerParticipant > 0) rewardParts.push(`💰 **${moneyPerParticipant}** / personne`);
       if (xpPerParticipant > 0) rewardParts.push(`⭐ **${xpPerParticipant} XP** / personne`);
+      if (expeditionsPerParticipant > 0) rewardParts.push(`🏔️ **${expeditionsPerParticipant}** expédition${expeditionsPerParticipant > 1 ? 's' : ''} / personne`);
 
       const container = new ContainerBuilder()
         .setAccentColor(color)
