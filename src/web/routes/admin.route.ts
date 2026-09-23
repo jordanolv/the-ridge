@@ -667,11 +667,13 @@ export default function adminRoute(client: BotClient): Router {
     const attended = Array.isArray(body.attendedIds) ? body.attendedIds.filter((x: unknown) => typeof x === 'string') : [];
     const money = parseInt(String(body.money ?? '0'), 10) || 0;
     const xp = parseInt(String(body.xp ?? '0'), 10) || 0;
+    const expeditions = parseInt(String(body.expeditions ?? '0'), 10) || 0;
     try {
       await PartyService.endEvent(client, String(req.params.id), {
         attendedParticipants: attended,
         rewardAmount: money > 0 ? money : undefined,
         xpAmount: xp > 0 ? xp : undefined,
+        expeditionAmount: expeditions > 0 ? expeditions : undefined,
       });
       res.json({ ok: true });
     } catch (err) {

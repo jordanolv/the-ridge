@@ -71,6 +71,9 @@ export class PartyEvent {
   xpAmount?: number;
 
   @prop()
+  expeditionAmount?: number;
+
+  @prop()
   startedAt?: Date;
 
   @prop()

@@ -1012,6 +1012,7 @@ async function loadParty() {
             <div class="row" style="margin-top:10px;justify-content:flex-start;align-items:flex-end">
               <label class="muted">💰 / présent<input id="endMoney-${e.id}" class="small" style="display:block;margin-top:4px" type="number" min="0" value="0"></label>
               <label class="muted">XP / présent<input id="endXp-${e.id}" class="small" style="display:block;margin-top:4px" type="number" min="0" value="0"></label>
+              <label class="muted">🏔️ expé / présent<input id="endExpe-${e.id}" class="small" style="display:block;margin-top:4px" type="number" min="0" value="0"></label>
               <button class="mini success" onclick="endParty('${e.id}')">Confirmer la clôture</button>
             </div>
           </div>
@@ -1050,7 +1051,7 @@ async function endParty(id) {
   try {
     await api(`/api/admin/party/events/${id}/end`, {
       method: 'POST',
-      body: JSON.stringify({ attendedIds, money: $('endMoney-' + id).value, xp: $('endXp-' + id).value }),
+      body: JSON.stringify({ attendedIds, money: $('endMoney-' + id).value, xp: $('endXp-' + id).value, expeditions: $('endExpe-' + id).value }),
     });
     toast('Soirée clôturée 🏁');
     await loadParty();
