@@ -113,23 +113,57 @@ export interface MountainDropResult {
   expeditionsSummary: string;
 }
 
-export async function dropMountain(userId: string): Promise<MountainDropResult | null> {
-  const tier = rollExpeditionTier(EXPEDITION_TIER_CHANCES);
+export interface CardDraw {
+  mountain: MountainInfo;
+  rarity: MountainRarity;
+  isDuplicate: boolean;
+  fragmentsGained: number;
+  expeditionsAwarded: number;
+  expeditionsSummary: string;
+}
+
+/**
+ * Tire une montagne, la débloque, et convertit le doublon en fragments.
+ * Point d'entrée unique de tout tirage de carte : expédition, pack, spawn.
+ */
+export async function drawCard(userId: string, tier: ExpeditionTier): Promise<CardDraw | null> {
   const mountain = MountainService.getRandomByTier(tier);
   if (!mountain) return null;
 
   const rarity = MountainService.getRarity(mountain);
-  const { emoji, label, fragmentsOnDuplicate } = RARITY_CONFIG[rarity];
-  const unlockResult = await UserMountainsRepository.unlock(userId, mountain.id, rarity);
-  const isDuplicate = unlockResult === null;
+  const { fragmentsOnDuplicate } = RARITY_CONFIG[rarity];
+  const isDuplicate = (await UserMountainsRepository.unlock(userId, mountain.id, rarity)) === null;
 
-  let expeditionsAwarded = 0;
-  let expeditionsSummary = '';
-  if (isDuplicate) {
-    const result = await addFragmentsAndAward(userId, fragmentsOnDuplicate);
-    expeditionsAwarded = result.expeditionsAwarded;
-    expeditionsSummary = result.summary;
+  if (!isDuplicate) {
+    return { mountain, rarity, isDuplicate: false, fragmentsGained: 0, expeditionsAwarded: 0, expeditionsSummary: '' };
   }
 
-  return { mountainLabel: mountain.mountainLabel, rarityEmoji: emoji, rarityLabel: label, image: mountain.image, isDuplicate, fragmentsGained: isDuplicate ? fragmentsOnDuplicate : 0, expeditionsAwarded, expeditionsSummary };
+  const { expeditionsAwarded, summary } = await addFragmentsAndAward(userId, fragmentsOnDuplicate);
+  return { mountain, rarity, isDuplicate: true, fragmentsGained: fragmentsOnDuplicate, expeditionsAwarded, expeditionsSummary: summary };
+}
+
+export async function drawCards(userId: string, tiers: ExpeditionTier[]): Promise<CardDraw[]> {
+  const cards: CardDraw[] = [];
+  for (const tier of tiers) {
+    const card = await drawCard(userId, tier);
+    if (card) cards.push(card);
+  }
+  return cards;
+}
+
+export async function dropMountain(userId: string): Promise<MountainDropResult | null> {
+  const card = await drawCard(userId, rollExpeditionTier(EXPEDITION_TIER_CHANCES));
+  if (!card) return null;
+
+  const { emoji, label } = RARITY_CONFIG[card.rarity];
+  return {
+    mountainLabel: card.mountain.mountainLabel,
+    rarityEmoji: emoji,
+    rarityLabel: label,
+    image: card.mountain.image,
+    isDuplicate: card.isDuplicate,
+    fragmentsGained: card.fragmentsGained,
+    expeditionsAwarded: card.expeditionsAwarded,
+    expeditionsSummary: card.expeditionsSummary,
+  };
 }

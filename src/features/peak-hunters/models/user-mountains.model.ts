@@ -31,6 +31,18 @@ export class UserMountains {
   @prop({ default: 0 })
   sommetTickets!: number;
 
+  /** Packs Sentier achetés en boutique, non ouverts */
+  @prop({ default: 0 })
+  sentierPacks!: number;
+
+  /** Packs Falaise achetés en boutique, non ouverts */
+  @prop({ default: 0 })
+  falaisePacks!: number;
+
+  /** Packs Sommet achetés en boutique, non ouverts */
+  @prop({ default: 0 })
+  sommetPacks!: number;
+
   /** Fragments accumulés (convertis en expéditions tous les 20) */
   @prop({ default: 0 })
   fragments!: number;

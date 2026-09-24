@@ -17,12 +17,16 @@ import {
 } from 'discord.js';
 import { BotClient } from '../../../../bot/client';
 import { UserMountainsRepository } from '../../repositories/user-mountains.repository';
-import { MountainService, MountainInfo } from '../../services/mountain.service';
-import { RARITY_CONFIG, FRAGMENTS_PER_EXPEDITION, EXPEDITION_TIER_CONFIG, EXPEDITION_TIER_RARITY_WEIGHTS } from '../../constants/peak-hunters.constants';
+import { MountainService, MountainInfo, drawCard, drawCards, type CardDraw } from '../../services/mountain.service';
+import { addCardSections, buildRarityOddsLine, highestRarity } from '../../services/card-render';
+import { PACK_CARDS } from '../../constants/peak-hunters.constants';
+import { packOpenId } from '../../services/pack.service';
+import type { IUserMountainsDoc } from '../../models/user-mountains.model';
+import { RARITY_CONFIG, FRAGMENTS_PER_EXPEDITION, EXPEDITION_TIER_CONFIG } from '../../constants/peak-hunters.constants';
 
 import type { MountainRarity, ExpeditionTier } from '../../types/peak-hunters.types';
 import { LogService } from '../../../../shared/logs/logs.service';
-import { awardExpeditions, formatExpeditionsLine, formatExpeditionsLineText } from '../../services/expedition.service';
+import { formatExpeditionsLine, formatExpeditionsLineText } from '../../services/expedition.service';
 
 // customId format : mountain:expe:open:<tier>:<userId>
 //                   mountain:expe:open5:<tier>:<userId>
@@ -34,29 +38,36 @@ const MULTI_EXPEDITION_COUNT = 5;
 const BAR_IMAGE_URL =
   'https://cdn.discordapp.com/attachments/685655650923053122/1493313723744518237/Nouveau_projet_7.png?ex=69de8448&is=69dd32c8&hm=e784bdf98db6660531cbf89dbd522b7d3da94558972c1b3dde033b1ac0718726&';
 
-function buildRarityImageUrl(imageUrl: string, rarity: MountainRarity): string {
-  const { color } = RARITY_CONFIG[rarity];
-  const colorHex = color.toString(16).padStart(6, '0');
-  const overlay = `l_text:Arial_1:.,co_rgb:${colorHex},b_rgb:${colorHex},g_south,y_0,fl_relative,w_1.0,h_0.09`;
-  return imageUrl.replace('/upload/', `/upload/${overlay}/`);
-}
-
 function buildFragmentBar(fragments: number): string {
   const filled = Math.round((fragments / FRAGMENTS_PER_EXPEDITION) * 10);
   return '🟧'.repeat(filled) + '⬛'.repeat(10 - filled);
 }
 
-function buildRarityOddsLine(tier: ExpeditionTier): string {
-  const weights = EXPEDITION_TIER_RARITY_WEIGHTS[tier];
-  const rarities: MountainRarity[] = ['common', 'rare', 'epic', 'legendary'];
-  const total = rarities.reduce((sum, r) => sum + weights[r], 0);
-  return rarities
-    .filter(r => weights[r] > 0)
-    .map(r => `${RARITY_CONFIG[r].emoji} ${Math.round((weights[r] / total) * 100)}%`)
-    .join('  ');
+const PACK_TIERS: ExpeditionTier[] = ['sentier', 'falaise', 'sommet'];
+
+/** Les packs achetés en boutique, retrouvables ici tant qu'ils ne sont pas ouverts. */
+function addPackSections(container: ContainerBuilder, userId: string, doc: IUserMountainsDoc): void {
+  const owned = PACK_TIERS.map(tier => ({ tier, count: UserMountainsRepository.packsOf(doc, tier) })).filter(p => p.count > 0);
+  if (owned.length === 0) return;
+
+  for (const { tier, count } of owned) {
+    const { emoji, label } = EXPEDITION_TIER_CONFIG[tier];
+    container.addSectionComponents(
+      new SectionBuilder()
+        .addTextDisplayComponents(
+          new TextDisplayBuilder().setContent(`### 🎁 Pack ${label} ${emoji} — **${count}** en stock\n-# ${PACK_CARDS[tier]} cartes · ${buildRarityOddsLine(tier)}`),
+        )
+        .setButtonAccessory(
+          new ButtonBuilder().setCustomId(packOpenId(tier, userId)).setLabel('Ouvrir').setEmoji('🎁').setStyle(ButtonStyle.Success),
+        ),
+    );
+  }
+
+  container.addSeparatorComponents(new SeparatorBuilder().setDivider(true));
 }
 
-export function buildExpeditionContainer(user: User, sentier: number, falaise: number, sommet: number, fragments: number): ContainerBuilder {
+export function buildExpeditionContainer(user: User, doc: IUserMountainsDoc): ContainerBuilder {
+  const { sentierTickets: sentier, falaiseTickets: falaise, sommetTickets: sommet, fragments } = doc;
   const { emoji: sEmoji, label: sLabel } = EXPEDITION_TIER_CONFIG.sentier;
   const { emoji: fEmoji, label: fLabel } = EXPEDITION_TIER_CONFIG.falaise;
   const { emoji: eEmoji, label: eLabel } = EXPEDITION_TIER_CONFIG.sommet;
@@ -69,7 +80,11 @@ export function buildExpeditionContainer(user: User, sentier: number, falaise: n
         .addTextDisplayComponents(new TextDisplayBuilder().setContent(`🧩 ${buildFragmentBar(fragments)}  \`${fragments}/${FRAGMENTS_PER_EXPEDITION}\``))
         .setThumbnailAccessory(new ThumbnailBuilder().setURL(user.displayAvatarURL({ size: 64 }))),
     )
-    .addSeparatorComponents(new SeparatorBuilder().setDivider(true))
+    .addSeparatorComponents(new SeparatorBuilder().setDivider(true));
+
+  addPackSections(container, user.id, doc);
+
+  container
     .addTextDisplayComponents(new TextDisplayBuilder().setContent(`### ${sEmoji} ${sLabel} — **${sentier}** disponible${sentier !== 1 ? 's' : ''}\n-# ${buildRarityOddsLine('sentier')}`))
 
   if (sentier > 0) container.addActionRowComponents(
@@ -151,15 +166,8 @@ function buildRevealEmbed(
     .setFooter({ text: `Expédition ${tierCfg.label}  |  ${formatExpeditionsLineText(sentier, falaise, sommet)}` });
 }
 
-interface ExpeditionDrawResult {
-  mountain: MountainInfo;
-  rarity: MountainRarity;
-  isDuplicate: boolean;
-  fragmentsGained: number;
-}
-
 function buildMultiRevealContainer(
-  results: ExpeditionDrawResult[],
+  results: CardDraw[],
   tier: ExpeditionTier,
   totalFragmentsGained: number,
   totalExpeditionsFromFragments: number,
@@ -186,14 +194,8 @@ function buildMultiRevealContainer(
   }
   headerLines.push(formatExpeditionsLine(sentier, falaise, sommet));
 
-  const rarityOrder: MountainRarity[] = ['common', 'rare', 'epic', 'legendary'];
-  const highestRarity = results.reduce<MountainRarity>((best, r) =>
-    rarityOrder.indexOf(r.rarity) > rarityOrder.indexOf(best) ? r.rarity : best,
-    'common',
-  );
-
   const container = new ContainerBuilder()
-    .setAccentColor(RARITY_CONFIG[highestRarity].color)
+    .setAccentColor(RARITY_CONFIG[highestRarity(results)].color)
     .addSectionComponents(
       new SectionBuilder()
         .addTextDisplayComponents(new TextDisplayBuilder().setContent(headerLines.join('\n')))
@@ -206,16 +208,7 @@ function buildMultiRevealContainer(
     )
     .addSeparatorComponents(new SeparatorBuilder().setDivider(true));
 
-  for (const r of results) {
-    const { emoji, label } = RARITY_CONFIG[r.rarity];
-    const statusLine = r.isDuplicate ? `-# 🔁 Double — +${r.fragmentsGained} 🧩` : `-# ✅ Nouvelle !`;
-    const flags = r.mountain.flags?.join(' ') ?? '';
-    container.addSectionComponents(
-      new SectionBuilder()
-        .addTextDisplayComponents(new TextDisplayBuilder().setContent(`${emoji} **${r.mountain.mountainLabel}** ${flags}\n-# ${label} · ${MountainService.getAltitude(r.mountain)}\n${statusLine}`))
-        .setThumbnailAccessory(new ThumbnailBuilder().setURL(buildRarityImageUrl(r.mountain.image, r.rarity))),
-    );
-  }
+  addCardSections(container, results);
 
   if (remaining > 0) {
     container.addSeparatorComponents(new SeparatorBuilder().setDivider(true));
@@ -251,34 +244,10 @@ async function openExpeditionMulti(interaction: ButtonInteraction, tier: Expedit
   const count = Math.min(available, MULTI_EXPEDITION_COUNT);
   await UserMountainsRepository.spendExpeditions(userId, count, tier);
 
-  const results: ExpeditionDrawResult[] = [];
-  let totalFragmentsGained = 0;
-  let totalExpeditionsFromFragments = 0;
-  let totalExpeditionsFromFragmentsSummary = '';
-
-  for (let i = 0; i < count; i++) {
-    const mountain = MountainService.getRandomByTier(tier);
-    if (!mountain) continue;
-
-    const rarity = MountainService.getRarity(mountain);
-    const { fragmentsOnDuplicate } = RARITY_CONFIG[rarity];
-    const unlockResult = await UserMountainsRepository.unlock(userId, mountain.id, rarity);
-    const isDuplicate = unlockResult === null;
-
-    let fragmentsGained = 0;
-    if (isDuplicate) {
-      const { expeditionsToAward } = await UserMountainsRepository.addFragments(userId, fragmentsOnDuplicate);
-      fragmentsGained = fragmentsOnDuplicate;
-      totalFragmentsGained += fragmentsGained;
-      if (expeditionsToAward > 0) {
-        const { summary } = await awardExpeditions(userId, expeditionsToAward);
-        totalExpeditionsFromFragments += expeditionsToAward;
-        totalExpeditionsFromFragmentsSummary += summary;
-      }
-    }
-
-    results.push({ mountain, rarity, isDuplicate, fragmentsGained });
-  }
+  const results = await drawCards(userId, Array<ExpeditionTier>(count).fill(tier));
+  const totalFragmentsGained = results.reduce((sum, r) => sum + r.fragmentsGained, 0);
+  const totalExpeditionsFromFragments = results.reduce((sum, r) => sum + r.expeditionsAwarded, 0);
+  const totalExpeditionsFromFragmentsSummary = results.map(r => r.expeditionsSummary).join('');
 
   const doc = await UserMountainsRepository.getOrCreate(userId);
   const tierCfg = EXPEDITION_TIER_CONFIG[tier];
@@ -307,40 +276,20 @@ async function openExpedition(interaction: ButtonInteraction, tier: ExpeditionTi
     return;
   }
 
-  const mountain = MountainService.getRandomByTier(tier);
-  if (!mountain) {
+  const card = await drawCard(userId, tier);
+  if (!card) {
     await interaction.editReply({ content: '❌ Erreur lors du tirage.' });
     return;
   }
 
-  const rarity = MountainService.getRarity(mountain);
-  const { fragmentsOnDuplicate } = RARITY_CONFIG[rarity];
-
-  const result = await UserMountainsRepository.unlock(userId, mountain.id, rarity);
-  const isDuplicate = result === null;
-
-  let fragmentsGained = 0;
-  let totalFragments = 0;
-  let expeditionsFromFragments = 0;
-  let expeditionsFromFragmentsSummary = '';
-
-  if (isDuplicate) {
-    const fragResult = await UserMountainsRepository.addFragments(userId, fragmentsOnDuplicate);
-    fragmentsGained = fragmentsOnDuplicate;
-    totalFragments = fragResult.newFragments;
-    if (fragResult.expeditionsToAward > 0) {
-      const { summary } = await awardExpeditions(userId, fragResult.expeditionsToAward);
-      expeditionsFromFragments = fragResult.expeditionsToAward;
-      expeditionsFromFragmentsSummary = summary;
-    }
-  }
+  const { mountain, rarity, isDuplicate, fragmentsGained, expeditionsAwarded: expeditionsFromFragments, expeditionsSummary: expeditionsFromFragmentsSummary } = card;
 
   const doc = await UserMountainsRepository.getOrCreate(userId);
   const tierCfg = EXPEDITION_TIER_CONFIG[tier];
   const remaining = tier === 'falaise' ? doc.falaiseTickets : tier === 'sommet' ? doc.sommetTickets : doc.sentierTickets;
 
   const embed = buildRevealEmbed(
-    mountain, rarity, tier, isDuplicate, fragmentsGained, totalFragments,
+    mountain, rarity, tier, isDuplicate, fragmentsGained, doc.fragments,
     doc.sentierTickets, doc.falaiseTickets, doc.sommetTickets, expeditionsFromFragments, expeditionsFromFragmentsSummary, interaction.user,
   );
 
@@ -388,6 +337,6 @@ export async function executeExpedition(interaction: ChatInputCommandInteraction
   await interaction.deferReply();
   const userId = interaction.user.id;
   const doc = await UserMountainsRepository.getOrCreate(userId);
-  const container = buildExpeditionContainer(interaction.user, doc.sentierTickets, doc.falaiseTickets, doc.sommetTickets, doc.fragments);
+  const container = buildExpeditionContainer(interaction.user, doc);
   await interaction.editReply({ components: [container], flags: MessageFlags.IsComponentsV2 });
 }
