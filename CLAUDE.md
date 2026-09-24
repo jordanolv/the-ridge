@@ -215,6 +215,9 @@ sont pas déductibles du code.
 Tout mouvement d'argent passe par `LogService.economy` avec le bon `flow`
 (`mint` | `transfer` | `burn`), sinon la page Économie ment.
 
+Le catalogue de la boutique, ses prix et ce qui a déjà été écarté sont dans
+[`docs/shop.md`](docs/shop.md) — à lire avant d'ajouter un article.
+
 ## Peak Hunters (montagnes)
 
 Dossier `src/features/peak-hunters/` — la feature s'appelait `mountain`, les customId

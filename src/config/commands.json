@@ -29,6 +29,11 @@
           "name": "daily",
           "description": "Réclamez votre récompense quotidienne (argent & XP aléatoires)",
           "usage": ""
+        },
+        {
+          "name": "shop",
+          "description": "Achète des cosmétiques et des packs avec tes RidgeCoins",
+          "usage": ""
         }
       ]
     },

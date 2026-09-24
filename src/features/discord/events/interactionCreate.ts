@@ -50,6 +50,8 @@ import { EnigmeService } from '../../arcade/enigme/services/enigme.service';
 import { ENIGME_BUTTON_ID, ENIGME_HINT_BUTTON_ID, ENIGME_MODAL_ID, ENIGME_REVEAL_BUTTON_ID } from '../../arcade/enigme/constants/enigme.constants';
 import { QuizService, QUIZ_BUTTON_PREFIX, QUIZ_THEME_PREFIX } from '../../quiz/services/quiz.service';
 import { PersonalityTestService, PTEST_BUTTON_PREFIX } from '../../personality-test/services/personality-test.service';
+import { handleShopButton, handleShopSelect, SHOP_PREFIX } from '../../shop/events/shop-interactions';
+import { handlePackButton, PACK_BUTTON_PREFIX } from '../../peak-hunters/services/pack.service';
 import { isSilentDiscordError } from '../../../shared/utils/discord-errors';
 const PROFILE_MODAL_ID = 'profile-config-modal';
 
@@ -115,12 +117,16 @@ export default {
           await handleHomeButton(interaction, client);
         } else if (interaction.customId.startsWith('mountain:expe:')) {
           await handleExpeditionButton(interaction, client);
+        } else if (interaction.customId.startsWith(PACK_BUTTON_PREFIX + ':')) {
+          await handlePackButton(interaction);
         } else if (interaction.customId.startsWith(SPAWN_BUTTON_PREFIX + ':')) {
           await SpawnService.handleClaim(interaction, client);
         } else if (interaction.customId.startsWith(VOICE_CHECK_BUTTON_PREFIX + ':')) {
           await PeakHuntersPlugin.handleVoiceCheck(interaction);
         } else if (interaction.customId.startsWith(INV_BUTTON_PREFIX + ':')) {
           await handleInventaireButton(interaction, client);
+        } else if (interaction.customId.startsWith(SHOP_PREFIX + ':')) {
+          await handleShopButton(interaction);
         } else if (interaction.customId.startsWith('impostor_')) {
           await handleImpostorButtonInteraction(interaction, client);
         } else if (interaction.customId.startsWith('bet:')) {
@@ -156,6 +162,8 @@ export default {
           await handleBetPlaceSelect(interaction, client);
         } else if (interaction.customId.startsWith('draft:pick:')) {
           await handleDraftStringSelect(interaction, client);
+        } else if (interaction.customId.startsWith(SHOP_PREFIX + ':')) {
+          await handleShopSelect(interaction);
         } else if (interaction.customId.startsWith('impostor_')) {
           await handleImpostorSelectMenu(interaction, client);
         }
