@@ -30,6 +30,14 @@ export const EXPEDITION_TIER_RARITY_WEIGHTS: Record<ExpeditionTier, Record<Mount
   sommet:   { common: 0,  rare: 10, epic: 65, legendary: 25 },
 };
 
+/** Nombre de cartes par pack acheté en boutique (`shop.md` §4). */
+export const PACK_CARDS: Record<ExpeditionTier, number> = { sentier: 3, falaise: 5, sommet: 5 };
+
+/** Un pack = N−1 cartes au tirage Sentier, la dernière au tirage de son propre tier. */
+export function packTiers(tier: ExpeditionTier): ExpeditionTier[] {
+  return [...Array<ExpeditionTier>(PACK_CARDS[tier] - 1).fill('sentier'), tier];
+}
+
 /** Probabilités de tier pour tout gain d'expédition (vocal, daily, quiz, raids) */
 export const EXPEDITION_TIER_CHANCES: { tier: ExpeditionTier; weight: number }[] = [
   { tier: 'sentier', weight: 80 },

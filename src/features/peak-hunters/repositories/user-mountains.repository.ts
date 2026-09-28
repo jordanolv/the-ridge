@@ -21,8 +21,35 @@ export class UserMountainsRepository {
     }
     doc.falaiseTickets ??= 0;
     doc.sommetTickets ??= 0;
+    doc.sentierPacks ??= 0;
+    doc.falaisePacks ??= 0;
+    doc.sommetPacks ??= 0;
     doc.fragments ??= 0;
     return doc;
+  }
+
+  /** Packs non ouverts du tier donné. */
+  static packsOf(doc: IUserMountainsDoc, tier: ExpeditionTier): number {
+    if (tier === 'falaise') return doc.falaisePacks ?? 0;
+    if (tier === 'sommet') return doc.sommetPacks ?? 0;
+    return doc.sentierPacks ?? 0;
+  }
+
+  static async addPacks(userId: string, tier: ExpeditionTier, amount: number): Promise<void> {
+    await this.getOrCreate(userId);
+    await UserMountainsModel.updateOne({ userId }, { $inc: { [`${tier}Packs`]: amount } });
+  }
+
+  /**
+   * Décrément conditionnel : la condition est dans le filtre, donc deux clics
+   * simultanés ne peuvent pas consommer le même pack.
+   */
+  static async spendPack(userId: string, tier: ExpeditionTier): Promise<boolean> {
+    const res = await UserMountainsModel.updateOne(
+      { userId, [`${tier}Packs`]: { $gte: 1 } },
+      { $inc: { [`${tier}Packs`]: -1 } },
+    );
+    return res.modifiedCount === 1;
   }
 
   static async isUnlocked(userId: string, mountainId: string): Promise<boolean> {
