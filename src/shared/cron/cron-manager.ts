@@ -7,6 +7,7 @@ import { BingoCronManager } from '../../features/arcade/bingo/cron';
 import { JustePrixCronManager } from '../../features/arcade/juste-prix/cron';
 import { AvalancheCronManager } from '../../features/arcade/avalanche/cron';
 import { EnigmeCronManager } from '../../features/arcade/enigme/cron';
+import { ShopCronManager } from '../../features/shop/cron';
 import { BaseCronManager, IStartStoppable } from './base-cron-manager';
 import { BotClient } from '../../bot/client';
 
@@ -19,6 +20,7 @@ export class CronManager extends BaseCronManager {
     private justePrixCronManager: JustePrixCronManager;
     private avalancheCronManager: AvalancheCronManager;
     private enigmeCronManager: EnigmeCronManager;
+    private shopCronManager: ShopCronManager;
 
     constructor(client: BotClient) {
         super(client, 'global');
@@ -31,6 +33,7 @@ export class CronManager extends BaseCronManager {
         this.justePrixCronManager = new JustePrixCronManager(client);
         this.avalancheCronManager = new AvalancheCronManager(client);
         this.enigmeCronManager = new EnigmeCronManager(client);
+        this.shopCronManager = new ShopCronManager(client);
 
         this.addCron(this.userCronManager);
         this.addCron(this.mountainCronManager);
@@ -40,6 +43,7 @@ export class CronManager extends BaseCronManager {
         this.addCron(this.justePrixCronManager);
         this.addCron(this.avalancheCronManager);
         this.addCron(this.enigmeCronManager);
+        this.addCron(this.shopCronManager);
     }
 
     public getUserCronManager(): UserCronManager {
