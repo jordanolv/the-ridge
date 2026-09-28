@@ -1,6 +1,11 @@
 import Anthropic from '@anthropic-ai/sdk';
 
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+/**
+ * Créé au premier appel, jamais à l'import : `dotenv.config()` tourne dans le corps
+ * de `src/index.ts`, après l'évaluation du graphe d'imports statiques.
+ */
+let client: Anthropic | null = null;
+const getClient = () => (client ??= new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY }));
 
 const PROMPT = (name: string, money: number, xp: number, packs: number) => `
 Une phrase absurde et drôle pour un bot Discord. Le personnage s'appelle "${name}" et reçoit ${money} pièces, ${xp} XP et ${packs} expédition${packs > 1 ? 's' : ''}.
@@ -10,7 +15,7 @@ Montants faibles = journée catastrophique, élevés = coup de chance insolent. 
 export class DailyStoryService {
   static async generate(name: string, money: number, xp: number, packs: number): Promise<string | null> {
     try {
-      const response = await client.messages.create({
+      const response = await getClient().messages.create({
         model: 'claude-haiku-4-5',
         max_tokens: 200,
         temperature: 1,
