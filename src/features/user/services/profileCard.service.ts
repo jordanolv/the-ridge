@@ -3,6 +3,7 @@ import { createCanvas, loadImage, GlobalFonts, type SKRSContext2D } from '@napi-
 import * as fs from 'fs';
 import * as path from 'path';
 import { toParisDayYMD } from '../../../shared/time/day-split';
+import { getTheme, type ProfileTheme } from './profile-themes';
 
 // Enregistrer Roboto pour un rendu cohérent sur tous les serveurs
 GlobalFonts.registerFromPath(path.join(process.cwd(), 'assets/fonts/Roboto-Regular.ttf'), 'Roboto');
@@ -10,6 +11,7 @@ GlobalFonts.registerFromPath(path.join(process.cwd(), 'assets/fonts/Roboto-Bold.
 GlobalFonts.registerFromPath(path.join(process.cwd(), 'assets/fonts/Roboto-Black.ttf'), 'Roboto');
 
 export interface ProfileCardData {
+  themeId?: string;
   pseudo: string;
   bio: string;
   ridgecoin: string;
@@ -44,9 +46,8 @@ interface ParsedPositions {
 }
 
 export class ProfileCardService {
-  private static templatePath = path.join(process.cwd(), 'assets/bg-me.svg');
-  private static templateCache: string | null = null;
-  private static positionsCache: ParsedPositions | null = null;
+  private static templateCache = new Map<string, string>();
+  private static positionsCache = new Map<string, ParsedPositions>();
 
   private static readonly SVG_WIDTH = 1500;
   private static readonly SVG_HEIGHT = 900;
@@ -63,22 +64,23 @@ export class ProfileCardService {
   };
 
 
-  private static getTemplate(): string {
-    if (!this.templateCache) {
-      this.templateCache = fs.readFileSync(this.templatePath, 'utf-8');
-      this.positionsCache = null; // Reset cache when template changes
-    }
-    return this.templateCache;
+  private static getTemplate(theme: ProfileTheme): string {
+    const cached = this.templateCache.get(theme.id);
+    if (cached) return cached;
+
+    const svg = fs.readFileSync(theme.file, 'utf-8');
+    this.templateCache.set(theme.id, svg);
+    this.positionsCache.delete(theme.id);
+    return svg;
   }
 
   /**
    * Parse le SVG pour extraire dynamiquement les positions des blocs
    * Utilise les id Figma (ex: id="{{LEVELBOX}}") quand disponibles
    */
-  private static getPositions(svg: string): ParsedPositions {
-    if (this.positionsCache) {
-      return this.positionsCache;
-    }
+  private static getPositions(theme: ProfileTheme, svg: string): ParsedPositions {
+    const cached = this.positionsCache.get(theme.id);
+    if (cached) return cached;
 
     // Extrait une Box depuis un path rectangulaire "MX YH...V..."
     const parsePathBox = (d: string): Box | null => {
@@ -124,7 +126,7 @@ export class ProfileCardService {
     const bioMatch = svg.match(/<tspan x="(\d+(?:\.\d+)?)" y="(\d+(?:\.\d+)?)">\{\{BIO\}\}<\/tspan>/);
     if (bioMatch) bioCenter = { x: avatar.cx, y: parseFloat(bioMatch[2]) };
 
-    this.positionsCache = {
+    const positions: ParsedPositions = {
       roleBox:     findBoxById('ROLE')     || this.DEFAULT_POSITIONS.roleBox,
       mountainBox: findBoxById('MONTAGNE') || this.DEFAULT_POSITIONS.mountainBox,
       levelBox:    findBoxById('LEVELBOX') || this.DEFAULT_POSITIONS.levelBox,
@@ -134,12 +136,14 @@ export class ProfileCardService {
       avatar
     };
 
-    return this.positionsCache;
+    this.positionsCache.set(theme.id, positions);
+    return positions;
   }
 
   static async generateCard(data: ProfileCardData): Promise<Buffer> {
-    const svg = this.getTemplate();
-    const positions = this.getPositions(svg);
+    const theme = getTheme(data.themeId);
+    const svg = this.getTemplate(theme);
+    const positions = this.getPositions(theme, svg);
 
     // 1. Générer l'image SVG avec les textes remplacés directement
     const svgBuffer = await this.generateSvgImage(data, svg, positions);
@@ -677,7 +681,7 @@ export class ProfileCardService {
   }
 
   static clearCache(): void {
-    this.templateCache = null;
-    this.positionsCache = null;
+    this.templateCache.clear();
+    this.positionsCache.clear();
   }
 }

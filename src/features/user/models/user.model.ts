@@ -20,6 +20,9 @@ class UserProfil {
   @prop({ default: 500 })
   money!: number;
 
+  @prop()
+  cardTheme?: string;
+
   @prop({ default: 0 })
   exp!: number;
 

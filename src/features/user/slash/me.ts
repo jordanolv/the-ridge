@@ -530,6 +530,7 @@ export default {
       // Générer l'image de profil
       const xpProgress = calculateXpProgress(profileData.level, profileData.experience);
       const cardBuffer = await ProfileCardService.generateCard({
+        themeId: user.profil?.cardTheme,
         pseudo: interaction.user.username,
         bio: profileData.bio,
         ridgecoin: profileData.money.toLocaleString('fr-FR'),
