@@ -121,7 +121,7 @@ function buildAnimatedCardContainer(pack: OpeningPack, url: string): ContainerBu
     );
 }
 
-async function buildSummaryContainer(pack: OpeningPack, userId: string): Promise<ContainerBuilder> {
+async function buildSummaryContainer(pack: OpeningPack, userId: string, withReopenButton: boolean): Promise<ContainerBuilder> {
   const doc = await UserMountainsRepository.getOrCreate(userId);
   const { label, emoji } = EXPEDITION_TIER_CONFIG[pack.tier];
 
@@ -148,7 +148,7 @@ async function buildSummaryContainer(pack: OpeningPack, userId: string): Promise
   addCardSections(container, pack.cards);
 
   const remaining = UserMountainsRepository.packsOf(doc, pack.tier);
-  if (remaining > 0) {
+  if (withReopenButton && remaining > 0) {
     container.addSeparatorComponents(new SeparatorBuilder().setDivider(true)).addActionRowComponents(
       new ActionRowBuilder<ButtonBuilder>().addComponents(
         new ButtonBuilder()
@@ -239,7 +239,12 @@ async function revealNext(interaction: ButtonInteraction, userId: string): Promi
   }
 
   opening.delete(userId);
-  await interaction.editReply({ components: [await buildSummaryContainer(pack, userId)], flags: MessageFlags.IsComponentsV2 });
+  await interaction.editReply({ components: [await buildSummaryContainer(pack, userId, true)], flags: MessageFlags.IsComponentsV2 });
+
+  // Ouvert depuis /shop, le pack vit dans un message éphémère : personne d'autre ne le voit.
+  if (interaction.message.flags.has(MessageFlags.Ephemeral)) {
+    await interaction.followUp({ components: [await buildSummaryContainer(pack, userId, false)], flags: MessageFlags.IsComponentsV2 });
+  }
 }
 
 export async function handlePackButton(interaction: ButtonInteraction): Promise<void> {
