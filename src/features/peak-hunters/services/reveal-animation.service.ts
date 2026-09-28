@@ -102,7 +102,7 @@ async function render(mountain: MountainInfo, rarity: MountainRarity): Promise<s
       await writeFile(path.join(dir, `${String(i).padStart(3, '0')}.png`), canvas.toBuffer('image/png'));
     }
 
-    const out = path.join(tmpdir(), `reveal-${mountain.id}-${Date.now()}.webp`);
+    const out = `${dir}.webp`;
     await run(ffmpeg as unknown as string, [
       '-y', '-framerate', String(FPS), '-i', path.join(dir, '%03d.png'),
       '-c:v', 'libwebp_anim', '-q:v', '72', '-loop', '1', out,
