@@ -14,20 +14,13 @@ const FONTS: { weight: FontWeight; file: string }[] = [
 
 const fontPath = (file: string) => path.join(process.cwd(), 'assets/fonts', file);
 
-let satoriFontsCache: { name: string; data: Buffer; weight: FontWeight; style: 'normal' }[] | null = null;
-let measureContext: SKRSContext2D | null = null;
-
-export function satoriFonts() {
-  satoriFontsCache ??= FONTS.map(({ weight, file }) => ({
-    name: FONT_FAMILY,
-    data: readFileSync(fontPath(file)),
-    weight,
-    style: 'normal' as const,
-  }));
-  return satoriFontsCache;
+export function fontFiles(): { name: string; weight: FontWeight; data: Buffer }[] {
+  return FONTS.map(({ weight, file }) => ({ name: FONT_FAMILY, weight, data: readFileSync(fontPath(file)) }));
 }
 
-/** Mêmes fichiers que Satori, pour que la mesure corresponde au rendu. */
+let measureContext: SKRSContext2D | null = null;
+
+/** Mêmes fichiers que le rendu, pour que la mesure lui corresponde. */
 export function measureText(content: string, size: number, weight: FontWeight = 400): number {
   if (!measureContext) {
     for (const { file } of FONTS) GlobalFonts.registerFromPath(fontPath(file), FONT_FAMILY);

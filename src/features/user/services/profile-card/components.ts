@@ -1,23 +1,13 @@
-import { readFileSync } from 'node:fs';
-import path from 'node:path';
-import { box, dataUrl, image, rgba, text, type CardChild, type CardNode } from './elements';
+import { iconSrc, type IconName } from './assets';
+import { box, image, rgba, text, type CardNode, type Style } from './elements';
 import { measureText } from './fonts';
 import { PANEL_RADIUS, type Rect } from './geometry';
-import { cleanRoleName, ellipsize, fitFontSize, sanitizeText } from './text';
+import { cleanRoleName, sanitizeText, truncateToWidth } from './text';
 import type { ThemeStyle } from './themes';
 
-const iconCache = new Map<string, string>();
+const SHRINK_TO_FIT: Style = { whiteSpace: 'nowrap', textFit: 'shrink' };
 
-export function icon(name: string): string {
-  let url = iconCache.get(name);
-  if (!url) {
-    url = dataUrl(readFileSync(path.join(process.cwd(), 'assets/profile-card', `${name}.png`)), 'image/png');
-    iconCache.set(name, url);
-  }
-  return url;
-}
-
-export function panel(rect: Rect, theme: ThemeStyle, style: Record<string, string | number>, ...children: (CardChild | null | false)[]): CardNode {
+export function panel(rect: Rect, theme: ThemeStyle, style: Style, ...children: (CardNode | null | false)[]): CardNode {
   return box(
     {
       position: 'absolute',
@@ -34,16 +24,16 @@ export function panel(rect: Rect, theme: ThemeStyle, style: Record<string, strin
   );
 }
 
-export function statCard(rect: Rect, theme: ThemeStyle, iconName: string, label: string, value: string, valueSize: number): CardNode {
+export function statCard(rect: Rect, theme: ThemeStyle, icon: IconName, label: string, value: string, valueSize: number): CardNode {
   return panel(
     rect,
     theme,
-    { alignItems: 'center', paddingLeft: 36, gap: 20 },
-    box({ width: 50, justifyContent: 'center' }, image(icon(iconName), { maxWidth: 50, maxHeight: 50 })),
+    { alignItems: 'center', padding: '0 20px 0 36px', gap: 20 },
+    box({ width: 50, flexShrink: 0, justifyContent: 'center' }, image(iconSrc(icon), { maxWidth: 50, maxHeight: 50 })),
     box(
-      { flexDirection: 'column' },
+      { flexDirection: 'column', minWidth: 0, flexGrow: 1 },
       text({ fontSize: 21, color: 'white' }, label),
-      text({ fontSize: valueSize, fontWeight: 900, color: 'white' }, ellipsize(value, rect.width - 130, valueSize, 900)),
+      text({ fontSize: valueSize, fontWeight: 900, color: 'white', ...SHRINK_TO_FIT }, value),
     ),
   );
 }
@@ -120,13 +110,14 @@ export function roleBadges(roles: { name: string; color: string }[], width: numb
   );
 }
 
-export function profileHeader(avatar: string, pseudo: string, bio: string, width: number): CardNode {
-  const name = sanitizeText(pseudo);
-  const nameSize = fitFontSize(name, width, 40, 26, 700);
+export function profileHeader(avatar: Buffer, pseudo: string, bio: string, width: number): CardNode {
   return box(
     { flexDirection: 'column', alignItems: 'center', width },
     image(avatar, { width: 204, height: 200, borderRadius: '50%', objectFit: 'cover' }),
-    text({ marginTop: 14, height: 48, alignItems: 'center', fontSize: nameSize, fontWeight: 700, color: 'white' }, ellipsize(name, width, nameSize, 700)),
-    text({ fontSize: 20, fontWeight: 700, color: 'white' }, ellipsize(sanitizeText(bio), width, 20, 700)),
+    text(
+      { width, marginTop: 14, height: 48, fontSize: 40, fontWeight: 700, color: 'white', textAlign: 'center', ...SHRINK_TO_FIT },
+      sanitizeText(pseudo),
+    ),
+    text({ width, fontSize: 20, fontWeight: 700, color: 'white', textAlign: 'center', whiteSpace: 'nowrap' }, truncateToWidth(sanitizeText(bio), width, 20, 700)),
   );
 }

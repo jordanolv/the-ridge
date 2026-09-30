@@ -1,31 +1,27 @@
 export type Style = Record<string, string | number>;
 
-export interface CardNode {
-  type: string;
-  props: { style: Style; children?: CardChild | CardChild[]; src?: string };
-}
+export type CardNode =
+  | { type: 'container'; style: Style; children: CardNode[] }
+  | { type: 'text'; text: string; style: Style }
+  | { type: 'image'; src: string | Buffer; style: Style };
 
-export type CardChild = CardNode | string;
-
-/** Satori refuse un bloc à plusieurs enfants sans `display` explicite : flex par défaut. */
-export function box(style: Style, ...children: (CardChild | null | false)[]): CardNode {
-  const kept = children.filter((c): c is CardChild => c !== null && c !== false);
-  return { type: 'div', props: { style: { display: 'flex', ...style }, children: kept.length === 1 ? kept[0] : kept } };
+export function box(style: Style, ...children: (CardNode | null | false)[]): CardNode {
+  return {
+    type: 'container',
+    style: { display: 'flex', ...style },
+    children: children.filter((c): c is CardNode => c !== null && c !== false),
+  };
 }
 
 export function text(style: Style, content: string): CardNode {
-  return box(style, content);
+  return { type: 'text', text: content, style };
 }
 
-export function image(src: string, style: Style): CardNode {
-  return { type: 'img', props: { src, style } };
+export function image(src: string | Buffer, style: Style): CardNode {
+  return { type: 'image', src, style };
 }
 
 export function rgba(hex: string, alpha: number): string {
   const value = parseInt(hex.replace('#', ''), 16);
   return `rgba(${(value >> 16) & 255}, ${(value >> 8) & 255}, ${value & 255}, ${alpha})`;
-}
-
-export function dataUrl(buffer: Buffer, mime: string): string {
-  return `data:${mime};base64,${buffer.toString('base64')}`;
 }

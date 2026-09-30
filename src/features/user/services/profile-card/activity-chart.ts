@@ -1,5 +1,5 @@
 import { toParisDayYMD } from '../../../../shared/time/day-split';
-import { box, dataUrl, image, text, type CardNode } from './elements';
+import { box, image, text, type CardNode } from './elements';
 
 export interface DayActivity {
   date: Date;
@@ -89,7 +89,7 @@ export function activityChart(activity: DayActivity[], width: number, height: nu
 
   return box(
     { position: 'relative', width, height },
-    image(dataUrl(Buffer.from(svg), 'image/svg+xml'), { position: 'absolute', left: 0, top: 0, width, height }),
+    image(Buffer.from(svg), { position: 'absolute', left: 0, top: 0, width, height }),
     ...current.flatMap((d, i) => [
       d.time > 0 && centeredAt(currentPoints[i].x, currentPoints[i].y - 50, { fontSize: 26, fontWeight: 700, color: 'white' }, formatDuration(d.time)),
       centeredAt(currentPoints[i].x, baseline + 14, { fontSize: 23, color: 'rgba(255,255,255,0.5)' }, DAY_NAMES[(d.date.getUTCDay() + 6) % 7]),

@@ -1,12 +1,8 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { parseThemeConfig, type ThemeStyle } from './theme-config';
 
-export interface ThemeStyle {
-  panelColor: string;
-  panelOpacity: number;
-  blur: number;
-  accent: string;
-}
+export type { ThemeStyle };
 
 export interface ProfileTheme {
   id: string;
@@ -31,15 +27,15 @@ function prettify(slug: string): string {
   return words.charAt(0).toUpperCase() + words.slice(1);
 }
 
-function readOverrides(id: string): Partial<ThemeStyle> & { label?: string } {
-  const file = path.join(THEMES_DIR, `${id}.json`);
-  if (!fs.existsSync(file)) return {};
-  return JSON.parse(fs.readFileSync(file, 'utf-8'));
-}
-
 function loadTheme(file: string): ProfileTheme {
   const id = path.basename(file, path.extname(file));
-  const { label, ...style } = readOverrides(id);
+  const configFile = path.join(THEMES_DIR, `${id}.json`);
+  const { label, style, problems } = fs.existsSync(configFile)
+    ? parseThemeConfig(fs.readFileSync(configFile, 'utf-8'))
+    : { label: undefined, style: {}, problems: [] };
+
+  for (const problem of problems) console.warn(`[ProfileCard] assets/cards/${id}.json : ${problem} — valeur ignorée`);
+
   return { id, label: label ?? prettify(id), background: path.join(THEMES_DIR, file), style: { ...DEFAULT_STYLE, ...style } };
 }
 

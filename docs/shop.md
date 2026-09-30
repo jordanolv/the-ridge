@@ -149,16 +149,19 @@ collection tient largement le rythme. Si elle devient triviale à finir, la rép
 `/me` répond **en public**. C'est la seule surface où un joueur se met vraiment en
 scène devant le salon, donc la seule qui justifie un cosmétique payant.
 
-La carte est mise en page par [Satori](https://github.com/vercel/satori) (flexbox → SVG)
-puis rastérisée par resvg, dans `src/features/user/services/profile-card/`. Les cadres
-sont fixes (`geometry.ts`), leur contenu se place tout seul : un pseudo long rétrécit
-puis se coupe, les rôles passent à la ligne, rien n'est positionné à la main.
+La carte est rendue par [Takumi](https://github.com/kane50613/takumi) (flexbox + CSS,
+rastérisé en natif), dans `src/features/user/services/profile-card/`. Les cadres sont
+fixes (`geometry.ts`), leur contenu se place tout seul : pseudo et montants rétrécissent
+pour tenir, la bio se coupe en « … », les rôles passent à la ligne. Rien n'est
+positionné à la main. Environ 70 ms par carte : le fond flouté de chaque thème est
+calculé une fois au démarrage (`backdrop.ts`), puis réutilisé.
 
 **Un thème est une image de fond.** Tout `.png`/`.jpg`/`.webp`/`.svg` déposé dans
 `assets/cards/` devient un design achetable au redémarrage, l'id venant du nom du
 fichier. Les panneaux en verre dépoli, textes, icônes et logo sont posés par-dessus :
 l'image doit être **sans texte**, en 16:9 (1500×900 idéalement, sinon recadrée au centre).
-Un `<id>.json` facultatif règle le libellé et les couleurs :
+Un `<id>.json` facultatif règle le libellé et les couleurs ; une valeur invalide est
+ignorée et signalée dans les logs au démarrage, sans casser `/me` :
 
 ```json
 { "label": "Crépuscule", "panelColor": "#2b1d3a", "panelOpacity": 0.5, "blur": 14, "accent": "#f5a623" }

@@ -12,7 +12,6 @@ export interface Rect {
 const STAT_ROWS = [381, 512, 643, 773];
 const STAT_HEIGHT = 104;
 
-/** Le flou des thèmes est cuit dans le fond à partir de ces rectangles : ils servent aux deux. */
 export const PANELS = {
   overview: { x: 28, y: 28, width: 888, height: 332 },
   activity: { x: 28, y: 381, width: 888, height: 496 },

@@ -12,6 +12,7 @@ import { VoiceSessionService } from '../../voice/services/voice-session.service'
 import { registerPeakHuntersVoiceListeners } from '../../peak-hunters/services/peak-hunters.register';
 import { registerStatsVoiceListeners } from '../../stats/services/stats.voice-listener';
 import { registerRaidListeners } from '../../peak-hunters/services/raid.voice-listener';
+import { ProfileCardService } from '../../user/services/profile-card/profile-card.service';
 
 export default {
   name: Events.ClientReady,
@@ -39,6 +40,7 @@ export default {
     registerRaidListeners();
     registerPeakHuntersVoiceListeners(client);
     VoiceSessionService.startTickLoop();
+    ProfileCardService.warmUp().catch(error => console.error('[Ready] Préparation des cartes /me échouée :', error));
 
     await VoiceService.rehydrate(client);
     await SpawnService.rehydrate(client);
