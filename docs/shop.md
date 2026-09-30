@@ -16,7 +16,7 @@ qui entre, la boutique décide de celui qui sort.
 | Achat multiple (1 à 6 mois / unités) | ✅ implémenté |
 | Rôle coloré (6 couleurs) | ✅ vendable |
 | Packs Peak Hunters | ✅ achetables, stockés en inventaire |
-| Design de carte `/me` | 🟡 câblé, en attente des fichiers SVG |
+| Design de carte `/me` | 🟡 câblé, en attente des images de fond (`scripts/make-card-theme.ts`) |
 | Ouverture animée des packs | ✅ un pack à la fois, carte par carte (§5) |
 | Palier prestige | 🔴 à trancher (§7) |
 
@@ -154,6 +154,20 @@ salon, donc la seule qui justifie un cosmétique payant.
 **Un thème est un fichier.** Tout `.svg` déposé dans `assets/cards/` devient un design
 achetable au redémarrage : l'id vient du nom du fichier, le libellé aussi. Aucun code
 à écrire pour en ajouter un, et les positions sont reparsées par thème.
+
+**Fabriquer un thème = fournir une image de fond.** Les panneaux, libellés, icônes et
+le logo ne sont plus dessinés à la main : `scripts/make-card-theme.ts` les repose sur
+n'importe quelle image (générée par IA, photo…) aux positions du gabarit, en verre
+dépoli, et écrit le `.svg` avec un aperçu rendu par le vrai moteur de `/me`.
+
+```bash
+node -r @swc-node/register scripts/make-card-theme.ts fond.png crepuscule --tint "#2b1d3a" --opacity 0.5
+```
+
+L'image doit être sans texte, en 16:9 (1500×900 idéalement ; elle est recadrée au
+centre sinon). Les icônes et le logo vivent dans `assets/card-kit/`. Le gabarit reste
+`assets/bg-me.svg` : un design qui déplace les blocs repasse par Figma, avec les mêmes
+ids `{{…}}`.
 
 Le design acheté est stocké dans `profil.cardTheme` — pas lu depuis les locations de
 la boutique. `/me` n'a donc rien à savoir de la boutique, et un thème dont le fichier
