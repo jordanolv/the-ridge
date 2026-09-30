@@ -16,7 +16,7 @@ qui entre, la boutique décide de celui qui sort.
 | Achat multiple (1 à 6 mois / unités) | ✅ implémenté |
 | Rôle coloré (6 couleurs) | ✅ vendable |
 | Packs Peak Hunters | ✅ achetables, stockés en inventaire |
-| Design de carte `/me` | 🟡 câblé, en attente des fichiers SVG |
+| Design de carte `/me` | 🟡 câblé, en attente des images de fond |
 | Ouverture animée des packs | ✅ un pack à la fois, carte par carte (§5) |
 | Palier prestige | 🔴 à trancher (§7) |
 
@@ -146,14 +146,30 @@ collection tient largement le rythme. Si elle devient triviale à finir, la rép
 
 ### Le design de carte `/me`
 
-`/me` répond **en public** et rend un template SVG (`assets/bg-me.svg`) dont les
-positions sont relues dans le fichier via les ids Figma (`{{LEVELBOX}}`, `{{AVATAR}}`,
-`{{ROLE}}`…). C'est la seule surface où un joueur se met vraiment en scène devant le
-salon, donc la seule qui justifie un cosmétique payant.
+`/me` répond **en public**. C'est la seule surface où un joueur se met vraiment en
+scène devant le salon, donc la seule qui justifie un cosmétique payant.
 
-**Un thème est un fichier.** Tout `.svg` déposé dans `assets/cards/` devient un design
-achetable au redémarrage : l'id vient du nom du fichier, le libellé aussi. Aucun code
-à écrire pour en ajouter un, et les positions sont reparsées par thème.
+La carte est mise en page par [Satori](https://github.com/vercel/satori) (flexbox → SVG)
+puis rastérisée par resvg, dans `src/features/user/services/profile-card/`. Les cadres
+sont fixes (`geometry.ts`), leur contenu se place tout seul : un pseudo long rétrécit
+puis se coupe, les rôles passent à la ligne, rien n'est positionné à la main.
+
+**Un thème est une image de fond.** Tout `.png`/`.jpg`/`.webp`/`.svg` déposé dans
+`assets/cards/` devient un design achetable au redémarrage, l'id venant du nom du
+fichier. Les panneaux en verre dépoli, textes, icônes et logo sont posés par-dessus :
+l'image doit être **sans texte**, en 16:9 (1500×900 idéalement, sinon recadrée au centre).
+Un `<id>.json` facultatif règle le libellé et les couleurs :
+
+```json
+{ "label": "Crépuscule", "panelColor": "#2b1d3a", "panelOpacity": 0.5, "blur": 14, "accent": "#f5a623" }
+```
+
+`classique` est le thème gratuit par défaut et doit exister. Pour juger un thème sans
+lancer le bot :
+
+```bash
+node -r @swc-node/register scripts/preview-card.ts <id> [pseudo]
+```
 
 Le design acheté est stocké dans `profil.cardTheme` — pas lu depuis les locations de
 la boutique. `/me` n'a donc rien à savoir de la boutique, et un thème dont le fichier

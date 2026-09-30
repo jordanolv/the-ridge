@@ -42,6 +42,7 @@
     "jsonwebtoken": "^9.0.2",
     "libsodium-wrappers": "^0.7.15",
     "mongoose": "^8.16.1",
+    "satori": "^0.33.5",
     "sodium-native": "^5.0.9",
     "uuid": "^11.1.0"
   },
