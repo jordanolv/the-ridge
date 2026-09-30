@@ -20,7 +20,7 @@ import { UserService } from '../services/user.service';
 import { getGuildId } from '../../../shared/guild';
 import UserMountainsModel from '../../peak-hunters/models/user-mountains.model';
 import { MountainService } from '../../peak-hunters/services/mountain.service';
-import { ProfileCardService } from '../services/profileCard.service';
+import { ProfileCardService } from '../services/profile-card/profile-card.service';
 
 type UserDoc = NonNullable<Awaited<ReturnType<typeof UserService.getUserByDiscordId>>>;
 
