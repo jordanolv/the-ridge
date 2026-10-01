@@ -10,8 +10,9 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   return response.json() as Promise<T>;
 }
 
-export const getJson = <T>(path: string, accessToken?: string) =>
-  request<T>(path, accessToken ? { headers: { Authorization: `Bearer ${accessToken}` } } : undefined);
+const authorization = (accessToken?: string): Record<string, string> => (accessToken ? { Authorization: `Bearer ${accessToken}` } : {});
 
-export const postJson = <T>(path: string, body: unknown) =>
-  request<T>(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+export const getJson = <T>(path: string, accessToken?: string) => request<T>(path, { headers: authorization(accessToken) });
+
+export const postJson = <T>(path: string, body: unknown, accessToken?: string) =>
+  request<T>(path, { method: 'POST', headers: { 'Content-Type': 'application/json', ...authorization(accessToken) }, body: JSON.stringify(body) });

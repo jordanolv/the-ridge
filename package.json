@@ -45,7 +45,8 @@
     "libsodium-wrappers": "^0.7.15",
     "mongoose": "^8.16.1",
     "sodium-native": "^5.0.9",
-    "uuid": "^11.1.0"
+    "uuid": "^11.1.0",
+    "ws": "^8.22.0"
   },
   "devDependencies": {
     "@swc-node/register": "^1.11.1",
@@ -53,6 +54,7 @@
     "@swc/core": "^1.15.3",
     "@types/express": "^5.0.6",
     "@types/node": "^20.17.30",
+    "@types/ws": "^8.18.2",
     "nodemon": "^3.0.1",
     "tsc-alias": "^1.8.15",
     "tsconfig-paths": "^4.2.0",

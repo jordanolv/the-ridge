@@ -2,14 +2,17 @@ import { useCallback, useEffect, useState } from 'react';
 import type { HomeSummary } from '../../src/features/activity/activity.types';
 import { Backdrop } from './components/Backdrop';
 import { BottomNav, Sidebar } from './components/Navigation';
+import { PackTheater } from './components/theater/PackTheater';
 import { ErrorScreen, SplashScreen } from './components/Screens';
 import { fetchHome } from './lib/api';
-import { connect, type Session } from './lib/session';
+import { startLive } from './lib/live';
+import { connect, describeError, type Session } from './lib/session';
 import { SECTIONS, type SectionId } from './navigation';
 import { ComingSoon } from './pages/ComingSoon';
 import { Home } from './pages/Home';
+import { Packs } from './pages/Packs';
 
-type State = { status: 'loading' } | { status: 'error'; message: string } | { status: 'ready'; session: Session; home: HomeSummary };
+type State = { status: 'loading' } | { status: 'error'; message: string; detail: string } | { status: 'ready'; session: Session; home: HomeSummary };
 
 export function App() {
   const [state, setState] = useState<State>({ status: 'loading' });
@@ -22,7 +25,7 @@ export function App() {
       setState({ status: 'ready', session, home: await fetchHome(session) });
     } catch (error) {
       console.error(error);
-      setState({ status: 'error', message: 'La connexion avec Discord a échoué. Vérifie ta connexion puis réessaie.' });
+      setState({ status: 'error', message: 'La connexion avec Discord a échoué. Vérifie ta connexion puis réessaie.', detail: describeError(error) });
     }
   }, []);
 
@@ -30,11 +33,23 @@ export function App() {
     void start();
   }, [start]);
 
+  const session = state.status === 'ready' ? state.session : null;
+  const user = state.status === 'ready' ? state.home.user : null;
+
+  useEffect(() => {
+    if (session && user) return startLive(session, user);
+  }, [session, user?.id]);
+
+  const refreshHome = useCallback(() => {
+    if (!session) return;
+    void fetchHome(session).then(home => setState({ status: 'ready', session, home }));
+  }, [session]);
+
   return (
     <>
       <Backdrop />
       {state.status === 'loading' && <SplashScreen />}
-      {state.status === 'error' && <ErrorScreen message={state.message} onRetry={start} />}
+      {state.status === 'error' && <ErrorScreen message={state.message} detail={state.detail} onRetry={start} />}
       {state.status === 'ready' && (
         <div className="flex h-full">
           <Sidebar active={section} onSelect={setSection} user={state.home.user} />
@@ -47,12 +62,15 @@ export function App() {
             <div className="mx-auto max-w-6xl">
               {section === 'home' ? (
                 <Home home={state.home} onNavigate={setSection} />
+              ) : section === 'packs' ? (
+                <Packs session={state.session} />
               ) : (
                 <ComingSoon key={section} section={SECTIONS.find(s => s.id === section)!} />
               )}
             </div>
           </main>
           <BottomNav active={section} onSelect={setSection} />
+          <PackTheater me={state.home.user} mapboxToken={state.session.config.mapboxToken} onOwnShowEnd={refreshHome} />
         </div>
       )}
     </>

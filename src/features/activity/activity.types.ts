@@ -2,6 +2,7 @@
 
 export interface ActivityConfig {
   clientId: string;
+  mapboxToken: string | null;
 }
 
 export interface ActivityUser {
@@ -40,3 +41,75 @@ export interface HomeSummary {
     fragmentsPerExpedition: number;
   };
 }
+
+export interface PackTierInfo {
+  id: ExpeditionTierName;
+  label: string;
+  description: string;
+  color: string;
+  cards: number;
+  owned: number;
+}
+
+export interface ShowCard {
+  id: string;
+  label: string;
+  countries: string[];
+  altitude: string;
+  elevation: number;
+  rarity: string;
+  rarityLabel: string;
+  color: string;
+  image: string;
+  lat: number | null;
+  lng: number | null;
+  isDuplicate: boolean;
+  fragmentsGained: number;
+  expeditionsAwarded: number;
+}
+
+/** Une ouverture de pack jouée en même temps chez tous les joueurs de l'Activity. */
+export interface PackShow {
+  id: string;
+  opener: ActivityUser;
+  tier: ExpeditionTierName;
+  tierLabel: string;
+  tierColor: string;
+  cards: ShowCard[];
+  startsAt: number;
+  skippedAt: number | null;
+}
+
+export type OpenPackResult = { ok: true; show: PackShow } | { ok: false; reason: 'no-pack' | 'draw-failed' };
+
+export interface FeedEntry {
+  id: string;
+  at: number;
+  user: ActivityUser;
+  tierLabel: string;
+  tierColor: string;
+  best: { label: string; rarityLabel: string; color: string };
+  fresh: number;
+  cards: number;
+}
+
+export const REACTIONS = ['🔥', '😱', '😭', '👏', '🤯'] as const;
+export type ReactionEmoji = (typeof REACTIONS)[number];
+
+export interface LiveReaction {
+  id: string;
+  user: ActivityUser;
+  emoji: ReactionEmoji;
+}
+
+export type LiveServerMessage =
+  | { type: 'welcome'; serverNow: number; participants: ActivityUser[]; shows: PackShow[]; feed: FeedEntry[] }
+  | { type: 'participants'; participants: ActivityUser[] }
+  | { type: 'shows'; shows: PackShow[] }
+  | { type: 'reaction'; reaction: LiveReaction }
+  | { type: 'feed'; entry: FeedEntry };
+
+export type LiveClientMessage =
+  | { type: 'join'; token: string; instanceId: string }
+  | { type: 'react'; emoji: ReactionEmoji }
+  | { type: 'skip'; showId: string };

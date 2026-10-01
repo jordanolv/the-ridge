@@ -7,10 +7,10 @@ const BOT_WEB_SERVER = `http://localhost:${process.env.WEB_PORT ?? 3001}`;
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   base: '/',
-  build: { outDir: 'dist', assetsDir: 'activity-assets' },
+  build: { outDir: 'dist', assetsDir: 'activity-assets', chunkSizeWarningLimit: 2500 },
   server: {
     port: 5173,
     allowedHosts: ['.trycloudflare.com'],
-    proxy: { '/api': BOT_WEB_SERVER },
+    proxy: { '/api': { target: BOT_WEB_SERVER, ws: true } },
   },
 });
