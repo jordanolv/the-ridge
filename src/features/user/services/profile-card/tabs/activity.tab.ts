@@ -40,8 +40,8 @@ export interface ActivityData {
   totalMessages: number;
   totalVoice: number;
   streak: number;
-  parties: number;
-  personalityTests: number;
+  weeklyPoints: number;
+  lastWeekPoints: number;
   balance: number[];
   players: number;
   ranks: Rank[];
@@ -97,16 +97,16 @@ export const activityTab = defineTab<ActivityData>({
       totalMessages: stats?.totalMsg ?? 0,
       totalVoice: stats?.voiceTime ?? 0,
       streak: stats?.dailyStreak ?? 0,
-      parties: stats?.partyParticipated ?? 0,
-      personalityTests: stats?.personalityTestsCount ?? 0,
+      weeklyPoints: stats?.activityPoints ?? 0,
+      lastWeekPoints: stats?.lastWeekActivityPoints ?? 0,
       balance: balanceHistory(account.profil?.money ?? 0, movements, DAYS),
       players,
       ranks: [
         { label: '💬 Messages', rank: messagesRank },
         { label: '🔊 Vocal', rank: voiceRank },
         { label: '🔥 Série', rank: streakRank },
-        { label: '🎉 Soirées', rank: partiesRank },
-        { label: '⚡ Activité de la semaine', rank: weeklyRank, detail: `${formatNumber(stats?.activityPoints ?? 0)} pts` },
+        { label: '⚡ Activité de la semaine', rank: weeklyRank },
+        { label: '🎉 Soirées', rank: partiesRank, detail: plural(stats?.partyParticipated ?? 0, 'soirée') },
       ],
       salary,
     };
@@ -125,7 +125,7 @@ export const activityTab = defineTab<ActivityData>({
       kpi(PANELS.kpis[0], style, '💬 Messages', formatNumber(data.totalMessages), `+${formatNumber(lastWeek(data.messages))} ces 7 derniers jours`),
       kpi(PANELS.kpis[1], style, '🔊 Temps vocal', formatDuration(data.totalVoice), `+${formatDuration(lastWeek(data.voice))} ces 7 derniers jours`),
       kpi(PANELS.kpis[2], style, '🔥 Série active', plural(data.streak, 'jour'), streakSince(data.days, data.streak)),
-      kpi(PANELS.kpis[3], style, '🎉 Soirées vocales', formatNumber(data.parties), `${plural(data.personalityTests, 'test')} de personnalité`),
+      kpi(PANELS.kpis[3], style, '⚡ Activité de la semaine', `${formatNumber(data.weeklyPoints)} pts`, `${formatNumber(data.lastWeekPoints)} pts la semaine dernière`),
 
       titledPanel(PANELS.voice, style, '🔊 Vocal par jour — 30 jours', barChart(data.voice.map(s => s / 3600), chartWidth, chartHeight, style.accent, axisLabels(data.days))),
       titledPanel(PANELS.messages, style, '💬 Messages par jour — 30 jours', barChart(data.messages, chartWidth, chartHeight, '#9b8cff', axisLabels(data.days))),
