@@ -2,6 +2,8 @@ import UserModel, { IUser } from '../models/user.model';
 import { AppConfigService } from '../../discord/services/app-config.service';
 import { NotFoundError, BirthdaySearchCriteria, BirthdayUser } from './user.types';
 
+export type RankedField = 'stats.totalMsg' | 'stats.voiceTime' | 'stats.dailyStreak' | 'stats.activityPoints';
+
 export class UserRepository {
 
   // ===== USER OPERATIONS =====
@@ -207,5 +209,19 @@ export class UserRepository {
       .find({})
       .sort({ 'stats.voiceTime': -1 })
       .limit(limit);
+  }
+
+  async countUsers(): Promise<number> {
+    return UserModel.countDocuments({});
+  }
+
+  /** Rang dans un classement : 1 + le nombre de joueurs strictement devant. */
+  async rankBy(field: RankedField, value: number): Promise<number> {
+    return 1 + (await UserModel.countDocuments({ [field]: { $gt: value } }));
+  }
+
+  async namesOf(discordIds: string[]): Promise<Map<string, string>> {
+    const users = await UserModel.find({ discordId: { $in: discordIds } }).select('discordId name').lean();
+    return new Map(users.map(u => [u.discordId, u.name]));
   }
 }

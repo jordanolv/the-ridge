@@ -74,6 +74,14 @@ export class LogService {
     });
   }
 
+  /** Mouvements d'argent d'un joueur depuis `since` : de quoi retracer l'évolution de son solde. */
+  static async economyMovements(userId: string, since: Date): Promise<{ date: Date; amount: number }[]> {
+    const entries = await BotLogModel.find({ kind: 'economy', userId, createdAt: { $gte: since } })
+      .select('amount createdAt')
+      .lean();
+    return entries.map(entry => ({ date: entry.createdAt, amount: entry.amount ?? 0 }));
+  }
+
   static async logMessageEdit(oldMessage: Message | PartialMessage, newMessage: Message | PartialMessage): Promise<void> {
     if (!oldMessage.author || oldMessage.author.bot) return;
     if (oldMessage.content === newMessage.content) return;

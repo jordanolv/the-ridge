@@ -1,41 +1,14 @@
-import { toParisDayYMD } from '../../../../shared/time/day-split';
-import { box, image, text, type CardNode } from './elements';
+import { box, image, text, type CardNode } from '../engine/elements';
+import { formatDurationShort } from '../engine/format';
+import type { DailyTotal } from '../engine/series';
 
-export interface DayActivity {
+interface DayActivity {
   date: Date;
   time: number;
 }
 
-export interface ActivityWeeks {
-  current: DayActivity[];
-  previous: DayActivity[];
-}
-
 const DAY_NAMES = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
 const DAYS = 7;
-
-/** Les 7 derniers jours (Paris) et les 7 d'avant, jours sans activité compris. */
-export function buildWeeks(activity: DayActivity[], now = new Date()): ActivityWeeks {
-  const [year, month, day] = toParisDayYMD(now).split('-').map(Number);
-  const dayAt = (offset: number) => new Date(Date.UTC(year, month - 1, day - offset, 12));
-  const timeByDay = new Map(activity.map(e => [toParisDayYMD(e.date), e.time]));
-  const entry = (date: Date) => ({ date, time: timeByDay.get(toParisDayYMD(date)) ?? 0 });
-
-  const current: DayActivity[] = [];
-  const previous: DayActivity[] = [];
-  for (let i = DAYS - 1; i >= 0; i--) {
-    current.push(entry(dayAt(i)));
-    previous.push(entry(dayAt(i + DAYS)));
-  }
-  return { current, previous };
-}
-
-export function formatDuration(seconds: number): string {
-  if (!seconds || seconds <= 0) return '0';
-  if (seconds >= 3600) return `${Math.floor(seconds / 3600)}h`;
-  if (seconds >= 60) return `${Math.floor(seconds / 60)}m`;
-  return `${Math.floor(seconds)}s`;
-}
 
 interface Point {
   x: number;
@@ -52,8 +25,10 @@ function smoothPath(points: Point[], step: number): string {
     .join(' ');
 }
 
-export function activityChart(activity: DayActivity[], width: number, height: number, accent: string): CardNode {
-  const { current, previous } = buildWeeks(activity);
+/** Temps vocal des 7 derniers jours, sur fond de la semaine d'avant. `fortnight` : 14 jours, du plus ancien. */
+export function activityChart(fortnight: DailyTotal[], width: number, height: number, accent: string): CardNode {
+  const previous = fortnight.slice(0, DAYS).map(d => ({ date: d.date, time: d.total }));
+  const current = fortnight.slice(DAYS).map(d => ({ date: d.date, time: d.total }));
 
   const left = width * 0.04;
   const top = height * 0.15;
@@ -91,7 +66,7 @@ export function activityChart(activity: DayActivity[], width: number, height: nu
     { position: 'relative', width, height },
     image(Buffer.from(svg), { position: 'absolute', left: 0, top: 0, width, height }),
     ...current.flatMap((d, i) => [
-      d.time > 0 && centeredAt(currentPoints[i].x, currentPoints[i].y - 50, { fontSize: 26, fontWeight: 700, color: 'white' }, formatDuration(d.time)),
+      d.time > 0 && centeredAt(currentPoints[i].x, currentPoints[i].y - 50, { fontSize: 26, fontWeight: 700, color: 'white' }, formatDurationShort(d.time)),
       centeredAt(currentPoints[i].x, baseline + 14, { fontSize: 23, color: 'rgba(255,255,255,0.5)' }, DAY_NAMES[(d.date.getUTCDay() + 6) % 7]),
     ]),
     box(

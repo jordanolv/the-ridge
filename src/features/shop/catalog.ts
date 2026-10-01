@@ -1,4 +1,4 @@
-import { listPaidThemes } from '../user/services/profile-card/themes';
+import { listPaidThemes } from '../user/services/profile-card/engine/themes';
 
 export interface ShopVariant {
   id: string;
@@ -70,7 +70,7 @@ export const SHOP_ITEMS: ShopItem[] = [
   },
 ];
 
-/** Les designs disponibles sont les images d'`assets/cards/` — voir `profile-card/themes.ts`. */
+/** Les designs disponibles sont les images d'`assets/cards/` — voir `profile-card/engine/themes.ts`. */
 function themeVariants(): ShopVariant[] {
   return listPaidThemes().map((theme, i) => ({
     id: theme.id,

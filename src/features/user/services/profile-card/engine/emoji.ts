@@ -1,4 +1,5 @@
 import { image, text, type CardNode } from './elements';
+import { fetchImage } from './remote-image';
 
 const TWEMOJI_URL = 'https://cdn.jsdelivr.net/gh/jdecked/twemoji@latest/assets/svg';
 const ZERO_WIDTH_JOINER = 0x200d;
@@ -12,7 +13,6 @@ const FLAG = /^\p{Regional_Indicator}{1,2}$/u;
 const KEYCAP = /^[#*0-9].?\u20E3$/u;
 
 const segmenter = new Intl.Segmenter('fr', { granularity: 'grapheme' });
-const cache = new Map<string, Promise<Buffer | undefined>>();
 
 /** Nom de fichier Twemoji : les codepoints en hexa, sans le sélecteur de variante hors séquence ZWJ. */
 export function twemojiCode(emoji: string): string {
@@ -34,25 +34,15 @@ export function isEmoji(grapheme: string): boolean {
   );
 }
 
-async function download(code: string): Promise<Buffer | undefined> {
-  try {
-    const response = await fetch(`${TWEMOJI_URL}/${code}.svg`, { signal: AbortSignal.timeout(3000) });
-    return response.ok ? Buffer.from(await response.arrayBuffer()) : undefined;
-  } catch {
-    return undefined;
-  }
+const CUSTOM_EMOJI = /^<a?:\w+:(\d+)>$/;
+
+/** Les emojis personnalisés Discord (`<:nom:id>`) n'existent pas en police : on prend leur image sur le CDN. */
+export function discordEmojiUrl(markup: string): string | null {
+  const id = CUSTOM_EMOJI.exec(markup)?.[1];
+  return id ? `https://cdn.discordapp.com/emojis/${id}.png?size=64` : null;
 }
 
-function loadEmoji(emoji: string): Promise<Buffer | undefined> {
-  const code = twemojiCode(emoji);
-  let svg = cache.get(code);
-  if (!svg) {
-    svg = download(code);
-    svg.then(result => result === undefined && cache.delete(code));
-    cache.set(code, svg);
-  }
-  return svg;
-}
+const loadEmoji = (emoji: string) => fetchImage(`${TWEMOJI_URL}/${twemojiCode(emoji)}.svg`);
 
 const EMOJI_STYLE = { width: '1em', height: '1em', margin: '0 0.05em 0 0.1em', verticalAlign: '-0.1em' };
 

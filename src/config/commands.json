@@ -12,13 +12,8 @@
         },
         {
           "name": "me",
-          "description": "Générez votre carte de profil personnalisée avec vos stats",
-          "usage": ""
-        },
-        {
-          "name": "stats",
-          "description": "Affiche tes statistiques détaillées (arcade, expéditions, collection, activité)",
-          "usage": ""
+          "description": "Ton profil en onglets : carte, activité, jeux et collection Peak Hunters",
+          "usage": "membre:@user"
         },
         {
           "name": "leaderboard",

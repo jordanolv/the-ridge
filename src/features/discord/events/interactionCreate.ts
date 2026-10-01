@@ -51,6 +51,7 @@ import { ENIGME_BUTTON_ID, ENIGME_HINT_BUTTON_ID, ENIGME_MODAL_ID, ENIGME_REVEAL
 import { QuizService, QUIZ_BUTTON_PREFIX, QUIZ_THEME_PREFIX } from '../../quiz/services/quiz.service';
 import { PersonalityTestService, PTEST_BUTTON_PREFIX } from '../../personality-test/services/personality-test.service';
 import { handleShopButton, handleShopSelect, SHOP_PREFIX } from '../../shop/events/shop-interactions';
+import { handleMeButton, ME_BUTTON_PREFIX } from '../../user/events/me-interactions';
 import { handlePackButton, PACK_BUTTON_PREFIX } from '../../peak-hunters/services/pack.service';
 import { isSilentDiscordError } from '../../../shared/utils/discord-errors';
 const PROFILE_MODAL_ID = 'profile-config-modal';
@@ -127,6 +128,8 @@ export default {
           await handleInventaireButton(interaction, client);
         } else if (interaction.customId.startsWith(SHOP_PREFIX + ':')) {
           await handleShopButton(interaction);
+        } else if (interaction.customId.startsWith(ME_BUTTON_PREFIX + ':')) {
+          await handleMeButton(interaction);
         } else if (interaction.customId.startsWith('impostor_')) {
           await handleImpostorButtonInteraction(interaction, client);
         } else if (interaction.customId.startsWith('bet:')) {

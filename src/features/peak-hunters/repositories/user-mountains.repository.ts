@@ -190,4 +190,13 @@ export class UserMountainsRepository {
       rarity: (m.rarity as MountainRarity) ?? 'common',
     }));
   }
+
+  /** Taille de chaque collection non vide, de la plus grande à la plus petite. */
+  static async collectionSizes(): Promise<{ userId: string; total: number }[]> {
+    return UserMountainsModel.aggregate([
+      { $project: { _id: 0, userId: 1, total: { $size: { $ifNull: ['$unlockedMountains', []] } } } },
+      { $match: { total: { $gt: 0 } } },
+      { $sort: { total: -1, userId: 1 } },
+    ]);
+  }
 }
