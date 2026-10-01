@@ -40,7 +40,6 @@ export interface ActivityData {
   totalMessages: number;
   totalVoice: number;
   streak: number;
-  dailies: number;
   parties: number;
   personalityTests: number;
   balance: number[];
@@ -52,6 +51,13 @@ export interface ActivityData {
 const sum = (values: number[]) => values.reduce((total, value) => total + value, 0);
 const lastWeek = (values: number[]) => sum(values.slice(-7));
 const signed = (value: number) => `${value > 0 ? '+' : value < 0 ? '−' : ''}${formatNumber(Math.abs(value))}`;
+
+/** La série compte aujourd'hui : elle a commencé il y a `streak - 1` jours. */
+function streakSince(days: Date[], streak: number): string {
+  if (streak <= 0) return 'Aucune série en cours';
+  const start = new Date(days[days.length - 1].getTime() - (streak - 1) * 86_400_000);
+  return `depuis le ${start.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: streak > 300 ? 'numeric' : undefined, timeZone: 'Europe/Paris' })}`;
+}
 
 function axisLabels(days: Date[]): AxisLabel[] {
   const short = (d: Date) => d.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', timeZone: 'Europe/Paris' });
@@ -73,12 +79,13 @@ export const activityTab = defineTab<ActivityData>({
     const since = parisDays(DAYS)[0];
     since.setUTCHours(0, 0, 0, 0);
 
-    const [movements, players, messagesRank, voiceRank, streakRank, weeklyRank, salary] = await Promise.all([
+    const [movements, players, messagesRank, voiceRank, streakRank, partiesRank, weeklyRank, salary] = await Promise.all([
       LogService.economyMovements(user.id, since),
       repository.countUsers(),
       repository.rankBy('stats.totalMsg', stats?.totalMsg ?? 0),
       repository.rankBy('stats.voiceTime', stats?.voiceTime ?? 0),
       repository.rankBy('stats.dailyStreak', stats?.dailyStreak ?? 0),
+      repository.rankBy('stats.partyParticipated', stats?.partyParticipated ?? 0),
       repository.rankBy('stats.activityPoints', stats?.activityPoints ?? 0),
       estimateWeeklySalary(user.id),
     ]);
@@ -90,7 +97,6 @@ export const activityTab = defineTab<ActivityData>({
       totalMessages: stats?.totalMsg ?? 0,
       totalVoice: stats?.voiceTime ?? 0,
       streak: stats?.dailyStreak ?? 0,
-      dailies: stats?.totalDailies ?? 0,
       parties: stats?.partyParticipated ?? 0,
       personalityTests: stats?.personalityTestsCount ?? 0,
       balance: balanceHistory(account.profil?.money ?? 0, movements, DAYS),
@@ -99,6 +105,7 @@ export const activityTab = defineTab<ActivityData>({
         { label: '💬 Messages', rank: messagesRank },
         { label: '🔊 Vocal', rank: voiceRank },
         { label: '🔥 Série', rank: streakRank },
+        { label: '🎉 Soirées', rank: partiesRank },
         { label: '⚡ Activité de la semaine', rank: weeklyRank, detail: `${formatNumber(stats?.activityPoints ?? 0)} pts` },
       ],
       salary,
@@ -117,7 +124,7 @@ export const activityTab = defineTab<ActivityData>({
       LAYOUT,
       kpi(PANELS.kpis[0], style, '💬 Messages', formatNumber(data.totalMessages), `+${formatNumber(lastWeek(data.messages))} ces 7 derniers jours`),
       kpi(PANELS.kpis[1], style, '🔊 Temps vocal', formatDuration(data.totalVoice), `+${formatDuration(lastWeek(data.voice))} ces 7 derniers jours`),
-      kpi(PANELS.kpis[2], style, '🔥 Série active', plural(data.streak, 'jour'), `${plural(data.dailies, 'daily')} réclamé${data.dailies > 1 ? 's' : ''}`),
+      kpi(PANELS.kpis[2], style, '🔥 Série active', plural(data.streak, 'jour'), streakSince(data.days, data.streak)),
       kpi(PANELS.kpis[3], style, '🎉 Soirées vocales', formatNumber(data.parties), `${plural(data.personalityTests, 'test')} de personnalité`),
 
       titledPanel(PANELS.voice, style, '🔊 Vocal par jour — 30 jours', barChart(data.voice.map(s => s / 3600), chartWidth, chartHeight, style.accent, axisLabels(data.days))),
