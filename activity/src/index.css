@@ -1,0 +1,48 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+
+  --color-night-950: #070814;
+  --color-night-900: #0c0f24;
+  --color-night-800: #141936;
+  --color-glow-violet: #a78bfa;
+  --color-glow-cyan: #67e8f9;
+  --color-glow-pink: #f472b6;
+
+  --color-tier-sentier: #e67e22;
+  --color-tier-falaise: #3498db;
+  --color-tier-sommet: #9b59b6;
+
+  --animate-rise: rise 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  --animate-float: float 6s ease-in-out infinite;
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+}
+
+@layer base {
+  html, body, #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-night-950 font-sans text-white antialiased;
+    overscroll-behavior: none;
+  }
+}
+
+@utility glass {
+  @apply rounded-2xl border border-white/10 bg-white/[0.04] shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-xl;
+}
+
+@utility text-gradient {
+  @apply bg-gradient-to-r from-glow-cyan via-glow-violet to-glow-pink bg-clip-text text-transparent;
+}
