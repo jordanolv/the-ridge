@@ -1,25 +1,22 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
+import { defaultTheme } from './engine/themes';
 import { ProfileCardService } from './profile-card.service';
+import { TABS } from './tabs';
+import { SAMPLES } from './tabs/samples';
 
-test('generateCard rend un PNG 1500×900 sans réseau, même avec des données extrêmes', async () => {
-  const png = await ProfileCardService.generateCard({
-    pseudo: 'Un pseudo vraiment beaucoup trop long pour tenir sur la carte',
-    bio: '',
-    ridgecoin: '123 456 789',
-    level: '999',
-    messages: '0',
-    voc: '0',
-    birthday: 'Non défini',
-    joinedAt: '01/2020',
-    avatarUrl: '',
-    roles: Array.from({ length: 40 }, (_, i) => ({ name: `Rôle numéro ${i}`, color: '#000000' })),
-    weeklyActivity: [],
-    mountains: [],
-    xp: { current: 0, required: 100, percent: 0 },
+const isCardPng = (png: Buffer) =>
+  png.subarray(1, 4).toString() === 'PNG' && png.readUInt32BE(16) === 1500 && png.readUInt32BE(20) === 900;
+
+for (const tab of TABS) {
+  test(`l’onglet « ${tab.label} » rend un PNG 1500×900 à partir de ses données d’exemple`, async () => {
+    assert.ok(SAMPLES[tab.id], `données d'exemple manquantes pour ${tab.id}`);
+    assert.ok(isCardPng(await ProfileCardService.draw(tab, SAMPLES[tab.id], defaultTheme())));
   });
+}
 
-  assert.deepEqual([...png.subarray(1, 4)], [...Buffer.from('PNG')]);
-  assert.equal(png.readUInt32BE(16), 1500);
-  assert.equal(png.readUInt32BE(20), 900);
+test('chaque onglet a un identifiant unique et court (il voyage dans le customId des boutons)', () => {
+  const ids = TABS.map(tab => tab.id);
+  assert.equal(new Set(ids).size, ids.length);
+  assert.ok(ids.every(id => !id.includes(':') && id.length <= 16));
 });

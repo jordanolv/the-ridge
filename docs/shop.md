@@ -149,12 +149,9 @@ collection tient largement le rythme. Si elle devient triviale à finir, la rép
 `/me` répond **en public**. C'est la seule surface où un joueur se met vraiment en
 scène devant le salon, donc la seule qui justifie un cosmétique payant.
 
-La carte est rendue par [Takumi](https://github.com/kane50613/takumi) (flexbox + CSS,
-rastérisé en natif), dans `src/features/user/services/profile-card/`. Les cadres sont
-fixes (`geometry.ts`), leur contenu se place tout seul : pseudo et montants rétrécissent
-pour tenir, la bio se coupe en « … », les rôles passent à la ligne. Rien n'est
-positionné à la main. Environ 70 ms par carte : le fond flouté de chaque thème est
-calculé une fois au démarrage (`backdrop.ts`), puis réutilisé.
+Le thème s'applique à **tous les onglets** de `/me` (Profil, Activité, Jeux, Peak Hunters) :
+un design acheté habille tout le profil, pas seulement la première carte. Le rendu est
+décrit dans CLAUDE.md, section *Profil `/me`*.
 
 **Un thème est une image de fond.** Tout `.png`/`.jpg`/`.webp`/`.svg` déposé dans
 `assets/cards/` devient un design achetable au redémarrage, l'id venant du nom du
@@ -171,7 +168,7 @@ ignorée et signalée dans les logs au démarrage, sans casser `/me` :
 lancer le bot :
 
 ```bash
-node -r @swc-node/register scripts/preview-card.ts <id> [pseudo]
+node -r @swc-node/register scripts/preview-card.ts all <id>
 ```
 
 Le design acheté est stocké dans `profil.cardTheme` — pas lu depuis les locations de

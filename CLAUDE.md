@@ -218,6 +218,30 @@ Tout mouvement d'argent passe par `LogService.economy` avec le bon `flow`
 Le catalogue de la boutique, ses prix et ce qui a déjà été écarté sont dans
 [`docs/shop.md`](docs/shop.md) — à lire avant d'ajouter un article.
 
+## Profil `/me`
+
+`/me [membre]` affiche une image par onglet, avec des boutons pour passer de l'un à
+l'autre (seul l'auteur de la commande peut cliquer). Rendu par
+[Takumi](https://github.com/kane50613/takumi) : arbre flexbox + CSS rastérisé en natif,
+~70 ms la carte. Tout vit dans `src/features/user/services/profile-card/` :
+
+```
+engine/      # renderer, thèmes, fond flouté, polices, emojis, images distantes, séries
+components/  # panneau, chiffre clé, barres, graphiques, classement, vignette…
+tabs/        # un fichier par onglet + index.ts (ordre des boutons) + samples.ts
+```
+
+**Ajouter un onglet** = un fichier `tabs/<nom>.tab.ts` (`defineTab` : cadres, `load`,
+`build`), une ligne dans `tabs/index.ts`, des données d'exemple dans `samples.ts`. Les
+boutons, le fond flouté et le test de rendu suivent tout seuls.
+
+- `load` fait les requêtes et télécharge les images ; `build` reste pur (données → arbre).
+- Les cadres sont fixes, leur contenu se place seul : jamais de coordonnées pour du texte.
+  Pseudo et montants rétrécissent (`textFit`), jamais tronqués.
+- Le flou sous les panneaux est cuit une fois par thème × onglet (`engine/backdrop.ts`),
+  préparé au démarrage (`ready`) : un `backdrop-filter` direct doublerait le temps de rendu.
+- Aperçu sans bot : `node -r @swc-node/register scripts/preview-card.ts [onglet|all] [thème]`.
+
 ## Peak Hunters (montagnes)
 
 Dossier `src/features/peak-hunters/` — la feature s'appelait `mountain`, les customId
