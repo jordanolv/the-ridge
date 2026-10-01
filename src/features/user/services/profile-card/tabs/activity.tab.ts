@@ -41,6 +41,8 @@ export interface ActivityData {
   totalVoice: number;
   streak: number;
   dailies: number;
+  parties: number;
+  personalityTests: number;
   balance: number[];
   players: number;
   ranks: Rank[];
@@ -89,6 +91,8 @@ export const activityTab = defineTab<ActivityData>({
       totalVoice: stats?.voiceTime ?? 0,
       streak: stats?.dailyStreak ?? 0,
       dailies: stats?.totalDailies ?? 0,
+      parties: stats?.partyParticipated ?? 0,
+      personalityTests: stats?.personalityTestsCount ?? 0,
       balance: balanceHistory(account.profil?.money ?? 0, movements, DAYS),
       players,
       ranks: [
@@ -114,7 +118,7 @@ export const activityTab = defineTab<ActivityData>({
       kpi(PANELS.kpis[0], style, '💬 Messages', formatNumber(data.totalMessages), `+${formatNumber(lastWeek(data.messages))} ces 7 derniers jours`),
       kpi(PANELS.kpis[1], style, '🔊 Temps vocal', formatDuration(data.totalVoice), `+${formatDuration(lastWeek(data.voice))} ces 7 derniers jours`),
       kpi(PANELS.kpis[2], style, '🔥 Série active', plural(data.streak, 'jour'), `${plural(data.dailies, 'daily')} réclamé${data.dailies > 1 ? 's' : ''}`),
-      kpi(PANELS.kpis[3], style, '💰 Solde', `${formatNumber(balanceNow)} RC`, `${signed(balanceDelta)} RC sur 30 jours`),
+      kpi(PANELS.kpis[3], style, '🎉 Soirées vocales', formatNumber(data.parties), `${plural(data.personalityTests, 'test')} de personnalité`),
 
       titledPanel(PANELS.voice, style, '🔊 Vocal par jour — 30 jours', barChart(data.voice.map(s => s / 3600), chartWidth, chartHeight, style.accent, axisLabels(data.days))),
       titledPanel(PANELS.messages, style, '💬 Messages par jour — 30 jours', barChart(data.messages, chartWidth, chartHeight, '#9b8cff', axisLabels(data.days))),
@@ -132,8 +136,13 @@ export const activityTab = defineTab<ActivityData>({
       titledPanel(
         PANELS.economy,
         style,
-        '💰 Solde — 30 jours',
-        lineChart(data.balance, PANELS.economy.width - 56, 170, '#f5c542', axisLabels(data.days)),
+        '💰 Économie',
+        box(
+          { alignItems: 'baseline', gap: 12 },
+          text({ fontSize: 30, fontWeight: 900, color: 'white' }, `${formatNumber(balanceNow)} RC`),
+          text({ fontSize: 17, color: MUTED }, `${signed(balanceDelta)} RC sur 30 jours`),
+        ),
+        lineChart(data.balance, PANELS.economy.width - 56, 130, '#f5c542', axisLabels(data.days)),
         box(
           { marginTop: 'auto', justifyContent: 'space-between', alignItems: 'baseline' },
           text({ fontSize: 18, color: MUTED }, 'Salaire estimé cette semaine'),

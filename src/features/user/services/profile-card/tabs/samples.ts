@@ -45,6 +45,8 @@ const activity: ActivityData = {
   totalVoice: 1_123_200,
   streak: 12,
   dailies: 87,
+  parties: 14,
+  personalityTests: 3,
   balance: Array.from({ length: 30 }, (_, i) => 900 + i * 12 + (i % 5) * 20),
   players: 214,
   ranks: [
@@ -70,9 +72,6 @@ const games: GamesData = {
     enigme: { wins: 4, losses: 0, attempts: 25, lastWin: new Date('2026-09-29T15:00:00Z') },
   },
   quiz: { correct: 312, answered: 420, streak: 5, bestStreak: 23, weekly: 18 },
-  parties: 14,
-  personalityTests: 3,
-  dailies: 87,
 };
 
 const peakHunters: PeakHuntersData = {

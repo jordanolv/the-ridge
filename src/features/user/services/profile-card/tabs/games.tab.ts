@@ -16,11 +16,10 @@ const PANELS = {
   duels: [0, 1, 2, 3].map(i => rect(column(i), 28, COLUMN_WIDTH, 200)),
   servers: [0, 1, 2, 3].map(i => rect(column(i), 250, COLUMN_WIDTH, 200)),
   quiz: rect(28, 472, 710, 400),
-  record: rect(760, 472, 345, 400),
-  community: rect(1127, 472, 345, 400),
+  record: rect(760, 472, 712, 400),
 };
 
-const LAYOUT = { id: 'jeux', panels: [...PANELS.duels, ...PANELS.servers, PANELS.quiz, PANELS.record, PANELS.community] };
+const LAYOUT = { id: 'jeux', panels: [...PANELS.duels, ...PANELS.servers, PANELS.quiz, PANELS.record] };
 
 const DUELS = [
   { key: 'shifumi', title: '✊ Shifumi' },
@@ -46,9 +45,6 @@ export interface GamesData {
   duels: Record<(typeof DUELS)[number]['key'], Score>;
   servers: Record<ResultGame, Score & { lastWin: Date | null }>;
   quiz: { correct: number; answered: number; streak: number; bestStreak: number; weekly: number };
-  parties: number;
-  personalityTests: number;
-  dailies: number;
 }
 
 const score = (stats?: Partial<Score>): Score => ({ wins: stats?.wins ?? 0, losses: stats?.losses ?? 0, attempts: stats?.attempts ?? 0 });
@@ -127,9 +123,6 @@ export const gamesTab = defineTab<GamesData>({
         bestStreak: quiz?.bestStreak ?? 0,
         weekly: quiz?.weeklyCorrect ?? 0,
       },
-      parties: account.stats?.partyParticipated ?? 0,
-      personalityTests: account.stats?.personalityTestsCount ?? 0,
-      dailies: account.stats?.totalDailies ?? 0,
     };
   },
 
@@ -140,6 +133,9 @@ export const gamesTab = defineTab<GamesData>({
     const serverWins = SERVER_GAMES.reduce((total, g) => total + data.servers[g.key].wins, 0);
     const favourite = [...DUELS.map(d => ({ title: d.title, wins: data.duels[d.key].wins })), ...SERVER_GAMES.map(g => ({ title: g.title, wins: data.servers[g.key].wins }))]
       .sort((a, b) => b.wins - a.wins)[0];
+    const bestDuel = DUELS.map(d => ({ title: d.title, ...data.duels[d.key] }))
+      .filter(d => d.wins + d.losses > 0)
+      .sort((a, b) => b.wins / (b.wins + b.losses) - a.wins / (a.wins + a.losses))[0];
 
     return card(
       theme,
@@ -172,18 +168,7 @@ export const gamesTab = defineTab<GamesData>({
           detail('⚔️ En duel', formatNumber(duelWins)),
           detail('🎯 Aux jeux du serveur', formatNumber(serverWins)),
           detail('Jeu fétiche', favourite.wins > 0 ? favourite.title : '—'),
-        ),
-      ),
-
-      titledPanel(
-        PANELS.community,
-        style,
-        '🎉 Vie du serveur',
-        box(
-          { flexDirection: 'column', justifyContent: 'space-around', flexGrow: 1 },
-          headline(formatNumber(data.parties), data.parties > 1 ? 'soirées vocales' : 'soirée vocale'),
-          detail('🔮 Tests de personnalité', formatNumber(data.personalityTests)),
-          detail('🎁 Dailies réclamés', formatNumber(data.dailies)),
+          detail('Meilleur taux en duel', bestDuel ? `${bestDuel.title} · ${percent(bestDuel.wins, bestDuel.wins + bestDuel.losses)} %` : '—'),
         ),
       ),
     );
