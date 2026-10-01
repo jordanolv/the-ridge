@@ -16,10 +16,11 @@ const PANELS = {
   duels: [0, 1, 2, 3].map(i => rect(column(i), 28, COLUMN_WIDTH, 200)),
   servers: [0, 1, 2, 3].map(i => rect(column(i), 250, COLUMN_WIDTH, 200)),
   quiz: rect(28, 472, 710, 400),
-  community: rect(760, 472, 712, 400),
+  record: rect(760, 472, 345, 400),
+  community: rect(1127, 472, 345, 400),
 };
 
-const LAYOUT = { id: 'jeux', panels: [...PANELS.duels, ...PANELS.servers, PANELS.quiz, PANELS.community] };
+const LAYOUT = { id: 'jeux', panels: [...PANELS.duels, ...PANELS.servers, PANELS.quiz, PANELS.record, PANELS.community] };
 
 const DUELS = [
   { key: 'shifumi', title: '✊ Shifumi' },
@@ -47,6 +48,7 @@ export interface GamesData {
   quiz: { correct: number; answered: number; streak: number; bestStreak: number; weekly: number };
   parties: number;
   personalityTests: number;
+  dailies: number;
 }
 
 const score = (stats?: Partial<Score>): Score => ({ wins: stats?.wins ?? 0, losses: stats?.losses ?? 0, attempts: stats?.attempts ?? 0 });
@@ -127,6 +129,7 @@ export const gamesTab = defineTab<GamesData>({
       },
       parties: account.stats?.partyParticipated ?? 0,
       personalityTests: account.stats?.personalityTestsCount ?? 0,
+      dailies: account.stats?.totalDailies ?? 0,
     };
   },
 
@@ -135,6 +138,8 @@ export const gamesTab = defineTab<GamesData>({
     const { quiz } = data;
     const duelWins = DUELS.reduce((total, d) => total + data.duels[d.key].wins, 0);
     const serverWins = SERVER_GAMES.reduce((total, g) => total + data.servers[g.key].wins, 0);
+    const favourite = [...DUELS.map(d => ({ title: d.title, wins: data.duels[d.key].wins })), ...SERVER_GAMES.map(g => ({ title: g.title, wins: data.servers[g.key].wins }))]
+      .sort((a, b) => b.wins - a.wins)[0];
 
     return card(
       theme,
@@ -158,16 +163,27 @@ export const gamesTab = defineTab<GamesData>({
       ),
 
       titledPanel(
+        PANELS.record,
+        style,
+        '🏅 Palmarès',
+        box(
+          { flexDirection: 'column', justifyContent: 'space-around', flexGrow: 1 },
+          headline(formatNumber(duelWins + serverWins), duelWins + serverWins > 1 ? 'victoires' : 'victoire'),
+          detail('⚔️ En duel', formatNumber(duelWins)),
+          detail('🎯 Aux jeux du serveur', formatNumber(serverWins)),
+          detail('Jeu fétiche', favourite.wins > 0 ? favourite.title : '—'),
+        ),
+      ),
+
+      titledPanel(
         PANELS.community,
         style,
         '🎉 Vie du serveur',
         box(
           { flexDirection: 'column', justifyContent: 'space-around', flexGrow: 1 },
-          headline(formatNumber(duelWins + serverWins), 'victoires au total, tous jeux confondus'),
-          detail('🎉 Soirées vocales', formatNumber(data.parties)),
+          headline(formatNumber(data.parties), data.parties > 1 ? 'soirées vocales' : 'soirée vocale'),
           detail('🔮 Tests de personnalité', formatNumber(data.personalityTests)),
-          detail('⚔️ Victoires en duel', formatNumber(duelWins)),
-          detail('🎯 Victoires aux jeux du serveur', formatNumber(serverWins)),
+          detail('🎁 Dailies réclamés', formatNumber(data.dailies)),
         ),
       ),
     );

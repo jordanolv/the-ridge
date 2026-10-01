@@ -72,6 +72,7 @@ const games: GamesData = {
   quiz: { correct: 312, answered: 420, streak: 5, bestStreak: 23, weekly: 18 },
   parties: 14,
   personalityTests: 3,
+  dailies: 87,
 };
 
 const peakHunters: PeakHuntersData = {
