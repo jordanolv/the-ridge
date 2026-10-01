@@ -4,6 +4,7 @@ import { MountainService } from '../../peak-hunters/services/mountain.service';
 import { xpProgress } from '../../user/services/xp-progress';
 import { UserService } from '../../user/services/user.service';
 import type { MountainRarity } from '../../peak-hunters/types/peak-hunters.types';
+import { hexColor } from './hex-color';
 import type { ActivityUser, ExpeditionTierName, HomeSummary, RarityProgress } from '../activity.types';
 
 const TIERS: ExpeditionTierName[] = ['sentier', 'falaise', 'sommet'];
@@ -16,7 +17,7 @@ function rarityProgress(ownedIds: Set<string>): RarityProgress[] {
     return {
       id: rarity,
       label: RARITY_CONFIG[rarity].label,
-      color: `#${RARITY_CONFIG[rarity].color.toString(16).padStart(6, '0')}`,
+      color: hexColor(RARITY_CONFIG[rarity].color),
       owned: ofRarity.filter(m => ownedIds.has(m.id)).length,
       total: ofRarity.length,
     };

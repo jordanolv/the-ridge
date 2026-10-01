@@ -260,6 +260,15 @@ URL mappings du portail pointent sur le domaine sans chemin.
   la même image sert staging et prod.
 - Ouverte hors Discord (pas de `frame_id` dans l'URL), elle passe en aperçu avec
   `activity/src/lib/sample.ts`.
+- **Direct** (`activity-live.service.ts`, WebSocket sur `/api/activity/live`) : une salle par
+  Activity lancée (`instanceId` du SDK). Une ouverture de pack est tirée côté serveur puis
+  diffusée avec une heure de départ ; chaque écran la joue au même instant d'après
+  `pack-show.timeline.ts`, partagé avec le front. Les ouvertures d'une salle passent en file.
+  Le fil du camp écoute `peak-hunters:pack:opened` sur le bus : il voit aussi les packs
+  ouverts depuis Discord.
+- **Mapbox** : la cinématique vole vers chaque sommet. Styles et tuiles passent par
+  `/api/activity/mapbox/*` (CSP) ; `MAPBOX_TOKEN` (jeton public `pk.`) dans l'env, sans lui
+  l'ouverture se joue sur un fond étoilé.
 
 ```bash
 npm run dev                                   # bot + serveur web (WEB_PORT, 3001)

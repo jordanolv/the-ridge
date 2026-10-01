@@ -17,13 +17,14 @@ export function SplashScreen() {
   );
 }
 
-export function ErrorScreen({ message, onRetry }: { message: string; onRetry: () => void }) {
+export function ErrorScreen({ message, detail, onRetry }: { message: string; detail?: string; onRetry: () => void }) {
   return (
     <div className="grid h-full place-items-center p-6">
       <div className="glass flex max-w-sm flex-col items-center gap-3 p-8 text-center">
         <Logo size={48} />
         <p className="text-lg font-bold">Impossible d'ouvrir le camp de base</p>
         <p className="text-sm text-white/60">{message}</p>
+        {detail && <p className="break-all rounded-lg bg-black/30 px-3 py-2 font-mono text-xs text-white/45">{detail}</p>}
         <button onClick={onRetry} className="mt-2 rounded-xl bg-gradient-to-r from-glow-violet to-glow-cyan px-5 py-2 font-semibold text-night-950">
           Réessayer
         </button>
