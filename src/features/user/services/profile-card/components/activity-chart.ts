@@ -70,7 +70,7 @@ export function activityChart(fortnight: DailyTotal[], width: number, height: nu
       centeredAt(currentPoints[i].x, baseline + 14, { fontSize: 23, color: 'rgba(255,255,255,0.5)' }, DAY_NAMES[(d.date.getUTCDay() + 6) % 7]),
     ]),
     box(
-      { position: 'absolute', left, bottom: 4, width: chartWidth, justifyContent: 'space-between', fontSize: 24, fontWeight: 700 },
+      { position: 'absolute', left, bottom: 14, width: chartWidth, justifyContent: 'space-between', fontSize: 24, fontWeight: 700 },
       text({ color: accent }, '● Cette semaine'),
       text({ color: 'rgba(255,255,255,0.4)' }, '● Semaine précédente'),
     ),
