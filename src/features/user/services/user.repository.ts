@@ -2,7 +2,7 @@ import UserModel, { IUser } from '../models/user.model';
 import { AppConfigService } from '../../discord/services/app-config.service';
 import { NotFoundError, BirthdaySearchCriteria, BirthdayUser } from './user.types';
 
-export type RankedField = 'stats.totalMsg' | 'stats.voiceTime' | 'stats.dailyStreak' | 'stats.activityPoints';
+export type RankedField = 'stats.totalMsg' | 'stats.voiceTime' | 'stats.dailyStreak' | 'stats.activityPoints' | 'stats.partyParticipated';
 
 export class UserRepository {
 
