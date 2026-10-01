@@ -6,6 +6,8 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc && tsc-alias && node scripts/copy-assets.js",
+    "activity:dev": "npm --prefix activity run dev",
+    "activity:build": "npm --prefix activity run build",
     "test": "node --require @swc-node/register --test \"src/**/*.test.ts\"",
     "start": "node dist/index.js",
     "watch": "nodemon --exec node -r @swc-node/register src/index.ts",

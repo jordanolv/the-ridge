@@ -242,6 +242,35 @@ boutons, le fond flouté et le test de rendu suivent tout seuls.
   préparé au démarrage (`ready`) : un `backdrop-filter` direct doublerait le temps de rendu.
 - Aperçu sans bot : `node -r @swc-node/register scripts/preview-card.ts [onglet|all] [thème]`.
 
+## Activity Discord (`activity/`)
+
+Le « camp de base » : une app web lancée depuis un salon vocal, qui tourne dans Discord.
+Front Vite + React + Tailwind dans `activity/` (dépendances à part), API dans
+`src/web/routes/activity.route.ts` + `src/features/activity/`. Le serveur web du bot sert
+l'interface **à la racine** et l'API sous `/api/activity/*` : un seul conteneur, et les
+URL mappings du portail pointent sur le domaine sans chemin.
+
+- Auth : `authorize` côté Activity → `POST /api/activity/token` (le secret client reste
+  serveur) → `authenticate`. Les appels suivants envoient le jeton Discord en Bearer ;
+  `ActivityAuthService.identify` le vérifie (cache 10 min).
+- Tout passe par ce domaine, images comprises (`/api/activity/avatar/:id`,
+  `/api/activity/brand/:asset`) : la CSP d'une Activity bloque les autres domaines.
+- Le contrat d'API est `src/features/activity/activity.types.ts`, importé tel quel par le front.
+- Rien n'est figé au build : l'Activity lit son client id via `/api/activity/config`,
+  la même image sert staging et prod.
+- Ouverte hors Discord (pas de `frame_id` dans l'URL), elle passe en aperçu avec
+  `activity/src/lib/sample.ts`.
+
+```bash
+npm run dev                                   # bot + serveur web (WEB_PORT, 3001)
+npm run activity:dev                          # Vite sur 5173, proxy /api → 3001
+cloudflared tunnel --url http://localhost:5173
+```
+
+Portail Discord (une fois par application, donc staging et prod) : *Activities → Settings*
+activé ; *URL Mappings* `/` → domaine du tunnel (dev) ou de l'appli Dokploy ; *OAuth2 →
+Redirects* : `https://127.0.0.1`. `DISCORD_CLIENT_ID` et `DISCORD_CLIENT_SECRET` dans l'env.
+
 ## Peak Hunters (montagnes)
 
 Dossier `src/features/peak-hunters/` — la feature s'appelait `mountain`, les customId

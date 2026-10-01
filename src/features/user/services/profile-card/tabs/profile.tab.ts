@@ -13,6 +13,7 @@ import { box, image } from '../engine/elements';
 import { formatDate, formatDuration, formatNumber } from '../engine/format';
 import { rect } from '../engine/geometry';
 import { dailyTotals, type DailyTotal } from '../engine/series';
+import { xpProgress } from '../../xp-progress';
 import { defineTab } from './tab';
 
 const STAT_ROWS = [381, 512, 643, 773];
@@ -48,15 +49,6 @@ export interface ProfileData {
   voiceFortnight: DailyTotal[];
   mountains: { unlocked: number; total: number };
   xp: { current: number; required: number; percent: number };
-}
-
-const xpForLevel = (level: number) => 5 * level ** 2 + 110 * level + 100;
-
-export function xpProgress(level: number, experience: number): ProfileData['xp'] {
-  const floor = level > 1 ? xpForLevel(level - 1) : 0;
-  const current = Math.max(0, experience - floor);
-  const required = Math.max(1, xpForLevel(level) - floor);
-  return { current, required, percent: Math.min(1, current / required) };
 }
 
 const STATS: { panel: keyof typeof PANELS; icon: IconName; label: string; value: (d: ProfileData) => string; size: number }[] = [
