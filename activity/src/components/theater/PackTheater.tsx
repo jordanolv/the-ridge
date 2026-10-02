@@ -1,3 +1,4 @@
+import { Eye, X } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { ActivityUser, PackShow } from '../../../../src/features/activity/activity.types';
 import { segmentAt, type ShowSegment } from '../../../../src/features/activity/pack-show.timeline';
@@ -38,16 +39,21 @@ function shotFor(show: PackShow, segment: ShowSegment, remaining: number): Camer
   return { id, kind: 'fly', center: target, elevation: show.cards[segment.card].elevation, bearing: ((segment.card * 67) % 120) - 60, duration: remaining };
 }
 
+function revealedCount(show: PackShow, segment: ShowSegment): number {
+  if (segment.kind === 'summary') return show.cards.length;
+  if (segment.kind === 'reveal') return segment.card + 1;
+  return segment.kind === 'flight' ? segment.card : 0;
+}
+
 function revealedMarkers(show: PackShow, segment: ShowSegment): SummitMarker[] {
-  const visible = segment.kind === 'summary' ? show.cards.length : segment.kind === 'reveal' ? segment.card + 1 : segment.kind === 'flight' ? segment.card : 0;
-  return show.cards.slice(0, visible).flatMap((card, index) => {
+  return show.cards.slice(0, revealedCount(show, segment)).flatMap((card, index) => {
     const at = position(card);
     return at ? [{ id: `${index}`, position: at, color: card.color }] : [];
   });
 }
 
 function ProgressDots({ show, segment }: { show: PackShow; segment: ShowSegment }) {
-  const revealed = segment.kind === 'summary' ? show.cards.length : segment.kind === 'reveal' ? segment.card + 1 : 'card' in segment ? segment.card : 0;
+  const revealed = revealedCount(show, segment);
   return (
     <div className="flex gap-1.5">
       {show.cards.map((card, index) => (
@@ -102,7 +108,7 @@ function Theater({ show, now, me, participants, mapboxToken, onHide }: { show: P
           </button>
         ) : (
           <button onClick={onHide} className="rounded-xl border border-white/15 bg-night-950/40 px-3 py-1.5 text-sm font-semibold text-white/80 transition hover:bg-white/10">
-            {segment.kind === 'summary' ? 'Fermer' : 'Masquer'}
+            {segment.kind === 'summary' ? 'Fermer' : 'Réduire'}
           </button>
         )}
       </header>
@@ -122,12 +128,56 @@ function Theater({ show, now, me, participants, mapboxToken, onHide }: { show: P
   );
 }
 
-/** Les ouvertures de pack de la salle, jouées au même instant chez tout le monde, par-dessus l'interface. */
+/** Un autre joueur ouvre un pack : on le signale sans interrompre, libre à chacun de venir regarder. */
+function LiveBanner({ show, segment, onWatch, onDismiss }: { show: PackShow; segment: ShowSegment; onWatch: () => void; onDismiss: () => void }) {
+  const revealed = revealedCount(show, segment);
+  const latest = revealed > 0 ? show.cards[revealed - 1] : null;
+  return (
+    <div className="glass animate-rise fixed bottom-24 right-3 z-40 flex w-[min(22rem,calc(100%-1.5rem))] items-center gap-3 p-3 md:bottom-4">
+      <Avatar userId={show.opener.id} name={show.opener.displayName} size={40} />
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-sm">
+          <span className="font-bold">{show.opener.displayName}</span> ouvre un pack{' '}
+          <span className="font-bold" style={{ color: show.tierColor }}>
+            {show.tierLabel}
+          </span>
+        </p>
+        {latest ? (
+          <p className="truncate text-xs text-white/60">
+            vient d'avoir{' '}
+            <span className="font-bold" style={{ color: latest.color }}>
+              {latest.label}
+            </span>
+          </p>
+        ) : (
+          <div className="mt-1.5">
+            <ProgressDots show={show} segment={segment} />
+          </div>
+        )}
+      </div>
+      <button onClick={onWatch} className="flex items-center gap-1.5 rounded-xl bg-white px-3 py-1.5 text-sm font-bold text-night-950 transition hover:brightness-90">
+        <Eye size={15} /> Regarder
+      </button>
+      <button onClick={onDismiss} aria-label="Ignorer" className="grid h-8 w-8 place-items-center rounded-lg text-white/50 transition hover:bg-white/10 hover:text-white">
+        <X size={16} />
+      </button>
+    </div>
+  );
+}
+
+const withId = (set: ReadonlySet<string>, id: string) => new Set(set).add(id);
+const withoutId = (set: ReadonlySet<string>, id: string) => new Set([...set].filter(other => other !== id));
+
+/**
+ * Les ouvertures de pack de la salle, calées sur la même horloge chez tout le monde. Celui
+ * qui ouvre la voit en plein écran ; les autres ont un bandeau et la rejoignent s'ils veulent.
+ */
 export function PackTheater({ me, mapboxToken, onOwnShowEnd }: { me: ActivityUser; mapboxToken: string | null; onOwnShowEnd: () => void }) {
   const { shows, participants } = useLive();
-  const [hidden, setHidden] = useState<ReadonlySet<string>>(new Set());
+  const [watching, setWatching] = useState<ReadonlySet<string>>(new Set());
+  const [dismissed, setDismissed] = useState<ReadonlySet<string>>(new Set());
   const now = useServerClock(shows.length > 0);
-  const current = shows.find(show => !hidden.has(show.id) && segmentAt(show, now) !== null) ?? null;
+  const current = shows.find(show => !dismissed.has(show.id) && segmentAt(show, now) !== null) ?? null;
 
   const ownShowId = current && current.opener.id === me.id ? current.id : null;
   const previousOwnShow = useRef<string | null>(null);
@@ -137,6 +187,19 @@ export function PackTheater({ me, mapboxToken, onOwnShowEnd }: { me: ActivityUse
   }, [ownShowId, onOwnShowEnd]);
 
   if (!current) return null;
+
+  const isOpener = current.opener.id === me.id;
+  if (!isOpener && !watching.has(current.id)) {
+    return (
+      <LiveBanner
+        show={current}
+        segment={segmentAt(current, now)!.segment}
+        onWatch={() => setWatching(withId(watching, current.id))}
+        onDismiss={() => setDismissed(withId(dismissed, current.id))}
+      />
+    );
+  }
+
   return (
     <Theater
       key={current.id}
@@ -145,7 +208,11 @@ export function PackTheater({ me, mapboxToken, onOwnShowEnd }: { me: ActivityUse
       me={me}
       participants={participants}
       mapboxToken={mapboxToken}
-      onHide={() => setHidden(new Set(hidden).add(current.id))}
+      onHide={() => {
+        const closing = isOpener || segmentAt(current, serverNow())?.segment.kind === 'summary';
+        if (closing) setDismissed(withId(dismissed, current.id));
+        else setWatching(withoutId(watching, current.id));
+      }}
     />
   );
 }
