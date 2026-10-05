@@ -14,8 +14,9 @@ Bot Discord communautaire du serveur The Ridge. TypeScript, Discord.js v14, Mong
 ## Lancer le bot
 
 ```bash
-npm run dev      # swc, pas de build
-npm run watch    # idem + rechargement à chaud
+npm run dev      # bot + Activity (Vite) ensemble, swc, pas de build
+npm run dev:bot  # le bot seul
+npm run watch    # le bot seul + rechargement à chaud
 npm run build    # tsc + tsc-alias + copie des assets — ce que vérifie la CI
 ```
 
@@ -271,8 +272,7 @@ URL mappings du portail pointent sur le domaine sans chemin.
   l'ouverture se joue sur un fond étoilé.
 
 ```bash
-npm run dev                                   # bot + serveur web (WEB_PORT, 3001)
-npm run activity:dev                          # Vite sur 5173, proxy /api → 3001
+npm run dev                                   # bot + serveur web (3001) + Vite (5173, proxy /api → 3001)
 cloudflared tunnel --url http://localhost:5173
 ```
 
