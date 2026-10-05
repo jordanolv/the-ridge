@@ -1,0 +1,181 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+
+  --color-night-950: #070814;
+  --color-night-900: #0c0f24;
+  --color-night-800: #141936;
+  --color-glow-violet: #a78bfa;
+  --color-glow-cyan: #67e8f9;
+  --color-glow-pink: #f472b6;
+
+  --color-tier-sentier: #e67e22;
+  --color-tier-falaise: #3498db;
+  --color-tier-sommet: #9b59b6;
+
+  --animate-rise: rise 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  --animate-float: float 6s ease-in-out infinite;
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+}
+
+@layer base {
+  html, body, #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-night-950 font-sans text-white antialiased;
+    overscroll-behavior: none;
+  }
+}
+
+@utility glass {
+  @apply rounded-2xl border border-white/10 bg-white/[0.04] shadow-[0_8px_32px_rgba(0,0,0,0.35)] backdrop-blur-xl;
+}
+
+@utility text-gradient {
+  @apply bg-gradient-to-r from-glow-cyan via-glow-violet to-glow-pink bg-clip-text text-transparent;
+}
+
+@utility pack {
+  background:
+    linear-gradient(160deg, color-mix(in srgb, var(--tint) 85%, white 15%), color-mix(in srgb, var(--tint) 55%, #070814) 70%);
+  box-shadow:
+    inset 0 0 0 2px rgba(255, 255, 255, 0.25),
+    0 0 60px color-mix(in srgb, var(--tint) 55%, transparent);
+}
+
+@utility pack-shine {
+  background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, 0.45) 45%, transparent 60%);
+  animation: shine 2.2s ease-in-out infinite;
+}
+
+@utility pack-rays {
+  background: repeating-conic-gradient(from 0deg, color-mix(in srgb, var(--tint) 45%, transparent) 0deg 8deg, transparent 8deg 22deg);
+  mask-image: radial-gradient(circle, black 15%, transparent 65%);
+  animation: spin 14s linear infinite;
+}
+
+@utility pack-shake {
+  animation-name: shake;
+  animation-duration: 0.4s;
+  animation-iteration-count: infinite;
+}
+
+@utility pack-burst {
+  animation: burst 0.45s ease-in forwards;
+}
+
+@utility card-back {
+  background:
+    radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.16), transparent 60%),
+    linear-gradient(160deg, #1c2150, #0c0f24);
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  transition: box-shadow 0.3s;
+}
+
+@utility card-flip {
+  perspective: 1200px;
+  animation: flip-in 0.75s cubic-bezier(0.2, 0.9, 0.25, 1.15) both;
+}
+
+@utility card-front {
+  background: rgba(12, 15, 36, 0.92);
+  border: 2px solid var(--tint);
+  box-shadow: 0 0 50px color-mix(in srgb, var(--tint) 55%, transparent), 0 20px 60px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(16px);
+}
+
+@utility reveal-flash {
+  background: radial-gradient(circle at 50% 70%, color-mix(in srgb, var(--tint) 80%, white), transparent 70%);
+  animation: flash 0.9s ease-out forwards;
+}
+
+@utility screen-shake {
+  animation: shake 0.12s linear 6;
+}
+
+@utility starfield {
+  background:
+    radial-gradient(1px 1px at 20% 30%, white, transparent),
+    radial-gradient(1px 1px at 70% 20%, white, transparent),
+    radial-gradient(1.5px 1.5px at 40% 80%, white, transparent),
+    radial-gradient(1px 1px at 85% 65%, white, transparent),
+    radial-gradient(1px 1px at 10% 75%, white, transparent),
+    radial-gradient(ellipse at 50% 120%, color-mix(in srgb, var(--tint) 35%, transparent), transparent 60%),
+    #070814;
+}
+
+@utility theater-enter {
+  animation: theater-in 0.5s ease-out both;
+}
+
+@utility reaction-float {
+  animation: float-up 2.6s cubic-bezier(0.2, 0.7, 0.3, 1) forwards;
+}
+
+@keyframes shine {
+  from { transform: translateX(-120%); }
+  to { transform: translateX(120%); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translate(0, 0) rotate(0); }
+  25% { transform: translate(-3px, 1px) rotate(-1.5deg); }
+  50% { transform: translate(2px, -2px) rotate(1deg); }
+  75% { transform: translate(-1px, 2px) rotate(-0.5deg); }
+}
+
+@keyframes burst {
+  to { transform: scale(1.5); opacity: 0; filter: brightness(3); }
+}
+
+@keyframes flip-in {
+  from { transform: rotateY(100deg) scale(0.6); opacity: 0; }
+  to { transform: rotateY(0) scale(1); opacity: 1; }
+}
+
+@keyframes flash {
+  from { opacity: 0.95; }
+  to { opacity: 0; }
+}
+
+@keyframes theater-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes float-up {
+  0% { transform: translateY(0) scale(0.6); opacity: 0; }
+  15% { transform: translateY(-30px) scale(1.15); opacity: 1; }
+  100% { transform: translateY(-320px) scale(1); opacity: 0; }
+}
+
+.summit-marker {
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  background: var(--marker-color);
+  border: 2px solid white;
+  box-shadow: 0 0 0 0 var(--marker-color);
+  animation: pulse 1.8s ease-out infinite;
+}
+
+@keyframes pulse {
+  from { box-shadow: 0 0 0 0 color-mix(in srgb, var(--marker-color) 80%, transparent); }
+  to { box-shadow: 0 0 0 22px transparent; }
+}

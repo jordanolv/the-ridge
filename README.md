@@ -38,7 +38,7 @@ feat/xxx ──PR──► dev ──PR──► main
 ## Commandes
 
 ```bash
-npm run dev      # lancer en local (swc, pas de build)
+npm run dev      # lancer en local : bot + Activity (swc, pas de build)
 npm run watch    # idem avec rechargement à chaud
 npm run build    # tsc + tsc-alias + copie des assets — c'est ce que la CI vérifie
 npm start        # node dist/index.js — ce que lance le conteneur

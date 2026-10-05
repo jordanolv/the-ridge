@@ -7,7 +7,10 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 
+COPY activity/package.json activity/package-lock.json ./activity/
+RUN npm --prefix activity ci
+
 COPY . .
-RUN npm run build
+RUN npm run build && npm --prefix activity run build
 
 CMD ["node", "dist/index.js"]

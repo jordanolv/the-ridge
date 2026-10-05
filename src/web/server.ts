@@ -4,6 +4,9 @@ import chalk from 'chalk';
 import mountainMapRoute from './routes/mountain-map.route';
 import adminRoute from './routes/admin.route';
 import logsRoute from './routes/logs.route';
+import activityRoute from './routes/activity.route';
+import { ActivityLiveService } from '../features/activity/services/activity-live.service';
+import fs from 'fs';
 import { BotClient } from '../bot/client';
 
 export function startWebServer(client: BotClient): void {
@@ -16,6 +19,14 @@ export function startWebServer(client: BotClient): void {
   app.use(mountainMapRoute);
   app.use(adminRoute(client));
   app.use(logsRoute(client));
+  app.use(activityRoute(client));
+
+  // L'Activity Discord est servie à la racine : ses URL mappings pointent sur ce domaine sans chemin.
+  const activityDist = path.join(process.cwd(), 'activity', 'dist');
+  if (fs.existsSync(activityDist)) {
+    app.use(express.static(activityDist));
+    app.get('/', (_req, res) => res.sendFile(path.join(activityDist, 'index.html')));
+  }
 
   // Page globe — sert l'HTML pour toute route /map/*
   app.get('/map', (_req, res) => {
@@ -26,10 +37,11 @@ export function startWebServer(client: BotClient): void {
     res.sendFile(path.join(__dirname, 'public', 'admin.html'));
   });
 
-  app.listen(port, () => {
+  const server = app.listen(port, () => {
     console.log(
       chalk.yellow('   ├─ 🌐 Web server') +
         chalk.gray(` • port ${port} • /admin actif`),
     );
   });
+  ActivityLiveService.attach(server, client);
 }
