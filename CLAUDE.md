@@ -14,7 +14,7 @@ Bot Discord communautaire du serveur The Ridge. TypeScript, Discord.js v14, Mong
 ## Lancer le bot
 
 ```bash
-npm run dev      # bot + Activity (Vite) ensemble, swc, pas de build
+npm run dev      # bot + Activity (Vite) + tunnel, swc, pas de build
 npm run dev:bot  # le bot seul
 npm run watch    # le bot seul + rechargement à chaud
 npm run build    # tsc + tsc-alias + copie des assets — ce que vérifie la CI
@@ -272,12 +272,11 @@ URL mappings du portail pointent sur le domaine sans chemin.
   l'ouverture se joue sur un fond étoilé.
 
 ```bash
-npm run dev                                   # bot + serveur web (3001) + Vite (5173, proxy /api → 3001)
-cloudflared tunnel --url http://localhost:5173
+npm run dev   # bot + serveur web (3001) + Vite (5173, proxy /api → 3001) + tunnel
 ```
 
 Portail Discord (une fois par application, donc staging et prod) : *Activities → Settings*
-activé ; *URL Mappings* `/` → domaine du tunnel (dev) ou de l'appli Dokploy ; *OAuth2 →
+activé ; *URL Mappings* `/` → `activity-dev.theridge.fr` (dev) ou de l'appli Dokploy ; *OAuth2 →
 Redirects* : `https://127.0.0.1`. `DISCORD_CLIENT_ID` et `DISCORD_CLIENT_SECRET` dans l'env.
 
 ## Peak Hunters (montagnes)

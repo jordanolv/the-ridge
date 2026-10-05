@@ -7,11 +7,12 @@
   "scripts": {
     "build": "tsc && tsc-alias && node scripts/copy-assets.js",
     "activity:dev": "npm --prefix activity run dev",
+    "tunnel": "cloudflared tunnel run --url http://localhost:5173 the-ridge-dev",
     "activity:build": "npm --prefix activity run build",
     "test": "node --require @swc-node/register --test \"src/**/*.test.ts\"",
     "start": "node dist/index.js",
     "watch": "nodemon --exec node -r @swc-node/register src/index.ts",
-    "dev": "concurrently -k -n bot,activity -c cyan,magenta \"npm run dev:bot\" \"npm run activity:dev\"",
+    "dev": "concurrently -n bot,activity,tunnel -c cyan,magenta,gray \"npm run dev:bot\" \"npm run activity:dev\" \"npm run tunnel\"",
     "dev:bot": "node -r @swc-node/register src/index.ts",
     "grep": "curl -s http://localhost:1234/v1/models > /dev/null 2>&1 || open -a 'LM Studio'; grepai watch --status | grep -q 'running' && echo 'grepai already running' || grepai watch --background"
   },
