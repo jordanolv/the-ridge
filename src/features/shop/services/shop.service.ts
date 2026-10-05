@@ -1,4 +1,4 @@
-import { GuildMember } from 'discord.js';
+import { Guild, GuildMember } from 'discord.js';
 import UserModel from '../../user/models/user.model';
 import { LogService } from '../../../shared/logs/logs.service';
 import { ShopRentalRepository } from '../repositories/shop-rental.repository';
@@ -42,13 +42,15 @@ async function grant(member: GuildMember, item: ShopItem, variant: ShopVariant |
   }
 }
 
-async function revokeItem(member: GuildMember, itemId: string): Promise<void> {
+async function revokeItem(guild: Guild, userId: string, itemId: string): Promise<void> {
   switch (itemId) {
-    case 'role-color':
-      await ColorRoleService.revoke(member);
+    case 'role-color': {
+      const member = await guild.members.fetch(userId).catch(() => null);
+      await ColorRoleService.revoke(guild, userId, member);
       return;
+    }
     case 'profile-theme':
-      await UserModel.updateOne({ discordId: member.id }, { $unset: { 'profil.cardTheme': '' } });
+      await UserModel.updateOne({ discordId: userId }, { $unset: { 'profil.cardTheme': '' } });
       return;
     default:
       console.warn(`[Shop] Expiration ignorée : aucune révocation pour ${itemId}`);
@@ -65,7 +67,7 @@ export class ShopService {
     if (item.soon) return { ok: false, reason: 'soon' };
 
     const variant = variantId ? findVariant(item, variantId) : undefined;
-    if (item.variants && !variant) return { ok: false, reason: 'variant' };
+    if ((item.variants || item.colorPicker) && !variant) return { ok: false, reason: 'variant' };
 
     const qty = clampQuantity(quantity);
     const total = item.price * qty;
@@ -96,14 +98,13 @@ export class ShopService {
     return Math.floor(user?.profil?.money ?? 0);
   }
 
-  static async expireDue(resolveMember: (userId: string) => Promise<GuildMember | null>): Promise<number> {
+  static async expireDue(guild: Guild): Promise<number> {
     const due = await ShopRentalRepository.findExpired();
     let revoked = 0;
 
     for (const rental of due) {
       try {
-        const member = await resolveMember(rental.userId);
-        if (member) await revokeItem(member, rental.itemId);
+        await revokeItem(guild, rental.userId, rental.itemId);
         await ShopRentalRepository.remove(rental.userId, rental.itemId);
         revoked++;
       } catch (err) {

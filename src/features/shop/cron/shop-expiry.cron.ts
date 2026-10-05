@@ -26,7 +26,7 @@ export class ShopExpiryCron {
     const guild = BotClient.getGuild();
     if (!guild) return;
 
-    const revoked = await ShopService.expireDue(userId => guild.members.fetch(userId).catch(() => null));
+    const revoked = await ShopService.expireDue(guild);
     if (revoked > 0) console.log(`[Shop] ${revoked} location(s) expirée(s)`);
   }
 }
