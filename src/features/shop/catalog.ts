@@ -4,6 +4,7 @@ export interface ShopVariant {
   id: string;
   label: string;
   color: number;
+  secondaryColor?: number;
   emoji: string;
 }
 
@@ -18,6 +19,8 @@ export interface ShopItem {
   /** Absent = consommable : rien à révoquer, rien à faire expirer. */
   durationDays?: number;
   variants?: ShopVariant[];
+  /** La variante est une couleur libre choisie par le joueur, encodée `RRGGBB` ou `RRGGBB-RRGGBB`. */
+  colorPicker?: boolean;
   soon?: boolean;
 }
 
@@ -26,16 +29,10 @@ export const SHOP_ITEMS: ShopItem[] = [
     id: 'role-color',
     label: 'Rôle coloré',
     emoji: '🎨',
-    description: 'Ta couleur à toi dans la liste des membres.',
+    description: 'Ton rôle perso, à la couleur de ton choix.',
     price: 40,
     durationDays: 30,
-    variants: [
-      { id: 'ecarlate',  label: 'Écarlate',  color: 0xe74c3c, emoji: '🔴' },
-      { id: 'ambre',     label: 'Ambre',     color: 0xf39c12, emoji: '🟠' },
-      { id: 'emeraude',  label: 'Émeraude',  color: 0x2ecc71, emoji: '🟢' },
-      { id: 'ocean',     label: 'Océan',     color: 0x3498db, emoji: '🔵' },
-      { id: 'amethyste', label: 'Améthyste', color: 0x9b59b6, emoji: '🟣' },
-    ],
+    colorPicker: true,
   },
   {
     id: 'pack-sentier',
@@ -90,7 +87,54 @@ export function findItem(id: string): ShopItem | undefined {
 }
 
 export function findVariant(item: ShopItem, id: string): ShopVariant | undefined {
+  if (item.colorPicker) return parseColorVariant(id);
   return item.variants?.find(v => v.id === id);
+}
+
+export const COLOR_PRESETS: { label: string; emoji: string; color: number }[] = [
+  { label: 'Écarlate',  emoji: '🔴', color: 0xe74c3c },
+  { label: 'Ambre',     emoji: '🟠', color: 0xf39c12 },
+  { label: 'Soleil',    emoji: '🟡', color: 0xf1c40f },
+  { label: 'Émeraude',  emoji: '🟢', color: 0x2ecc71 },
+  { label: 'Océan',     emoji: '🔵', color: 0x3498db },
+  { label: 'Améthyste', emoji: '🟣', color: 0x9b59b6 },
+  { label: 'Rose',      emoji: '🌸', color: 0xff6fb5 },
+  { label: 'Neige',     emoji: '⚪', color: 0xf5f6fa },
+];
+
+/** `#f80`, `F80`, `#ff8800` → 0xff8800. Le noir pur devient 0x010101 : pour Discord, 0 veut dire « sans couleur ». */
+export function parseHex(input: string): number | undefined {
+  const hex = input.trim().replace(/^#/, '');
+  const full = /^[0-9a-f]{3}$/i.test(hex) ? [...hex].map(c => c + c).join('') : hex;
+  if (!/^[0-9a-f]{6}$/i.test(full)) return undefined;
+  return parseInt(full, 16) || 0x010101;
+}
+
+export function formatHex(color: number): string {
+  return `#${color.toString(16).padStart(6, '0').toUpperCase()}`;
+}
+
+export function colorVariantId(primary: number, secondary?: number): string {
+  const part = (c: number) => c.toString(16).padStart(6, '0');
+  return secondary === undefined ? part(primary) : `${part(primary)}-${part(secondary)}`;
+}
+
+export function parseColorVariant(id: string): ShopVariant | undefined {
+  const [rawPrimary, rawSecondary, ...rest] = id.split('-');
+  if (rest.length > 0) return undefined;
+  const color = parseHex(rawPrimary);
+  if (color === undefined) return undefined;
+  const secondaryColor = rawSecondary === undefined ? undefined : parseHex(rawSecondary);
+  if (rawSecondary !== undefined && secondaryColor === undefined) return undefined;
+
+  const preset = secondaryColor === undefined ? COLOR_PRESETS.find(p => p.color === color) : undefined;
+  return {
+    id: colorVariantId(color, secondaryColor),
+    label: preset?.label ?? (secondaryColor === undefined ? formatHex(color) : `${formatHex(color)} → ${formatHex(secondaryColor)}`),
+    color,
+    secondaryColor,
+    emoji: preset?.emoji ?? '🎨',
+  };
 }
 
 export const MAX_QUANTITY = 6;

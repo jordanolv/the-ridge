@@ -1,46 +1,71 @@
-import { Guild, GuildMember, Role } from 'discord.js';
+import { Guild, GuildFeature, GuildMember, Role, type RoleColorsResolvable } from 'discord.js';
 import type { ShopVariant } from '../catalog';
+import { ColorRoleRepository } from '../repositories/color-role.repository';
 
 const ROLE_PREFIX = '🎨 ';
+const MAX_ROLE_NAME = 100;
 
-function roleName(variant: ShopVariant): string {
-  return `${ROLE_PREFIX}${variant.label}`;
+function roleName(member: GuildMember): string {
+  return `${ROLE_PREFIX}${member.displayName}`.slice(0, MAX_ROLE_NAME);
 }
 
-/**
- * Les rôles de couleur sont reconnus à leur préfixe, pas stockés en base :
- * un renommage manuel côté Discord fait perdre le lien et le rôle sera recréé.
- */
+/** Les anciens rôles partagés (`🎨 Écarlate`…) portent le même préfixe et sont retirés au passage. */
 function isColorRole(role: Role): boolean {
   return role.name.startsWith(ROLE_PREFIX);
 }
 
-async function ensureRole(guild: Guild, variant: ShopVariant): Promise<Role> {
-  const name = roleName(variant);
-  const existing = guild.roles.cache.find(r => r.name === name);
-  if (existing) return existing;
+export function supportsGradient(guild: Guild): boolean {
+  return guild.features.includes(GuildFeature.EnhancedRoleColors);
+}
+
+function roleColors(guild: Guild, variant: ShopVariant): RoleColorsResolvable {
+  return {
+    primaryColor: variant.color,
+    secondaryColor: supportsGradient(guild) ? variant.secondaryColor : undefined,
+  };
+}
+
+async function findPersonalRole(guild: Guild, userId: string): Promise<Role | null> {
+  const roleId = await ColorRoleRepository.findRoleId(userId);
+  if (!roleId) return null;
+  return guild.roles.fetch(roleId).catch(() => null);
+}
+
+async function upsertPersonalRole(member: GuildMember, variant: ShopVariant): Promise<Role> {
+  const { guild } = member;
+  const colors = roleColors(guild, variant);
+  const existing = await findPersonalRole(guild, member.id);
+  if (existing) return existing.edit({ name: roleName(member), colors, reason: 'Boutique — rôle coloré' });
 
   const botHighest = guild.members.me?.roles.highest.position;
-  return guild.roles.create({
-    name,
-    color: variant.color,
+  const role = await guild.roles.create({
+    name: roleName(member),
+    colors,
     permissions: [],
     position: botHighest ? botHighest - 1 : undefined,
     reason: 'Boutique — rôle coloré',
   });
+  await ColorRoleRepository.save(member.id, role.id);
+  return role;
 }
 
 export class ColorRoleService {
-  /** Un seul rôle coloré à la fois : les précédents sont retirés. */
+  /** Un rôle perso par joueur, recoloré à chaque achat plutôt que recréé. */
   static async apply(member: GuildMember, variant: ShopVariant): Promise<void> {
-    const role = await ensureRole(member.guild, variant);
+    const role = await upsertPersonalRole(member, variant);
     const stale = member.roles.cache.filter(r => isColorRole(r) && r.id !== role.id);
     if (stale.size > 0) await member.roles.remove(stale);
     if (!member.roles.cache.has(role.id)) await member.roles.add(role);
   }
 
-  static async revoke(member: GuildMember): Promise<void> {
-    const owned = member.roles.cache.filter(isColorRole);
-    if (owned.size > 0) await member.roles.remove(owned);
+  /** `member` est null quand le joueur a quitté le serveur : son rôle perso est supprimé quand même. */
+  static async revoke(guild: Guild, userId: string, member: GuildMember | null): Promise<void> {
+    const personal = await findPersonalRole(guild, userId);
+    if (personal) await personal.delete('Boutique — rôle coloré expiré');
+    await ColorRoleRepository.remove(userId);
+
+    if (!member) return;
+    const legacy = member.roles.cache.filter(r => isColorRole(r) && r.id !== personal?.id);
+    if (legacy.size > 0) await member.roles.remove(legacy);
   }
 }

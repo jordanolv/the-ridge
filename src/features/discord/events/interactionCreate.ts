@@ -50,7 +50,7 @@ import { EnigmeService } from '../../arcade/enigme/services/enigme.service';
 import { ENIGME_BUTTON_ID, ENIGME_HINT_BUTTON_ID, ENIGME_MODAL_ID, ENIGME_REVEAL_BUTTON_ID } from '../../arcade/enigme/constants/enigme.constants';
 import { QuizService, QUIZ_BUTTON_PREFIX, QUIZ_THEME_PREFIX } from '../../quiz/services/quiz.service';
 import { PersonalityTestService, PTEST_BUTTON_PREFIX } from '../../personality-test/services/personality-test.service';
-import { handleShopButton, handleShopSelect, SHOP_PREFIX } from '../../shop/events/shop-interactions';
+import { COLOR_MODAL_ID, handleShopButton, handleShopColorModal, handleShopSelect, SHOP_PREFIX } from '../../shop/events/shop-interactions';
 import { handleMeButton, ME_BUTTON_PREFIX } from '../../user/events/me-interactions';
 import { handlePackButton, PACK_BUTTON_PREFIX } from '../../peak-hunters/services/pack.service';
 import { isSilentDiscordError } from '../../../shared/utils/discord-errors';
@@ -212,6 +212,8 @@ export default {
           if (embedCommand?.handleEditModal) await embedCommand.handleEditModal(interaction, client);
         } else if (interaction.customId.startsWith(PTEST_BUTTON_PREFIX + ':')) {
           await PersonalityTestService.handleModal(client, interaction);
+        } else if (interaction.customId.startsWith(COLOR_MODAL_ID + ':')) {
+          await handleShopColorModal(interaction);
         }
       }
     } catch (error) {

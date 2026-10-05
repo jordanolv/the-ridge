@@ -13,8 +13,9 @@ qui entre, la boutique décide de celui qui sort.
 | | État |
 |---|---|
 | Commande `/shop` — catalogue, achat, expiration | ✅ implémenté |
-| Achat multiple (1 à 6 mois / unités) | ✅ implémenté |
-| Rôle coloré (6 couleurs) | ✅ vendable |
+| Achat multiple des locations (1 à 6 mois) | ✅ implémenté |
+| Packs achetés en un clic depuis le catalogue | ✅ implémenté |
+| Rôle coloré perso (couleur libre, dégradé si le serveur le permet) | ✅ vendable |
 | Packs Peak Hunters | ✅ achetables, stockés en inventaire |
 | Design de carte `/me` | 🟡 câblé, en attente des images de fond |
 | Ouverture animée des packs | ✅ un pack à la fois, carte par carte (§5) |
@@ -81,7 +82,7 @@ Référence de revenu : **paie médiane 237 RC / semaine**, soit ~1 030 / mois.
 
 | Article | Prix | Durée | Statut |
 |---|---:|---|---|
-| Rôle coloré | 40 | 30 j | ✅ validé |
+| Rôle coloré perso | 40 | 30 j | ✅ validé |
 | Pack Sentier — 3 cartes | 150 | consommable | ✅ validé |
 | Pack Falaise — 5 cartes | 300 | consommable | ✅ validé |
 | Pack Sommet — 5 cartes | 600 | consommable | ✅ validé |
@@ -271,7 +272,7 @@ rachète pendant des mois (un détenteur à vie est un puits mort).
 catalog.ts                    articles, prix, variantes
 models/shop-rental.model.ts   une ligne par (userId, itemId) en cours
 services/shop.service.ts      achat : débit, livraison, log burn
-services/color-role.service.ts
+services/color-role.service.ts  rôle perso par acheteur (models/color-role.model.ts)
 services/shop-ui.service.ts   containers ComponentsV2
 cron/shop-expiry.cron.ts      révocation, toutes les heures
 ```
@@ -279,6 +280,24 @@ cron/shop-expiry.cron.ts      révocation, toutes les heures
 **Une ligne de location par article, pas par variante.** Racheter une autre couleur
 remplace la précédente et cumule le temps restant — le joueur ne peut pas se
 retrouver avec deux rôles colorés dont un seul est visible.
+
+### Le rôle coloré
+
+Chaque acheteur a **son propre rôle** (`🎨 <pseudo>`), créé au premier achat juste sous
+le rôle du bot, puis recoloré à chaque rachat plutôt que recréé. Son id est stocké dans
+`shop_color_roles` : un renommage côté Discord ne casse pas le lien. À l'expiration, le
+rôle est **supprimé**, même si le joueur a quitté le serveur.
+
+La couleur est libre : un select propose des couleurs toutes prêtes, le bouton *Ma
+propre couleur* ouvre un modal où l'on tape un code hexa (`#FF8800`, `F80`). Si le
+serveur a la fonctionnalité Discord `ENHANCED_ROLE_COLORS` (boost niveau 2), le modal
+propose une seconde couleur pour un **dégradé**, au même prix. La couleur voyage dans le
+`customId` (`ff8800` ou `ff8800-3498db`), comme une variante.
+
+Le noir pur est envoyé en `#010101` : pour Discord, la couleur `0` veut dire « pas de
+couleur ». Les anciens rôles partagés (`🎨 Écarlate`…) portent le même préfixe et sont
+retirés du joueur à son prochain achat ou à l'expiration ; une fois vides, ils peuvent
+être supprimés à la main.
 
 Les consommables (packs) n'ont pas de ligne : ils créditent et disparaissent.
 
@@ -292,8 +311,12 @@ Discord n'a pas de grille — seul `MediaGalleryBuilder` tuile, et uniquement de
 images non cliquables. Une grille dessinée au canvas a été envisagée puis écartée :
 trop cher pour cinq articles.
 
-La quantité (`−` / `+`, plafond 6) multiplie le prix **et** la durée : 3 mois de rôle
-coloré = 120 RC. Tout l'état de navigation tient dans le `customId`
+Un **consommable** (pack) s'achète directement depuis le bouton prix du catalogue, sans
+écran intermédiaire ; l'écran de résultat propose *Ouvrir* et *Encore un*. Seules les
+**locations** passent par l'écran de l'article.
+
+La quantité d'une location (`−` / `+`, plafond 6) multiplie le prix **et** la durée :
+3 mois de rôle coloré = 120 RC. Tout l'état de navigation tient dans le `customId`
 (`shop:view:<article>:<variante>:<quantité>`), donc aucune session à stocker.
 
 Trois points qui ne se devinent pas :

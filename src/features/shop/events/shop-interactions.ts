@@ -1,14 +1,19 @@
-import { ButtonInteraction, MessageFlags, StringSelectMenuInteraction } from 'discord.js';
-import { clampQuantity, findItem, findVariant } from '../catalog';
+import { ButtonInteraction, MessageFlags, ModalSubmitInteraction, StringSelectMenuInteraction } from 'discord.js';
+import { clampQuantity, colorVariantId, findItem, findVariant, parseHex } from '../catalog';
 import { ShopService, type PurchaseFailure } from '../services/shop.service';
+import { supportsGradient } from '../services/color-role.service';
 import {
   buildCatalogContainer,
+  buildColorModal,
   buildItemContainer,
   buildResultContainer,
+  COLOR_MODAL_ID,
+  COLOR_PRIMARY_INPUT,
+  COLOR_SECONDARY_INPUT,
   SHOP_PREFIX,
 } from '../services/shop-ui.service';
 
-export { SHOP_PREFIX };
+export { SHOP_PREFIX, COLOR_MODAL_ID };
 
 const FAILURE_MESSAGE: Record<PurchaseFailure, string> = {
   soon: "⏳ Cet article n'est pas encore disponible.",
@@ -17,9 +22,10 @@ const FAILURE_MESSAGE: Record<PurchaseFailure, string> = {
   grant: '❌ La livraison a échoué, tu as été remboursé. Préviens un admin si ça se reproduit.',
 };
 
-type ShopInteraction = ButtonInteraction | StringSelectMenuInteraction;
+type ShopInteraction = ButtonInteraction | StringSelectMenuInteraction | ModalSubmitInteraction;
 
 async function showCatalog(interaction: ShopInteraction): Promise<void> {
+  if (interaction.isModalSubmit() && !interaction.isFromMessage()) return;
   const balance = await ShopService.getBalance(interaction.user.id);
 
   await interaction.update({
@@ -36,6 +42,7 @@ async function showItem(
 ): Promise<void> {
   const item = findItem(itemId);
   if (!item) return showCatalog(interaction);
+  if (interaction.isModalSubmit() && !interaction.isFromMessage()) return;
 
   const balance = await ShopService.getBalance(interaction.user.id);
   const variant = variantId ? findVariant(item, variantId) : undefined;
@@ -94,6 +101,40 @@ export async function handleShopButton(interaction: ButtonInteraction): Promise<
   if (action === 'home') return showCatalog(interaction);
   if (action === 'view') return showItem(interaction, itemId, variantId, qty);
   if (action === 'buy') return buy(interaction, itemId, variantId, qty);
+  if (action === 'color') return openColorModal(interaction, itemId, variantId, qty);
+}
+
+async function openColorModal(
+  interaction: ButtonInteraction,
+  itemId: string,
+  variantId: string | undefined,
+  qty: number,
+): Promise<void> {
+  const item = findItem(itemId);
+  if (!item || !interaction.guild) return showCatalog(interaction);
+
+  const current = variantId ? findVariant(item, variantId) : undefined;
+  await interaction.showModal(buildColorModal(item.id, current, clampQuantity(qty), supportsGradient(interaction.guild)));
+}
+
+export async function handleShopColorModal(interaction: ModalSubmitInteraction): Promise<void> {
+  const [, , itemId, , rawQty] = interaction.customId.split(':');
+
+  const primary = parseHex(interaction.fields.getTextInputValue(COLOR_PRIMARY_INPUT));
+  const rawSecondary = interaction.guild && supportsGradient(interaction.guild)
+    ? interaction.fields.getTextInputValue(COLOR_SECONDARY_INPUT).trim()
+    : '';
+  const secondary = rawSecondary ? parseHex(rawSecondary) : undefined;
+
+  if (primary === undefined || (rawSecondary && secondary === undefined)) {
+    await interaction.reply({
+      content: '❌ Couleur invalide — écris un code comme `#FF8800` ou `F80`.',
+      flags: MessageFlags.Ephemeral,
+    });
+    return;
+  }
+
+  return showItem(interaction, itemId, colorVariantId(primary, secondary), Number(rawQty));
 }
 
 export async function handleShopSelect(interaction: StringSelectMenuInteraction): Promise<void> {
