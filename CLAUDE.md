@@ -276,7 +276,7 @@ npm run dev   # bot + serveur web (3001) + Vite (5173, proxy /api → 3001) + tu
 ```
 
 Portail Discord (une fois par application, donc staging et prod) : *Activities → Settings*
-activé ; *URL Mappings* `/` → `activity-dev.theridge.fr` (dev) ou de l'appli Dokploy ; *OAuth2 →
+activé ; *URL Mappings* `/` → `activity-dev.theridge.fr` (dev) ou domaine de l'appli Dokploy ; *OAuth2 →
 Redirects* : `https://127.0.0.1`. `DISCORD_CLIENT_ID` et `DISCORD_CLIENT_SECRET` dans l'env.
 
 ## Peak Hunters (montagnes)
