@@ -10,7 +10,7 @@ export default defineConfig({
   build: { outDir: 'dist', assetsDir: 'activity-assets', chunkSizeWarningLimit: 2500 },
   server: {
     port: 5173,
-    allowedHosts: ['.trycloudflare.com'],
+    allowedHosts: ['activity-dev.theridge.fr', '.trycloudflare.com'],
     proxy: { '/api': { target: BOT_WEB_SERVER, ws: true } },
   },
 });
