@@ -40,3 +40,8 @@ export async function findAsset(publicId: string): Promise<string | null> {
     return null;
   }
 }
+
+export async function uploadBuffer(data: Buffer, mimeType: string, folder: string): Promise<string> {
+  const result = await client().uploader.upload(`data:${mimeType};base64,${data.toString('base64')}`, { folder });
+  return result.secure_url;
+}

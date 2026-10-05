@@ -120,6 +120,18 @@ src/web/
 Ajouter un réglage = une entrée dans `GET /api/admin/config`, une branche dans
 `POST /api/admin/config/:feature`, et une carte dans `admin.html`.
 
+### Assistant (onglet 🤖 du dashboard)
+
+Chat avec un manager (Claude) qui délègue au rédacteur (messages Discord) et à
+l'illustrateur (visuels). Tout vit dans `src/features/assistant/`, la route dans
+`src/web/routes/assistant.route.ts`. L'assistant ne lit le reste du bot qu'à travers
+`AssistantContext`, fourni par la route. Il ne publie rien seul : c'est l'admin qui clique.
+
+- Images : Gemini génère un fond sans texte (`GEMINI_API_KEY`, modèle surchargeable via
+  `GEMINI_IMAGE_MODEL`), puis Takumi pose le titre par-dessus (`poster.renderer.ts`).
+- Le ton du serveur est fixé dans `services/brand-guide.ts`, partagé par les agents.
+- La route est montée avant `express.json()` global : l'upload d'image dépasse ses 100 ko.
+
 ### Logs
 
 `LogService` écrit dans la collection `bot_logs` (TTL 90 jours), plus rien dans Discord.

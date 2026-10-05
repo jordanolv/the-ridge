@@ -123,6 +123,41 @@
   .amount.pos { color: var(--green); }
   .amount.neg { color: var(--red); }
   #login { max-width: 360px; margin: 15vh auto 0; }
+  .asst { display: grid; grid-template-columns: 230px 1fr; gap: 16px; margin-top: 16px; align-items: start; }
+  @media (max-width: 760px) { .asst { grid-template-columns: 1fr; } }
+  .asst-list .card { margin-top: 0; padding: 12px; }
+  .conv { display: flex; align-items: center; gap: 6px; padding: 8px 10px; border-radius: 8px; cursor: pointer; font-size: 13px; color: var(--muted); }
+  .conv:hover { background: rgba(255,255,255,.04); }
+  .conv.on { background: rgba(88,101,242,.15); color: var(--text); }
+  .conv span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .conv button { padding: 2px 6px; font-size: 11px; background: transparent; color: var(--muted); opacity: 0; }
+  .conv:hover button { opacity: 1; }
+  .asst-main.card { margin-top: 0; display: flex; flex-direction: column; min-height: 60vh; }
+  .thread { flex: 1; overflow-y: auto; max-height: calc(100vh - 280px); display: flex; flex-direction: column; gap: 14px; padding-right: 4px; }
+  .bubble { max-width: 88%; padding: 10px 14px; border-radius: 12px; font-size: 14px; line-height: 1.45; white-space: pre-wrap; word-break: break-word; }
+  .bubble.user { align-self: flex-end; background: var(--accent); color: #fff; }
+  .bubble.assistant { align-self: flex-start; background: var(--bg); border: 1px solid var(--border); }
+  .bubble .who { font-size: 11px; font-weight: 700; color: var(--muted); margin-bottom: 4px; }
+  .bubble img.thumb { max-width: 160px; border-radius: 8px; margin-top: 8px; display: block; }
+  .deliv { align-self: flex-start; width: 88%; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 12px; }
+  .deliv .lbl { font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 8px; }
+  .deliv img { width: 100%; border-radius: 8px; display: block; }
+  .discord { background: #313338; border-radius: 8px; padding: 12px 14px; font-size: 14px; line-height: 1.4; white-space: pre-wrap; word-break: break-word; color: #dbdee1; }
+  .discord .h1 { font-size: 22px; font-weight: 700; }
+  .discord .h2 { font-size: 18px; font-weight: 700; }
+  .discord .h3 { font-size: 16px; font-weight: 700; }
+  .discord .sub { font-size: 12px; color: #949ba4; margin: 0; }
+  .deliv .acts { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+  .deliv .panel { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-top: 8px; }
+  .deliv .panel select { width: auto; flex: 1; min-width: 160px; margin-top: 0; }
+  .composer { display: flex; gap: 8px; align-items: flex-end; margin-top: 14px; border-top: 1px solid var(--border); padding-top: 14px; }
+  .composer textarea { resize: none; }
+  .pending-imgs { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pending-imgs div { position: relative; }
+  .pending-imgs img { height: 56px; border-radius: 6px; display: block; margin-top: 10px; }
+  .pending-imgs button { position: absolute; top: 4px; right: -6px; padding: 0 6px; font-size: 11px; background: var(--red); }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .chips button { background: transparent; border: 1px solid var(--border); color: var(--muted); font-weight: 500; font-size: 13px; }
   .hidden { display: none; }
 </style>
 </head>
@@ -141,6 +176,7 @@
   <div class="row">
     <h1><span class="dot"></span> The Ridge — Admin</h1>
     <div style="display:flex;gap:8px">
+      <button class="ghost" id="navAssistant" onclick="switchTab('assistant')">🤖 Assistant</button>
       <button class="ghost" id="navUsers" onclick="switchTab('users')">👥 Joueurs</button>
       <button class="ghost" id="navLogs" onclick="switchTab('logs')">📋 Logs</button>
       <button class="ghost" onclick="logout()">Déconnexion</button>
@@ -399,6 +435,28 @@
     </div>
   </section>
 
+  <!-- ═══════════ Assistant ═══════════ -->
+  <section id="tab-assistant" class="hidden">
+    <div class="asst">
+      <div class="asst-list">
+        <div class="card">
+          <button style="width:100%" onclick="newConversation()">＋ Nouvelle demande</button>
+          <div id="convList" style="margin-top:10px"></div>
+        </div>
+      </div>
+      <div class="asst-main card">
+        <div id="thread" class="thread"></div>
+        <div id="pendingImgs" class="pending-imgs"></div>
+        <div class="composer">
+          <button class="ghost" title="Joindre une image" onclick="$('asstFile').click()">📎</button>
+          <input id="asstFile" type="file" accept="image/png,image/jpeg,image/webp,image/gif" class="hidden" onchange="attachImage(this)">
+          <textarea id="asstInput" rows="2" placeholder="Demande quelque chose au manager… (Entrée pour envoyer, Maj+Entrée pour un saut de ligne)"></textarea>
+          <button id="asstSend" onclick="sendToAssistant()">Envoyer</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ═══════════ Anniversaires ═══════════ -->
   <section id="tab-birthday" class="hidden">
     <button class="ghost back" onclick="switchTab('overview')">← Accueil</button>
@@ -627,6 +685,7 @@ function switchTab(id) {
   $('tab-' + id).classList.remove('hidden');
   $('navUsers').classList.toggle('on', id === 'users');
   $('navLogs').classList.toggle('on', id === 'logs');
+  $('navAssistant').classList.toggle('on', id === 'assistant');
   if (id === 'logs') logCursor = null;
   (TAB_LOADERS[id] ?? (() => Promise.resolve()))().catch((err) => toast(err.message));
 }
@@ -1348,7 +1407,221 @@ async function loadEconomy() {
     eco.byDay.map((d) => `<tr><td>${d.date}</td><td class="amount pos">+${fmt(d.mint)}</td><td class="amount neg">${fmt(d.burn)}</td><td>${fmt(d.mint + d.burn)}</td><td class="muted">${fmt(d.transfer)}</td></tr>`).join('');
 }
 
+// ── Assistant ──
+const ASSISTANT_SUGGESTIONS = [
+  'Écris l\'annonce de la prochaine soirée',
+  'Fais un visuel pour la prochaine soirée',
+  'Un rappel court à poster 1h avant la soirée',
+];
+let conversationId = null;
+let pendingImages = [];
+let deliverables = {};
+let assistantTargets = { channels: [], parties: [] };
+
+async function loadAssistant() {
+  const [list, meta, party] = await Promise.all([api('/api/admin/assistant/conversations'), getMeta(), api('/api/admin/party')]);
+  assistantTargets = { channels: meta.channels, parties: party.events };
+  renderConversationList(list);
+  if (conversationId) await openConversation(conversationId);
+  else renderThread([]);
+}
+function renderConversationList(list) {
+  $('convList').innerHTML = list.length === 0
+    ? '<p class="muted" style="padding:6px">Aucune demande pour l\'instant.</p>'
+    : list.map((c) => `
+      <div class="conv ${c.id === conversationId ? 'on' : ''}" data-id="${c.id}" onclick="openConversation('${c.id}')">
+        <span title="${esc(c.title)}">${esc(c.title)}</span>
+        <button onclick="event.stopPropagation(); deleteConversation('${c.id}')">✕</button>
+      </div>`).join('');
+}
+async function refreshConversationList() {
+  renderConversationList(await api('/api/admin/assistant/conversations'));
+}
+function highlightConversation() {
+  document.querySelectorAll('.conv').forEach((el) => el.classList.toggle('on', el.dataset.id === conversationId));
+}
+async function openConversation(id) {
+  conversationId = id;
+  highlightConversation();
+  try {
+    const conv = await api('/api/admin/assistant/conversations/' + id);
+    renderThread(conv.messages);
+  } catch (err) { conversationId = null; renderThread([]); toast(err.message); }
+}
+function newConversation() {
+  conversationId = null;
+  pendingImages = [];
+  renderPendingImages();
+  renderThread([]);
+  highlightConversation();
+  $('asstInput').focus();
+}
+async function deleteConversation(id) {
+  if (!confirm('Supprimer cette conversation ?')) return;
+  try {
+    await api('/api/admin/assistant/conversations/' + id, { method: 'DELETE' });
+    if (id === conversationId) newConversation();
+    await refreshConversationList();
+  } catch (err) { toast(err.message); }
+}
+
+function discordPreview(md) {
+  return esc(md).split('\n').map((line) => {
+    const inline = line.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/\*(.+?)\*/g, '<i>$1</i>').replace(/__(.+?)__/g, '<u>$1</u>');
+    if (line.startsWith('-# ')) return `<p class="sub">${inline.slice(3)}</p>`;
+    const h = /^(#{1,3}) /.exec(line);
+    if (h) return `<div class="h${h[1].length}">${inline.slice(h[0].length)}</div>`;
+    return inline;
+  }).join('\n');
+}
+
+function deliverableCard(key, d) {
+  const body = d.kind === 'message'
+    ? `<div class="discord">${discordPreview(d.content)}</div>`
+    : `<a href="${esc(d.url)}" target="_blank"><img src="${esc(d.url)}" loading="lazy"></a>`;
+  const acts = d.kind === 'message'
+    ? `<button class="mini ghost" onclick="copyDeliverable('${key}')">📋 Copier</button>
+       <button class="mini" onclick="showPublish('${key}')">📤 Publier…</button>`
+    : `<button class="mini ghost" onclick="showAttachParty('${key}')">🎉 Image de soirée…</button>
+       <button class="mini" onclick="showPublish('${key}')">📤 Publier…</button>`;
+  return `<div class="deliv"><div class="lbl">${esc(d.label)}</div>${body}<div class="acts">${acts}</div><div id="panel-${key}"></div></div>`;
+}
+
+function renderThread(messages) {
+  deliverables = {};
+  if (messages.length === 0) {
+    $('thread').innerHTML = `
+      <div class="bubble assistant"><div class="who">Manager</div>Salut ! Dis-moi ce dont tu as besoin : une annonce, un rappel, un visuel pour une soirée… Je fais bosser le rédacteur et l'illustrateur, et rien ne part sur Discord sans ta validation.</div>
+      <div class="chips">${ASSISTANT_SUGGESTIONS.map((s) => `<button onclick="useSuggestion(this)">${esc(s)}</button>`).join('')}</div>`;
+    return;
+  }
+  $('thread').innerHTML = messages.map((m, mi) => {
+    if (m.role === 'user') {
+      const imgs = m.attachments.map((a) => `<img class="thumb" src="${esc(a.url)}">`).join('');
+      return `<div class="bubble user">${esc(m.text)}${imgs}</div>`;
+    }
+    const cards = m.attachments.map((d, ai) => {
+      const key = `d${mi}-${ai}`;
+      deliverables[key] = d;
+      return deliverableCard(key, d);
+    }).join('');
+    return `<div class="bubble assistant"><div class="who">Manager</div>${esc(m.text)}</div>${cards}`;
+  }).join('');
+  $('thread').scrollTop = $('thread').scrollHeight;
+}
+
+function useSuggestion(btn) {
+  $('asstInput').value = btn.textContent;
+  sendToAssistant();
+}
+
+async function attachImage(input) {
+  const file = input.files[0];
+  input.value = '';
+  if (!file) return;
+  if (file.size > 8 * 1024 * 1024) { toast('Image trop lourde (8 Mo max)'); return; }
+  const dataUrl = await new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+  try {
+    toast('Envoi de l\'image…');
+    const { url } = await api('/api/admin/assistant/upload', { method: 'POST', body: JSON.stringify({ dataUrl }) });
+    pendingImages.push(url);
+    renderPendingImages();
+  } catch (err) { toast(err.message); }
+}
+function renderPendingImages() {
+  $('pendingImgs').innerHTML = pendingImages.map((url, i) =>
+    `<div><img src="${esc(url)}"><button onclick="pendingImages.splice(${i}, 1); renderPendingImages()">✕</button></div>`).join('');
+}
+
+async function sendToAssistant() {
+  const text = $('asstInput').value.trim();
+  if (!text || $('asstSend').disabled) return;
+  const imageUrls = pendingImages;
+  $('asstSend').disabled = true;
+  $('asstInput').value = '';
+  pendingImages = [];
+  renderPendingImages();
+  $('thread').querySelector('.chips')?.remove();
+  $('thread').insertAdjacentHTML('beforeend', `
+    <div class="bubble user">${esc(text)}${imageUrls.map((u) => `<img class="thumb" src="${esc(u)}">`).join('')}</div>
+    <div class="bubble assistant" id="asstWorking"><div class="who">Manager</div>⏳ Je m'en occupe avec l'équipe… (un visuel peut prendre une minute)</div>`);
+  $('thread').scrollTop = $('thread').scrollHeight;
+  try {
+    const conv = await api('/api/admin/assistant/messages', { method: 'POST', body: JSON.stringify({ conversationId, text, imageUrls }) });
+    conversationId = conv.id;
+    renderThread(conv.messages);
+    await refreshConversationList();
+  } catch (err) {
+    $('asstWorking')?.remove();
+    $('asstInput').value = text;
+    toast(err.message);
+  } finally {
+    $('asstSend').disabled = false;
+  }
+}
+
+async function copyDeliverable(key) {
+  try { await navigator.clipboard.writeText(deliverables[key].content); toast('Copié 📋'); }
+  catch { toast('Copie impossible'); }
+}
+function showPublish(key) {
+  const d = deliverables[key];
+  const images = Object.entries(deliverables).filter(([, x]) => x.kind === 'image');
+  const imageSelect = d.kind === 'message' && images.length
+    ? `<select id="pubImg-${key}" class="cfg"><option value="">Sans image</option>${images.map(([k, x]) => `<option value="${k}">${esc(x.label)}</option>`).join('')}</select>`
+    : '';
+  $('panel-' + key).innerHTML = `
+    <div class="panel">
+      <select id="pubChan-${key}" class="cfg">${assistantTargets.channels.map((c) => `<option value="${c.id}">#${esc(c.name)}</option>`).join('')}</select>
+      ${imageSelect}
+      <button class="mini success" onclick="publishDeliverable('${key}')">Publier sur Discord</button>
+    </div>`;
+}
+async function publishDeliverable(key) {
+  const d = deliverables[key];
+  const imageKey = $('pubImg-' + key)?.value;
+  const body = {
+    channelId: $('pubChan-' + key).value,
+    content: d.kind === 'message' ? d.content : '',
+    imageUrl: d.kind === 'image' ? d.url : (imageKey ? deliverables[imageKey].url : null),
+  };
+  const channel = assistantTargets.channels.find((c) => c.id === body.channelId);
+  if (!confirm(`Publier dans #${channel?.name ?? '?'} ?`)) return;
+  try {
+    await api('/api/admin/assistant/publish', { method: 'POST', body: JSON.stringify(body) });
+    $('panel-' + key).innerHTML = '';
+    toast('Publié sur Discord 📤');
+  } catch (err) { toast(err.message); }
+}
+function showAttachParty(key) {
+  const parties = assistantTargets.parties;
+  $('panel-' + key).innerHTML = parties.length === 0
+    ? '<p class="muted" style="margin-top:8px">Aucune soirée active.</p>'
+    : `<div class="panel">
+        <select id="party-${key}" class="cfg">${parties.map((p) => `<option value="${p.id}">${esc(p.name)} — ${new Date(p.dateTime).toLocaleDateString('fr-FR')}</option>`).join('')}</select>
+        <button class="mini success" onclick="attachToParty('${key}')">Mettre en image de la soirée</button>
+      </div>`;
+}
+async function attachToParty(key) {
+  const id = $('party-' + key).value;
+  try {
+    await api(`/api/admin/party/events/${id}/image`, { method: 'POST', body: JSON.stringify({ image: deliverables[key].url }) });
+    $('panel-' + key).innerHTML = '';
+    toast('Image de la soirée mise à jour 🖼️');
+  } catch (err) { toast(err.message); }
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.target.id === 'asstInput' && e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendToAssistant(); }
+});
+
 const TAB_LOADERS = {
+  assistant: loadAssistant,
   overview: loadHome,
   quiz: loadQuiz,
   arcade: loadArcade,
