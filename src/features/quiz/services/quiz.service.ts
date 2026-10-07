@@ -205,7 +205,8 @@ export class QuizService {
     const existing = await QuizConfigRepository.getOrCreate();
     if (existing.enabled === false || existing.activeMessageId) return;
 
-    const questions = QuizQuestionBankService.generateSet(existing.recentQuestionTexts ?? [], 4);
+    const special = QuizQuestionBankService.todaySpecial();
+    const questions = special ? [special] : QuizQuestionBankService.generateSet(existing.recentQuestionTexts ?? [], 4);
     if (questions.length === 0) return;
 
     await QuizConfigRepository.setActiveQuestions('pending', questions, getTodayRevealDate());
