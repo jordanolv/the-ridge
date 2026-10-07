@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { formatInTimeZone } from 'date-fns-tz';
 import { MountainService, MountainInfo } from '../../peak-hunters/services/mountain.service';
 import { QuizQuestion } from './quiz.service';
 
@@ -12,6 +13,8 @@ interface BankQuestion {
   answer: number;
   explanation: string;
 }
+
+type SpecialQuestion = Omit<BankQuestion, 'id' | 'category'> & { subtheme?: string };
 
 export const MOUNTAIN_THEME = '🏔️ Montagne';
 
@@ -155,6 +158,7 @@ const MOUNTAIN_FORMATS = [photoQuestion, altitudeQuestion, countryQuestion, high
 
 export class QuizQuestionBankService {
   private static bank: BankQuestion[] = [];
+  private static specials: Record<string, SpecialQuestion> = {};
 
   static {
     try {
@@ -163,6 +167,29 @@ export class QuizQuestionBankService {
     } catch (err) {
       console.error('[QuizQuestionBank] Erreur chargement questions.json:', err);
     }
+    try {
+      const filePath = path.join(__dirname, '../data/special-questions.json');
+      QuizQuestionBankService.specials = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+    } catch (err) {
+      console.error('[QuizQuestionBank] Erreur chargement special-questions.json:', err);
+    }
+  }
+
+  /** Question unique prévue pour aujourd'hui (date de Paris) : remplace le choix de thèmes. */
+  static todaySpecial(): QuizQuestion | null {
+    const day = formatInTimeZone(new Date(), 'Europe/Paris', 'yyyy-MM-dd');
+    const special = this.specials[day];
+    if (!special) return null;
+    return shuffleQuizChoices({
+      id: `special:${day}`,
+      question: special.question,
+      choices: special.choices,
+      answer: special.answer,
+      explanation: special.explanation,
+      image: null,
+      theme: special.theme,
+      subtheme: special.subtheme,
+    });
   }
 
   private static toQuizQuestion(q: BankQuestion): QuizQuestion {
