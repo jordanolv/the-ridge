@@ -14,8 +14,9 @@ test('un thème inconnu retombe sur le classique', () => {
   assert.equal(getTheme(null).id, 'classique');
 });
 
-test('le .json d’un thème donne son libellé, les couleurs absentes gardent les défauts', () => {
+test('le .json d’un thème surcharge le libellé et les couleurs, le reste garde les défauts', () => {
   const theme = defaultTheme();
   assert.equal(theme.label, 'Classique');
-  assert.deepEqual(theme.style, DEFAULT_STYLE);
+  assert.notEqual(theme.style.panelColor, DEFAULT_STYLE.panelColor);
+  assert.equal(theme.style.accent, DEFAULT_STYLE.accent);
 });
