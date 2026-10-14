@@ -42,6 +42,11 @@ export function discordEmojiUrl(markup: string): string | null {
   return id ? `https://cdn.discordapp.com/emojis/${id}.png?size=64` : null;
 }
 
+export async function fetchDiscordEmoji(markup: string): Promise<Buffer | null> {
+  const url = discordEmojiUrl(markup);
+  return url ? fetchImage(url) : null;
+}
+
 const loadEmoji = (emoji: string) => fetchImage(`${TWEMOJI_URL}/${twemojiCode(emoji)}.svg`);
 
 const EMOJI_STYLE = { width: '1em', height: '1em', margin: '0 0.05em 0 0.1em', verticalAlign: '-0.1em' };

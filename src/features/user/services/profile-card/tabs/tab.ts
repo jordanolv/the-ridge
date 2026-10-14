@@ -1,4 +1,4 @@
-import type { GuildMember, User } from 'discord.js';
+import type { ActionRowBuilder, ButtonBuilder, GuildMember, User } from 'discord.js';
 import type { IUser } from '../../../models/user.model';
 import type { Layout } from '../engine/backdrop';
 import type { CardNode } from '../engine/elements';
@@ -21,6 +21,8 @@ export interface ProfileTab<Data> {
   layout: Layout;
   load(target: TabTarget): Promise<Data>;
   build(data: Data, theme: ProfileTheme): CardNode;
+  /** Boutons propres à l'onglet, proposés seulement quand on regarde son propre profil. */
+  actions?(data: Data, userId: string): ActionRowBuilder<ButtonBuilder>[];
   /** Ressources communes à tous les joueurs, chargées au démarrage plutôt qu'au premier clic. */
   prepare?(): Promise<void>;
 }

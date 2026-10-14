@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { ChatInputCommandInteraction, MessageFlags } from 'discord.js';
 import { BotClient } from '../../../bot/client';
-import { DEFAULT_TAB } from '../services/profile-card/tabs';
+import { DEFAULT_TAB, findTab, TABS } from '../services/profile-card/tabs';
 import { buildTabMessage, resolveTarget } from '../services/me-ui.service';
 
 const ERROR_MESSAGE = "❌ Une erreur est survenue lors de l'exécution de la commande.";
@@ -9,7 +9,14 @@ const ERROR_MESSAGE = "❌ Une erreur est survenue lors de l'exécution de la co
 export default {
   data: new SlashCommandBuilder()
     .setName('me')
-    .setDescription('Ton profil : carte, activité, jeux et collection Peak Hunters')
+    .setDescription('Ton profil : carte, activité, jeux, collection Peak Hunters et inventaire')
+    .addStringOption(option =>
+      option
+        .setName('onglet')
+        .setDescription('Ouvrir directement un onglet')
+        .setRequired(false)
+        .addChoices(...TABS.map(tab => ({ name: tab.label, value: tab.id }))),
+    )
     .addUserOption(option => option.setName('membre').setDescription("Voir le profil de quelqu'un d'autre").setRequired(false)),
 
   async execute(interaction: ChatInputCommandInteraction, _client: BotClient) {
@@ -27,7 +34,8 @@ export default {
         return;
       }
 
-      await interaction.editReply(await buildTabMessage(DEFAULT_TAB, target, interaction.user.id));
+      const tab = findTab(interaction.options.getString('onglet') ?? '') ?? DEFAULT_TAB;
+      await interaction.editReply(await buildTabMessage(tab, target, interaction.user.id));
     } catch (error) {
       console.error('Erreur dans la commande /me:', error);
       const reply = { content: ERROR_MESSAGE, flags: MessageFlags.Ephemeral } as const;

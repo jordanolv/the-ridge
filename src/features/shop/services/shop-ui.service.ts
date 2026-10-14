@@ -333,7 +333,7 @@ export function buildResultContainer(
     '',
     `Il te reste **${balance}** 💰`,
   ];
-  if (packTier) lines.push('', '-# Tes packs t\'attendent dans `/peak-hunters` → Packs, tu peux les ouvrir quand tu veux.');
+  if (packTier) lines.push('', '-# Tes packs t\'attendent dans `/me onglet:Inventaire`, tu peux les ouvrir quand tu veux.');
 
   const buttons = new ActionRowBuilder<ButtonBuilder>();
   if (packTier) {

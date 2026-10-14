@@ -223,7 +223,7 @@ Contraintes :
 
 - **Un pack acheté est un objet d'inventaire** (`sentierPacks`, `falaisePacks`,
   `sommetPacks` sur `user_mountains`), pas une ouverture en attente. Il se retrouve
-  dans `/peak-hunters` → Packs et s'ouvre quand le joueur veut — un achat non ouvert
+  dans `/me onglet:Inventaire` (et `/peak-hunters` → Packs) et s'ouvre quand le joueur veut — un achat non ouvert
   ne se perd jamais.
 - **Les cartes sont tirées et débloquées au premier clic**, pas à l'achat. Le pack est
   décrémenté par un update conditionnel (`{ $gte: 1 }`), donc deux clics simultanés ne

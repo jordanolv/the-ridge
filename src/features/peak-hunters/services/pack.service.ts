@@ -32,6 +32,8 @@ import type { ExpeditionTier } from '../types/peak-hunters.types';
 
 export const PACK_BUTTON_PREFIX = 'mountain:pack';
 export const packOpenId = (tier: ExpeditionTier, userId: string) => `${PACK_BUTTON_PREFIX}:open:${tier}:${userId}`;
+/** Ouvre le pack dans un nouveau message plutôt qu'à la place de celui du bouton. */
+export const packStartId = (tier: ExpeditionTier, userId: string) => `${PACK_BUTTON_PREFIX}:start:${tier}:${userId}`;
 const packReopenId = (pack: OpeningPack, userId: string) => `${PACK_BUTTON_PREFIX}:reopen:${pack.tier}:${userId}:${pack.id}`;
 const packViewId = (pack: OpeningPack, userId: string, index: number) =>
   `${PACK_BUTTON_PREFIX}:view:${pack.tier}:${userId}:${pack.id}:${index}`;
@@ -265,11 +267,11 @@ function prewarmAnimations(cards: CardDraw[]): void {
 
 /**
  * Une ouverture se fait toujours devant tout le salon, et un bilan déjà affiché reste
- * dans le fil : depuis la boutique (éphémère) ou depuis un bilan, le pack part dans un
- * nouveau message public, ensuite édité en place.
+ * dans le fil : depuis la boutique (éphémère), un bilan ou un autre message à garder
+ * (l'inventaire de /me), le pack part dans un nouveau message public, ensuite édité en place.
  */
-async function packMessage(interaction: ButtonInteraction, tier: ExpeditionTier, fromSummary: boolean): Promise<EditMessage> {
-  if (!fromSummary && !interaction.message.flags.has(MessageFlags.Ephemeral)) return options => interaction.editReply(options);
+async function packMessage(interaction: ButtonInteraction, tier: ExpeditionTier, keepSource: boolean): Promise<EditMessage> {
+  if (!keepSource && !interaction.message.flags.has(MessageFlags.Ephemeral)) return options => interaction.editReply(options);
 
   const { label, emoji } = EXPEDITION_TIER_CONFIG[tier];
   const message = await interaction.followUp({
@@ -283,8 +285,17 @@ async function packMessage(interaction: ButtonInteraction, tier: ExpeditionTier,
   return options => interaction.webhook.editMessage(message, options);
 }
 
-/** `fromPackId` : le bilan d'où part l'ouverture, qui perd ses boutons et reste dans le fil. */
-async function openPack(interaction: ButtonInteraction, tier: ExpeditionTier, userId: string, fromPackId?: string): Promise<void> {
+/**
+ * `fromPackId` : le bilan d'où part l'ouverture, qui perd ses boutons et reste dans le fil.
+ * `keepSource` : le message du bouton reste tel quel, le pack s'ouvre à côté.
+ */
+async function openPack(
+  interaction: ButtonInteraction,
+  tier: ExpeditionTier,
+  userId: string,
+  fromPackId?: string,
+  keepSource = fromPackId !== undefined,
+): Promise<void> {
   if (!(await UserMountainsRepository.spendPack(userId, tier))) {
     await interaction.followUp({
       content: `❌ Tu n'as plus de pack ${EXPEDITION_TIER_CONFIG[tier].label} — passe par la boutique (\`/shop\`).`,
@@ -316,7 +327,7 @@ async function openPack(interaction: ButtonInteraction, tier: ExpeditionTier, us
     title: `${emoji} Pack ${label} ouvert`,
   });
 
-  await revealNext(await packMessage(interaction, tier, fromPackId !== undefined), pack, userId);
+  await revealNext(await packMessage(interaction, tier, keepSource), pack, userId);
 }
 
 /** Revenir sur une carte déjà vue, révéler la suivante, ou retourner au bilan. */
@@ -344,6 +355,11 @@ export async function handlePackButton(interaction: ButtonInteraction): Promise<
   }
 
   await interaction.deferUpdate();
+
+  if (action === 'start') {
+    await openPack(interaction, tier as ExpeditionTier, ownerId, undefined, true);
+    return;
+  }
 
   if (action === 'open' || action === 'reopen') {
     await openPack(interaction, tier as ExpeditionTier, ownerId, action === 'reopen' ? packId : undefined);
