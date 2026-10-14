@@ -6,6 +6,10 @@ export class ShopRentalRepository {
     return ShopRentalModel.find({ expiresAt: { $lte: now } });
   }
 
+  static async activeOf(userId: string, now = new Date()): Promise<IShopRental[]> {
+    return ShopRentalModel.find({ userId, expiresAt: { $gt: now } }).sort({ expiresAt: 1 });
+  }
+
   static async extend(userId: string, itemId: string, variantId: string | undefined, days: number): Promise<Date> {
     const current = await ShopRentalModel.findOne({ userId, itemId });
     const expiresAt = nextExpiry(current?.expiresAt, new Date(), days);

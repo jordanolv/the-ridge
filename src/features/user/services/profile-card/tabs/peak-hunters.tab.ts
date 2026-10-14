@@ -9,7 +9,7 @@ import { meter } from '../components/progress-bar';
 import { ranking, type RankingRow } from '../components/ranking';
 import { thumbnail, type ThumbnailProps } from '../components/thumbnail';
 import { box, image, text, type CardNode } from '../engine/elements';
-import { discordEmojiUrl } from '../engine/emoji';
+import { fetchDiscordEmoji as loadIcon } from '../engine/emoji';
 import { formatNumber, plural } from '../engine/format';
 import { rect } from '../engine/geometry';
 import { fetchImage } from '../engine/remote-image';
@@ -38,11 +38,6 @@ const byPrestige = (a: MountainInfo, b: MountainInfo) =>
 
 /** Vignette légère servie par Cloudinary plutôt que la photo pleine taille. */
 const thumbnailUrl = (url: string) => url.replace('/upload/', '/upload/c_fill,w_320,h_200,q_auto/');
-
-async function loadIcon(markup: string): Promise<Buffer | null> {
-  const url = discordEmojiUrl(markup);
-  return url ? fetchImage(url) : null;
-}
 
 export interface PeakHuntersData {
   owned: number;

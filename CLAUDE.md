@@ -220,8 +220,11 @@ Le catalogue de la boutique, ses prix et ce qui a déjà été écarté sont dan
 
 ## Profil `/me`
 
-`/me [membre]` affiche une image par onglet, avec des boutons pour passer de l'un à
-l'autre (seul l'auteur de la commande peut cliquer). Rendu par
+`/me [onglet] [membre]` affiche une image par onglet, avec des boutons pour passer de l'un à
+l'autre (seul l'auteur de la commande peut cliquer). L'option `onglet` ouvre directement
+un onglet ; ses choix viennent de `tabs/index.ts`. Un onglet peut ajouter ses propres
+boutons (`actions`), proposés seulement sur son propre profil — l'Inventaire s'en sert
+pour ouvrir les packs dans un nouveau message. Rendu par
 [Takumi](https://github.com/kane50613/takumi) : arbre flexbox + CSS rastérisé en natif,
 ~70 ms la carte. Tout vit dans `src/features/user/services/profile-card/` :
 

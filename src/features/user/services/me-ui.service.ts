@@ -35,9 +35,10 @@ function tabButtons(active: ProfileTab<unknown>, targetId: string, ownerId: stri
 }
 
 export async function buildTabMessage(tab: ProfileTab<unknown>, target: TabTarget, ownerId: string) {
-  const image = await ProfileCardService.render(tab, target);
+  const { image, data } = await ProfileCardService.render(tab, target);
+  const actions = target.user.id === ownerId ? (tab.actions?.(data, ownerId) ?? []) : [];
   return {
     files: [new AttachmentBuilder(image, { name: `${tab.id}.png` })],
-    components: [tabButtons(tab, target.user.id, ownerId)],
+    components: [tabButtons(tab, target.user.id, ownerId), ...actions],
   };
 }

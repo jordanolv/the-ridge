@@ -1,3 +1,5 @@
 {
-  "label": "Classique"
+  "label": "Classique",
+  "panelColor": "#343b47",
+  "panelOpacity": 0.6
 }

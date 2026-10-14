@@ -1,6 +1,7 @@
 import { parisDays } from '../engine/series';
 import type { ActivityData } from './activity.tab';
 import type { GamesData } from './games.tab';
+import type { InventoryData } from './inventory.tab';
 import type { PeakHuntersData } from './peak-hunters.tab';
 import type { ProfileData } from './profile.tab';
 
@@ -115,9 +116,23 @@ const peakHunters: PeakHuntersData = {
   fragments: 12,
 };
 
+const inventory: InventoryData = {
+  tiers: [
+    { tier: 'sentier', icon: null, packs: 2, tickets: 3 },
+    { tier: 'falaise', icon: null, packs: 0, tickets: 1 },
+    { tier: 'sommet', icon: null, packs: 1, tickets: 0 },
+  ],
+  fragments: 12,
+  rentals: [
+    { emoji: '🎨', label: 'Rôle coloré', variant: '#FF8800 – #9B59B6', swatch: 'linear-gradient(90deg, #FF8800, #9B59B6)', expiresAt: '02/11/2026', daysLeft: 19 },
+    { emoji: '🪪', label: 'Design de carte', variant: 'Crépuscule', swatch: null, expiresAt: '28/10/2026', daysLeft: 14 },
+  ],
+};
+
 export const SAMPLES: Record<string, unknown> = {
   profil: profile,
   activite: activity,
   jeux: games,
   'peak-hunters': peakHunters,
+  inventaire: inventory,
 };

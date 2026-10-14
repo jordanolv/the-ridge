@@ -9,10 +9,10 @@ import { TABS, type TabTarget } from './tabs';
 import type { ProfileTab } from './tabs/tab';
 
 export class ProfileCardService {
-  static async render<Data>(tab: ProfileTab<Data>, target: TabTarget): Promise<Buffer> {
+  static async render<Data>(tab: ProfileTab<Data>, target: TabTarget): Promise<{ image: Buffer; data: Data }> {
     const theme = getTheme(target.account.profil?.cardTheme);
     const [data] = await Promise.all([tab.load(target), backdrop(theme, tab.layout)]);
-    return this.draw(tab, data, theme);
+    return { image: await this.draw(tab, data, theme), data };
   }
 
   /** Le rendu seul, à partir de données déjà chargées : c'est ce que testent les onglets. */

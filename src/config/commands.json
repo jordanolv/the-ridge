@@ -12,8 +12,8 @@
         },
         {
           "name": "me",
-          "description": "Ton profil en onglets : carte, activité, jeux et collection Peak Hunters",
-          "usage": "membre:@user"
+          "description": "Ton profil en onglets : carte, activité, jeux, collection Peak Hunters et inventaire",
+          "usage": "onglet:Jeux membre:@user"
         },
         {
           "name": "leaderboard",
