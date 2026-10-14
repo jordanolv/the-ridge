@@ -4,12 +4,15 @@ import {
   clampQuantity,
   colorVariantId,
   COLOR_PRESETS,
+  findCategory,
   findItem,
+  itemsOf,
   findVariant,
   MAX_QUANTITY,
   parseColorVariant,
   parseHex,
   quantityLabel,
+  SHOP_CATEGORIES,
   SHOP_ITEMS,
 } from './catalog';
 
@@ -79,4 +82,14 @@ test('une couleur toute prête garde son nom', () => {
 test('le rôle coloré accepte n\'importe quelle couleur', () => {
   const item = findItem('role-color')!;
   assert.equal(findVariant(item, 'abcdef')!.color, 0xabcdef);
+});
+
+test('chaque catégorie a au moins un article', () => {
+  for (const category of SHOP_CATEGORIES) assert.ok(itemsOf(category.id).length > 0, `${category.id} vide`);
+});
+
+test('une catégorie inconnue retombe sur la première', () => {
+  assert.equal(findCategory('nimporte').id, SHOP_CATEGORIES[0].id);
+  assert.equal(findCategory(undefined).id, SHOP_CATEGORIES[0].id);
+  assert.equal(findCategory('cosmetics').id, 'cosmetics');
 });

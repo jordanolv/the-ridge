@@ -27,6 +27,13 @@ export function highestRarity(cards: RenderableCard[]): MountainRarity {
   return cards.reduce<MountainRarity>((best, c) => (RARITY_ORDER.indexOf(c.rarity) > RARITY_ORDER.indexOf(best) ? c.rarity : best), 'common');
 }
 
+/** Façon booster : la carte la plus rare passe en dernier, les autres gardent l'ordre du tirage. */
+export function withRarestLast<T extends Pick<RenderableCard, 'rarity'>>(cards: T[]): T[] {
+  const rank = (c: T) => RARITY_ORDER.indexOf(c.rarity);
+  const rarest = cards.reduce((best, c, i) => (rank(c) >= rank(cards[best]) ? i : best), 0);
+  return [...cards.slice(0, rarest), ...cards.slice(rarest + 1), cards[rarest]].filter(Boolean);
+}
+
 /** `⬜×2  🟦×1` — tableau de chasse des cartes déjà révélées. */
 export function buildRarityTally(cards: RenderableCard[]): string {
   return RARITY_ORDER

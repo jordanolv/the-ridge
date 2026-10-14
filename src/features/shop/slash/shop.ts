@@ -1,6 +1,7 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction, MessageFlags } from 'discord.js';
 import { ShopService } from '../services/shop.service';
 import { buildCatalogContainer } from '../services/shop-ui.service';
+import { SHOP_CATEGORIES } from '../catalog';
 
 export default {
   data: new SlashCommandBuilder()
@@ -13,7 +14,7 @@ export default {
     const balance = await ShopService.getBalance(interaction.user.id);
 
     await interaction.editReply({
-      components: [buildCatalogContainer(interaction.user, balance)],
+      components: [buildCatalogContainer(interaction.user, balance, SHOP_CATEGORIES[0].id, 1)],
       flags: MessageFlags.IsComponentsV2,
     });
   },

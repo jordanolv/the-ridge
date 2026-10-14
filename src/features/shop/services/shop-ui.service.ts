@@ -18,11 +18,13 @@ import {
 import {
   COLOR_PRESETS,
   MAX_QUANTITY,
-  SHOP_ITEMS,
+  SHOP_CATEGORIES,
   colorVariantId,
   formatHex,
+  itemsOf,
   packTierOf,
   quantityLabel,
+  type ShopCategoryId,
   type ShopItem,
   type ShopVariant,
 } from '../catalog';
@@ -40,9 +42,13 @@ export const COLOR_MODAL_ID = `${SHOP_PREFIX}:color`;
 export const COLOR_PRIMARY_INPUT = 'primary';
 export const COLOR_SECONDARY_INPUT = 'secondary';
 
+function homeId(category: ShopCategoryId, qty = 1): string {
+  return `${SHOP_PREFIX}:home:${category}:_:${qty}`;
+}
+
 /** Un consommable s'achète en un clic depuis le catalogue ; une location passe par l'écran de l'article. */
-function catalogButtonId(item: ShopItem): string {
-  return item.durationDays ? viewId(item.id, undefined, 1) : buyId(item.id, undefined, 1);
+function catalogButtonId(item: ShopItem, qty: number): string {
+  return item.durationDays ? viewId(item.id, undefined, 1) : buyId(item.id, undefined, qty);
 }
 
 function buyId(itemId: string, variantId: string | undefined, qty: number): string {
@@ -57,7 +63,46 @@ function relative(date: Date): string {
   return `<t:${Math.floor(date.getTime() / 1000)}:R>`;
 }
 
-export function buildCatalogContainer(user: User, balance: number): ContainerBuilder {
+function buildQuantityRow(label: string, qty: number, idFor: (qty: number) => string): ActionRowBuilder<ButtonBuilder> {
+  return new ActionRowBuilder<ButtonBuilder>().addComponents(
+    new ButtonBuilder()
+      .setCustomId(idFor(qty - 1))
+      .setLabel('−')
+      .setStyle(ButtonStyle.Secondary)
+      .setDisabled(qty <= 1),
+    new ButtonBuilder()
+      .setCustomId(`${SHOP_PREFIX}:noop`)
+      .setLabel(label)
+      .setStyle(ButtonStyle.Secondary)
+      .setDisabled(true),
+    new ButtonBuilder()
+      .setCustomId(idFor(qty + 1))
+      .setLabel('+')
+      .setStyle(ButtonStyle.Secondary)
+      .setDisabled(qty >= MAX_QUANTITY),
+  );
+}
+
+function buildCategoryRow(active: ShopCategoryId, qty: number): ActionRowBuilder<ButtonBuilder> {
+  return new ActionRowBuilder<ButtonBuilder>().addComponents(
+    SHOP_CATEGORIES.map(category =>
+      new ButtonBuilder()
+        .setCustomId(homeId(category.id, category.id === active ? qty : 1))
+        .setLabel(category.label)
+        .setEmoji(category.emoji)
+        .setStyle(category.id === active ? ButtonStyle.Primary : ButtonStyle.Secondary)
+        .setDisabled(category.id === active),
+    ),
+  );
+}
+
+function catalogButtonLabel(item: ShopItem, qty: number): string {
+  if (item.soon) return 'Bientôt';
+  if (item.durationDays || qty === 1) return `${item.price} 💰`;
+  return `×${qty} — ${item.price * qty} 💰`;
+}
+
+export function buildCatalogContainer(user: User, balance: number, category: ShopCategoryId, qty: number): ContainerBuilder {
   const header = [
     '## 🛒 Boutique',
     `-# **${user.displayName}** · solde **${balance}** 💰`,
@@ -71,7 +116,8 @@ export function buildCatalogContainer(user: User, balance: number): ContainerBui
         .setThumbnailAccessory(new ThumbnailBuilder().setURL(user.displayAvatarURL({ size: 64 }))),
     );
 
-  for (const item of SHOP_ITEMS) {
+  const items = itemsOf(category);
+  for (const item of items) {
     container.addSeparatorComponents(new SeparatorBuilder());
     container.addSectionComponents(
       new SectionBuilder()
@@ -82,15 +128,24 @@ export function buildCatalogContainer(user: User, balance: number): ContainerBui
         )
         .setButtonAccessory(
           new ButtonBuilder()
-            .setCustomId(catalogButtonId(item))
-            .setLabel(item.soon ? 'Bientôt' : `${item.price} 💰`)
+            .setCustomId(catalogButtonId(item, qty))
+            .setLabel(catalogButtonLabel(item, qty))
             .setStyle(item.soon ? ButtonStyle.Secondary : ButtonStyle.Primary)
-            .setDisabled(item.soon === true),
+            .setDisabled(item.soon === true || (!item.durationDays && balance < item.price * qty)),
         ),
     );
   }
 
-  return container;
+  if (items.some(item => !item.durationDays)) {
+    container
+      .addSeparatorComponents(new SeparatorBuilder())
+      .addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Quantité à acheter'))
+      .addActionRowComponents(buildQuantityRow(`×${qty}`, qty, q => homeId(category, q)));
+  }
+
+  return container
+    .addSeparatorComponents(new SeparatorBuilder().setDivider(true))
+    .addActionRowComponents(buildCategoryRow(category, qty));
 }
 
 function colorLine(variant: ShopVariant): string {
@@ -129,25 +184,7 @@ export function buildItemContainer(
   if (item.colorPicker) addColorPicker(container, item, variant, qty);
   else if (item.variants) addVariantSelect(container, item, item.variants, variant, qty);
 
-  container.addActionRowComponents(
-    new ActionRowBuilder<ButtonBuilder>().addComponents(
-      new ButtonBuilder()
-        .setCustomId(viewId(item.id, variant?.id, qty - 1))
-        .setLabel('−')
-        .setStyle(ButtonStyle.Secondary)
-        .setDisabled(qty <= 1),
-      new ButtonBuilder()
-        .setCustomId(`${SHOP_PREFIX}:noop`)
-        .setLabel(quantityLabel(item, qty))
-        .setStyle(ButtonStyle.Secondary)
-        .setDisabled(true),
-      new ButtonBuilder()
-        .setCustomId(viewId(item.id, variant?.id, qty + 1))
-        .setLabel('+')
-        .setStyle(ButtonStyle.Secondary)
-        .setDisabled(qty >= MAX_QUANTITY),
-    ),
-  );
+  container.addActionRowComponents(buildQuantityRow(quantityLabel(item, qty), qty, q => viewId(item.id, variant?.id, q)));
 
   return container.addActionRowComponents(
     new ActionRowBuilder<ButtonBuilder>().addComponents(
@@ -157,7 +194,7 @@ export function buildItemContainer(
         .setStyle(ButtonStyle.Success)
         .setDisabled(needsVariant || !affordable),
       new ButtonBuilder()
-        .setCustomId(`${SHOP_PREFIX}:home`)
+        .setCustomId(homeId(item.category))
         .setLabel('Retour')
         .setEmoji('↩️')
         .setStyle(ButtonStyle.Secondary),
@@ -315,7 +352,7 @@ export function buildResultContainer(
   }
   buttons.addComponents(
     new ButtonBuilder()
-      .setCustomId(`${SHOP_PREFIX}:home`)
+      .setCustomId(homeId(item.category))
       .setLabel('Retour à la boutique')
       .setEmoji('🛒')
       .setStyle(ButtonStyle.Secondary),
