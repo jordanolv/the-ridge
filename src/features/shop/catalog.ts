@@ -10,8 +10,22 @@ export interface ShopVariant {
 
 const THEME_SWATCHES = [0xe67e22, 0x9b59b6, 0x1abc9c, 0xe74c3c, 0x3498db, 0xf1c40f];
 
+export type ShopCategoryId = 'packs' | 'cosmetics';
+
+export interface ShopCategory {
+  id: ShopCategoryId;
+  label: string;
+  emoji: string;
+}
+
+export const SHOP_CATEGORIES: ShopCategory[] = [
+  { id: 'packs', label: 'Packs', emoji: '🎁' },
+  { id: 'cosmetics', label: 'Cosmétiques', emoji: '🎨' },
+];
+
 export interface ShopItem {
   id: string;
+  category: ShopCategoryId;
   label: string;
   emoji: string;
   description: string;
@@ -27,6 +41,7 @@ export interface ShopItem {
 export const SHOP_ITEMS: ShopItem[] = [
   {
     id: 'role-color',
+    category: 'cosmetics',
     label: 'Rôle coloré',
     emoji: '🎨',
     description: 'Ton rôle perso, à la couleur de ton choix.',
@@ -36,6 +51,7 @@ export const SHOP_ITEMS: ShopItem[] = [
   },
   {
     id: 'pack-sentier',
+    category: 'packs',
     label: 'Pack Sentier',
     emoji: '<:sentierTier:1493914305824034907>',
     description: '3 cartes au tirage normal.',
@@ -43,6 +59,7 @@ export const SHOP_ITEMS: ShopItem[] = [
   },
   {
     id: 'pack-falaise',
+    category: 'packs',
     label: 'Pack Falaise',
     emoji: '<:falaiseTier:1493914310282448916>',
     description: '5 cartes, la dernière Rare ou mieux.',
@@ -50,6 +67,7 @@ export const SHOP_ITEMS: ShopItem[] = [
   },
   {
     id: 'pack-sommet',
+    category: 'packs',
     label: 'Pack Sommet',
     emoji: '<:sommetTier:1493914307698884608>',
     description: '5 cartes, la dernière Épique ou Légendaire garantie.',
@@ -57,6 +75,7 @@ export const SHOP_ITEMS: ShopItem[] = [
   },
   {
     id: 'profile-theme',
+    category: 'cosmetics',
     label: 'Design de carte',
     emoji: '🪪',
     description: 'Un autre design pour ta carte /me, visible par tout le salon.',
@@ -80,6 +99,14 @@ function themeVariants(): ShopVariant[] {
 /** `pack-falaise` → `falaise`, sinon undefined. */
 export function packTierOf(item: ShopItem): string | undefined {
   return item.id.startsWith('pack-') ? item.id.slice('pack-'.length) : undefined;
+}
+
+export function findCategory(id: string | undefined): ShopCategory {
+  return SHOP_CATEGORIES.find(c => c.id === id) ?? SHOP_CATEGORIES[0];
+}
+
+export function itemsOf(category: ShopCategoryId): ShopItem[] {
+  return SHOP_ITEMS.filter(i => i.category === category);
 }
 
 export function findItem(id: string): ShopItem | undefined {

@@ -14,7 +14,8 @@ qui entre, la boutique décide de celui qui sort.
 |---|---|
 | Commande `/shop` — catalogue, achat, expiration | ✅ implémenté |
 | Achat multiple des locations (1 à 6 mois) | ✅ implémenté |
-| Packs achetés en un clic depuis le catalogue | ✅ implémenté |
+| Packs achetés en un clic depuis le catalogue, quantité − / + | ✅ implémenté |
+| Catalogue en catégories (Packs, Cosmétiques) | ✅ implémenté |
 | Rôle coloré perso (couleur libre, dégradé si le serveur le permet) | ✅ vendable |
 | Packs Peak Hunters | ✅ achetables, stockés en inventaire |
 | Design de carte `/me` | 🟡 câblé, en attente des images de fond |
@@ -192,22 +193,27 @@ Un pack s'ouvre **carte par carte, au clic**, jamais d'un bloc :
 | Étape | Affichage | Durée |
 |---|---|---|
 | Achat | le pack entre en inventaire, bouton **Ouvrir** | — |
-| Cartes 1 → N−1 | carte nette, barre `▮▮▯▯▯`, tableau de chasse `⬜×2 🟦×1`, bouton **Suivante** | au clic |
-| Carte N | WebP animé : flou qui se lève, reflet, nom en fondu | 2,8 s auto |
-| Bilan | les N cartes, nouvelles obtenues, progression `87/289`, fragments rendus | — |
+| Ouverture | toujours publique : depuis `/shop` (éphémère), un nouveau message dans le salon, ensuite édité en place | — |
+| Chaque carte | WebP animé : flou qui se lève, reflet, nom en fondu ; barre `▮▮▯▯▯`, tableau de chasse `⬜×2 🟦×1`, flèches ◀ ▶ | au clic |
+| Bilan | remplace la dernière carte ~3,5 s après son animation : les N cartes côte à côte en une image, nouvelles obtenues, progression `87/289`, fragments rendus, boutons « Revoir les cartes » et « Ouvrir un autre pack ». ▶ « Bilan du pack » le montre sans attendre. Rouvrir un pack crée un nouveau message, l'ancien bilan reste dans le fil sans boutons | auto |
 
 Le clic fait le rythme mieux qu'un timer : le joueur décide quand il retourne la
-carte suivante, et la dernière — la seule qui compte — est la seule à mériter une
-animation. La barre d'accent prend la couleur de rareté avant que le nom soit lisible.
+carte suivante, et ◀ revient sur celles déjà vues. Comme dans un booster, **la carte
+la plus rare passe en dernier** (`withRarestLast`) ; les autres gardent l'ordre du
+tirage, une rare peut donc sortir avant. La barre d'accent prend la couleur de rareté
+avant que le nom soit lisible.
 
 L'animation est un **WebP animé de 480×270**, rendu par `@napi-rs/canvas` et encodé
 par `ffmpeg-static` — les deux étaient déjà dans les dépendances, rien à installer.
 Elle est **générée une seule fois par montagne** puis servie par Cloudinary
 (`the-ridge/mountains/reveal/{slug}`), donc ~1,4 s pour le premier joueur qui la sort
-et zéro pour tous les suivants. La génération est lancée **au premier clic**, pendant
-que le joueur retourne les cartes 1 → N−1 : elle est prête quand il arrive à la
-dernière. Au-delà de 6 s d'attente ou en cas d'échec, on retombe sur la révélation
-par éditions de message — une animation ratée ne doit jamais coûter la carte.
+et zéro pour tous les suivants. Les animations du pack sont générées **une par une dès
+l'ouverture**, pendant que le joueur retourne les premières cartes. Une carte pas
+encore prête s'affiche floutée en attendant ; au-delà de 6 s ou en cas d'échec, on
+retombe sur l'image fixe — une animation ratée ne doit jamais coûter la carte.
+
+L'image du bilan est rendue à la volée (`pack-strip.service.ts`) et jointe au
+message, pas envoyée sur Cloudinary : elle est propre à une ouverture.
 
 `scripts/pregenerate-reveals.ts` génère les 289 d'avance si on ne veut aucun joueur
 qui attende. Le WebP a été préféré au GIF : 6× plus léger (120 Ko contre 700) et sans

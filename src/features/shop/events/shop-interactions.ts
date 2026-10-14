@@ -1,5 +1,5 @@
 import { ButtonInteraction, MessageFlags, ModalSubmitInteraction, StringSelectMenuInteraction } from 'discord.js';
-import { clampQuantity, colorVariantId, findItem, findVariant, parseHex } from '../catalog';
+import { clampQuantity, colorVariantId, findCategory, findItem, findVariant, parseHex, type ShopCategoryId } from '../catalog';
 import { ShopService, type PurchaseFailure } from '../services/shop.service';
 import { supportsGradient } from '../services/color-role.service';
 import {
@@ -24,12 +24,12 @@ const FAILURE_MESSAGE: Record<PurchaseFailure, string> = {
 
 type ShopInteraction = ButtonInteraction | StringSelectMenuInteraction | ModalSubmitInteraction;
 
-async function showCatalog(interaction: ShopInteraction): Promise<void> {
+async function showCatalog(interaction: ShopInteraction, category?: ShopCategoryId, qty = 1): Promise<void> {
   if (interaction.isModalSubmit() && !interaction.isFromMessage()) return;
   const balance = await ShopService.getBalance(interaction.user.id);
 
   await interaction.update({
-    components: [buildCatalogContainer(interaction.user, balance)],
+    components: [buildCatalogContainer(interaction.user, balance, category ?? findCategory(undefined).id, clampQuantity(qty))],
     flags: MessageFlags.IsComponentsV2,
   });
 }
@@ -98,7 +98,7 @@ export async function handleShopButton(interaction: ButtonInteraction): Promise<
   const variantId = rawVariant === '_' ? undefined : rawVariant;
   const qty = Number(rawQty);
 
-  if (action === 'home') return showCatalog(interaction);
+  if (action === 'home') return showCatalog(interaction, findCategory(itemId).id, qty);
   if (action === 'view') return showItem(interaction, itemId, variantId, qty);
   if (action === 'buy') return buy(interaction, itemId, variantId, qty);
   if (action === 'color') return openColorModal(interaction, itemId, variantId, qty);
