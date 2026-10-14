@@ -62,8 +62,8 @@ export const SHOP_ITEMS: ShopItem[] = [
     category: 'packs',
     label: 'Pack Falaise',
     emoji: '<:falaiseTier:1493914310282448916>',
-    description: '5 cartes, la dernière Rare ou mieux garantie.',
-    price: 30,
+    description: '5 cartes, la dernière avec de meilleures chances de Rare et d’Épique.',
+    price: 25,
   },
   {
     id: 'pack-sommet',

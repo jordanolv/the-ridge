@@ -86,7 +86,7 @@ Référence de revenu : **paie médiane 237 RC / semaine**, soit ~1 030 / mois.
 |---|---:|---|---|
 | Rôle coloré perso | 40 | 30 j | ✅ validé |
 | Pack Sentier — 3 cartes | 15 | consommable | ✅ validé |
-| Pack Falaise — 5 cartes | 30 | consommable | ✅ validé |
+| Pack Falaise — 5 cartes | 25 | consommable | ✅ validé |
 | Pack Sommet — 5 cartes | 45 | consommable | ✅ validé |
 | Design de carte `/me` | 50 | 30 j | ✅ validé |
 | Emoji perso | 300 | permanent | 🟡 proposé |
@@ -101,24 +101,26 @@ même chose en plus cher, elle vend l'ouverture.
 | Pack | Cartes | Table des N−1 premières | Table de la dernière | Prix |
 |---|---:|---|---|---:|
 | Sentier | 3 | `sentier` | `sentier` | 15 |
-| Falaise | 5 | `sentier` | `falaise` — Rare ou mieux garantie | 30 |
+| Falaise | 5 | `sentier` | `falaise` — meilleures chances, communes possibles | 25 |
 | Sommet | 5 | `sentier` | `sommet` — Épique ou Légendaire garantie | 45 |
 
 **Aucune nouvelle table de probabilités.** `EXPEDITION_TIER_RARITY_WEIGHTS` existe
 déjà avec ses trois entrées ; elles cessent d'être des « niveaux d'expédition » pour
-devenir des **qualités de slot**. Une table de slot garanti ne contient **aucune
-commune** :
+devenir des **qualités de slot** :
 
 | Table | Commune | Rare | Épique | Légendaire |
 |---|---:|---:|---:|---:|
 | `sentier` | 60 | 25 | 12 | 3 |
-| `falaise` | 0 | 60 | 32 | 8 |
+| `falaise` | 40 | 35 | 20 | 5 |
 | `sommet` | 0 | 10 | 65 | 25 |
 
-La table `falaise` contenait 40 % de communes, alors que le pack promettait « Rare ou
-mieux » : un pack sur deux et demi mentait. Elle a été recalée plutôt que la promesse
-retirée. Effet de bord accepté : les expéditions gratuites tirées en Falaise (18 %)
-s'améliorent aussi — c'est le chemin gratuit, il peut se le permettre.
+Seul le Sommet garantit une rareté. La Falaise améliore les chances sans rien promettre :
+sa dernière carte peut être commune (40 %), et c'est voulu — un pack qui ne déçoit
+jamais n'a plus de moment fort. Son texte en boutique ne promet donc rien d'autre que
+« de meilleures chances ».
+
+Pas de table modifiée pour les packs : `falaise` et `sommet` servent aussi aux
+expéditions gratuites, et le jeu est pensé sur le long terme.
 
 Structure volée aux boosters Pokémon, et pour la même raison : des cartes banales qui
 défilent, **une carte du fond qui décide de tout**. Sans slot garanti, un pack à
@@ -132,7 +134,7 @@ un Sentier, une place de cinéma pour une Falaise, un repas pour un Sommet.
 
 ```
 Sentier  = 3 cartes × 5               = 15
-Falaise  = 2 Sentiers                 = 30
+Falaise  = 1⅔ Sentier                 = 25
 Sommet   = 3 Sentiers                 = 45
 ```
 
@@ -144,13 +146,13 @@ tableau — sinon il ne serait qu'un piège pour qui ne fait pas le calcul. Simu
 | 450 RC en… | Communes | Rares | Épiques | Légendaires |
 |---|---:|---:|---:|---:|
 | 30 Sentiers | 54 | 22,5 | 10,8 | **2,7** |
-| 15 Falaises | 36 | **24** | **12** | 3,0 |
+| 18 Falaises | 50 | **24** | **12** | 3,1 |
 | 10 Sommets | 24 | 11 | 11,3 | **3,7** |
 
 Le Sentier est le volume, la Falaise le milieu de tableau, le Sommet la chasse aux
 légendaires. Aucun ne domine les deux autres. **Ne pas monter un pack cher sans
-refaire ce tableau** : l'ancienne grille (150 / 300 / 600) donnait un Sommet battu sur
-tous les plans par quatre Sentiers.
+refaire ce tableau** : à 30, la Falaise repasse sous deux Sentiers ; l'ancienne grille
+(150 / 300 / 600) donnait un Sommet battu sur tous les plans par quatre Sentiers.
 
 L'ancienne grille partait d'« une carte = 50 RC », un chiffre qui ne nommait aucun
 équivalent réel — 150 € pour trois cartes cassait l'ancrage exactement comme la prime
@@ -158,7 +160,7 @@ de 750 (`economy.md` §6). Elle excluait aussi la moitié du serveur : le solde 
 après redénomination est de ~50 RC.
 
 **Le puits tient par la collection, pas par le prix unitaire.** Finir les 289
-montagnes coûte ~12 000 RC en packs (simulé, sans compter les fragments des doublons),
+montagnes coûte ~11 000 RC en packs (simulé, sans compter les fragments des doublons),
 soit environ deux ans de dépense pour un joueur médian qui y met la moitié de sa paie,
 et à peu près le solde du compte le plus riche. Le jour où des joueurs approchent de la
 fin, la réponse reste d'**ajouter des montagnes**.

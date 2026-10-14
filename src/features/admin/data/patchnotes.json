@@ -572,7 +572,7 @@
             "title": "🛒 /shop — la boutique du serveur",
             "items": [
               "🎨 **Rôle coloré** — 40 💰 / mois : ton propre rôle, à la couleur que tu veux (code hexa accepté, dégradé si le serveur le permet)",
-              "🎁 **Packs Peak Hunters**, achetés en un clic : **Sentier** 15 💰 (3 cartes) · **Falaise** 30 💰 (5 cartes, la dernière Rare ou mieux) · **Sommet** 45 💰 (5 cartes, la dernière Épique ou Légendaire)",
+              "🎁 **Packs Peak Hunters**, achetés en un clic : **Sentier** 15 💰 (3 cartes) · **Falaise** 25 💰 (5 cartes, la dernière avec de meilleures chances) · **Sommet** 45 💰 (5 cartes, la dernière Épique ou Légendaire)",
               "Les locations s'achètent de 1 à 6 mois d'un coup, les packs à la quantité"
             ]
           },
@@ -617,8 +617,7 @@
           {
             "title": "🏔️ Peak Hunters",
             "items": [
-              "Les expéditions **Falaise** garantissent désormais une montagne **Rare ou mieux**",
-              "Les soirées peuvent maintenant récompenser en **expéditions**"
+                    "Les soirées peuvent maintenant récompenser en **expéditions**"
             ]
           },
           {

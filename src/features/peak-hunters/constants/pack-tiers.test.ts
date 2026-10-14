@@ -18,7 +18,6 @@ test('le pack Sentier ne tire que du sentier', () => {
   assert.deepEqual(packTiers('sentier'), ['sentier', 'sentier', 'sentier']);
 });
 
-test('la dernière carte des packs Falaise et Sommet ne peut pas être commune', () => {
-  assert.equal(EXPEDITION_TIER_RARITY_WEIGHTS.falaise.common, 0);
+test('la dernière carte du pack Sommet ne peut pas être commune', () => {
   assert.equal(EXPEDITION_TIER_RARITY_WEIGHTS.sommet.common, 0);
 });

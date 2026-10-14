@@ -19,14 +19,14 @@ export const RARITY_CONFIG: Record<MountainRarity, RarityConfig> = {
 
 export const EXPEDITION_TIER_CONFIG: Record<ExpeditionTier, ExpeditionTierConfig> = {
   sentier:  { label: 'Sentier',  emoji: '<:sentierTier:1493914305824034907>', color: 0xe67e22, description: 'Probabilités normales' },
-  falaise:  { label: 'Falaise',  emoji: '<:falaiseTier:1493914310282448916>',  color: 0x3498db, description: 'Garantit une montagne Rare ou mieux' },
+  falaise:  { label: 'Falaise',  emoji: '<:falaiseTier:1493914310282448916>',  color: 0x3498db, description: 'Meilleures chances de rare et épique' },
   sommet:   { label: 'Sommet',   emoji: '<:sommetTier:1493914307698884608>', color: 0x9b59b6, description: 'Garantit une montagne Épique ou Légendaire' },
 };
 
 /** Poids de rareté par tier d'expédition */
 export const EXPEDITION_TIER_RARITY_WEIGHTS: Record<ExpeditionTier, Record<MountainRarity, number>> = {
   sentier:  { common: 60, rare: 25, epic: 12, legendary: 3  },
-  falaise:  { common: 0,  rare: 60, epic: 32, legendary: 8  },
+  falaise:  { common: 40, rare: 35, epic: 20, legendary: 5  },
   sommet:   { common: 0,  rare: 10, epic: 65, legendary: 25 },
 };
 
