@@ -16,6 +16,7 @@ import {
 export { SHOP_PREFIX, COLOR_MODAL_ID };
 
 const FAILURE_MESSAGE: Record<PurchaseFailure, string> = {
+  closed: "🔧 La boutique ouvre dans quelques minutes, reviens d'ici peu.",
   soon: "⏳ Cet article n'est pas encore disponible.",
   variant: "❌ Choisis une couleur avant d'acheter.",
   funds: '❌ Solde insuffisant — un autre achat est peut-être passé avant celui-ci.',

@@ -55,15 +55,15 @@ export const SHOP_ITEMS: ShopItem[] = [
     label: 'Pack Sentier',
     emoji: '<:sentierTier:1493914305824034907>',
     description: '3 cartes au tirage normal.',
-    price: 150,
+    price: 15,
   },
   {
     id: 'pack-falaise',
     category: 'packs',
     label: 'Pack Falaise',
     emoji: '<:falaiseTier:1493914310282448916>',
-    description: '5 cartes, la dernière Rare ou mieux.',
-    price: 300,
+    description: '5 cartes, la dernière Rare ou mieux garantie.',
+    price: 30,
   },
   {
     id: 'pack-sommet',
@@ -71,7 +71,7 @@ export const SHOP_ITEMS: ShopItem[] = [
     label: 'Pack Sommet',
     emoji: '<:sommetTier:1493914307698884608>',
     description: '5 cartes, la dernière Épique ou Légendaire garantie.',
-    price: 600,
+    price: 45,
   },
   {
     id: 'profile-theme',

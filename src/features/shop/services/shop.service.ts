@@ -1,4 +1,5 @@
 import { Guild, GuildMember } from 'discord.js';
+import mongoose from 'mongoose';
 import UserModel from '../../user/models/user.model';
 import { LogService } from '../../../shared/logs/logs.service';
 import { ShopRentalRepository } from '../repositories/shop-rental.repository';
@@ -8,8 +9,25 @@ import { grantPacks } from '../../peak-hunters/services/pack.service';
 import type { ExpeditionTier } from '../../peak-hunters/types/peak-hunters.types';
 
 const LOG_FEATURE = '🛒 Boutique';
+const REDENOMINATION_MARKER = 'redenominate-v1';
 
-export type PurchaseFailure = 'soon' | 'variant' | 'funds' | 'grant';
+let redenominated = false;
+
+/**
+ * Les prix sont à la nouvelle échelle (economy.md §8). Entre le déploiement et
+ * `scripts/redenominate.mjs --apply`, les soldes valent encore dix fois trop :
+ * la boutique reste fermée tant que le marqueur de migration n'est pas posé.
+ */
+async function isRedenominated(): Promise<boolean> {
+  if (redenominated) return true;
+  const marker = await mongoose.connection.db
+    ?.collection<{ _id: string }>('migrations')
+    .findOne({ _id: REDENOMINATION_MARKER });
+  redenominated = marker != null;
+  return redenominated;
+}
+
+export type PurchaseFailure = 'closed' | 'soon' | 'variant' | 'funds' | 'grant';
 export type PurchaseResult =
   | { ok: true; expiresAt?: Date; balance: number }
   | { ok: false; reason: PurchaseFailure };
@@ -64,6 +82,7 @@ export class ShopService {
     variantId?: string,
     quantity = 1,
   ): Promise<PurchaseResult> {
+    if (!(await isRedenominated())) return { ok: false, reason: 'closed' };
     if (item.soon) return { ok: false, reason: 'soon' };
 
     const variant = variantId ? findVariant(item, variantId) : undefined;

@@ -544,5 +544,91 @@
         ]
       }
     ]
+  },
+  {
+    "version": "1.11.0",
+    "timestamp": 1791973734,
+    "sections": [
+      {
+        "type": "new",
+        "blocks": [
+          {
+            "title": "💰 Nouvelle monnaie : ton solde perd un zéro",
+            "items": [
+              "**Tous les soldes sont divisés par 10.** Personne n'y perd : les écarts et le classement restent exactement les mêmes",
+              "Les prix et les gains passent tous à la nouvelle échelle, pour que **chaque montant veuille enfin dire quelque chose**",
+              "Les gains en vocal à la minute disparaissent : ils sont remplacés par **la paie du lundi**"
+            ]
+          },
+          {
+            "title": "🗓️ La paie du lundi",
+            "items": [
+              "Chaque lundi, une **paie** est versée à tous ceux qui ont été actifs dans la semaine : **30 min de vocal** suffisent pour être payé",
+              "Une **base fixe** pour tout le monde, plus une **part selon ton activité** (vocal et messages)",
+              "Tu reçois ta **fiche de paie en MP** : base, part d'activité, total et ton rang"
+            ]
+          },
+          {
+            "title": "🛒 /shop — la boutique du serveur",
+            "items": [
+              "🎨 **Rôle coloré** — 40 💰 / mois : ton propre rôle, à la couleur que tu veux (code hexa accepté, dégradé si le serveur le permet)",
+              "🎁 **Packs Peak Hunters**, achetés en un clic : **Sentier** 15 💰 (3 cartes) · **Falaise** 30 💰 (5 cartes, la dernière Rare ou mieux) · **Sommet** 45 💰 (5 cartes, la dernière Épique ou Légendaire)",
+              "Les locations s'achètent de 1 à 6 mois d'un coup, les packs à la quantité"
+            ]
+          },
+          {
+            "title": "🃏 Ouverture des packs",
+            "items": [
+              "Un pack s'ouvre **carte par carte, au clic**, avec une animation de révélation — la plus rare passe toujours **en dernier**",
+              "À la fin, le **bilan** : toutes tes cartes côte à côte, tes nouvelles montagnes et ta progression",
+              "Un pack acheté ne se perd jamais : il t'attend dans ton **inventaire** jusqu'à ce que tu l'ouvres"
+            ]
+          },
+          {
+            "title": "🪪 /me — ton profil en onglets",
+            "items": [
+              "**Profil, Activité, Jeux, Peak Hunters, Inventaire** : un onglet par image, des boutons pour passer de l'un à l'autre",
+              "`/me onglet:` pour ouvrir directement le bon, `/me membre:` pour voir le profil de quelqu'un",
+              "L'onglet **Inventaire** montre tes packs et te permet de les ouvrir",
+              "`/stats` est retiré : tout son contenu est dans les onglets Activité et Jeux"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "update",
+        "blocks": [
+          {
+            "title": "🏆 Récompenses à la nouvelle échelle",
+            "items": [
+              "Bingo, Avalanche, Juste Prix : **40 💰** la victoire · Énigme : **40 / 25 / 15 💰** pour le podium",
+              "Raids : **20 / 50 / 100 💰** selon la rareté · Daily : **0 à 10 💰**",
+              "XP, expéditions et fragments ne changent pas"
+            ]
+          },
+          {
+            "title": "🧩 Énigme",
+            "items": [
+              "L'énigme est **scellée** : tu la découvres avec un bouton, et **ton chrono démarre à ce moment-là**",
+              "Le podium se joue sur **ton propre chrono**, plus sur l'ordre d'arrivée",
+              "**L'indice se demande quand tu veux**, mais il te fait sortir du podium — tu gardes tes fragments de bonne réponse"
+            ]
+          },
+          {
+            "title": "🏔️ Peak Hunters",
+            "items": [
+              "Les expéditions **Falaise** garantissent désormais une montagne **Rare ou mieux**",
+              "Les soirées peuvent maintenant récompenser en **expéditions**"
+            ]
+          },
+          {
+            "title": "❓ Quiz",
+            "items": [
+              "Certains jours, une **question spéciale** remplace le choix des thèmes"
+            ]
+          }
+        ]
+      }
+    ]
   }
 ]
