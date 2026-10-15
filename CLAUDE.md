@@ -251,8 +251,9 @@ boutons, le fond flouté et le test de rendu suivent tout seuls.
 Le « camp de base » : une app web lancée depuis un salon vocal, qui tourne dans Discord.
 Front Vite + React + Tailwind dans `activity/` (dépendances à part), API dans
 `src/web/routes/activity.route.ts` + `src/features/activity/`. Le serveur web du bot sert
-l'interface **à la racine** et l'API sous `/api/activity/*` : un seul conteneur, et les
-URL mappings du portail pointent sur le domaine sans chemin.
+l'interface **à la racine des domaines `activity*`** et l'API sous `/api/activity/*` : un
+seul conteneur, les URL mappings du portail pointent sur le domaine sans chemin, et les
+autres domaines (`theridge.fr`, `staging.theridge.fr`) redirigent `/` vers le dashboard.
 
 - Auth : `authorize` côté Activity → `POST /api/activity/token` (le secret client reste
   serveur) → `authenticate`. Les appels suivants envoient le jeton Discord en Bearer ;
@@ -284,8 +285,8 @@ réglée une fois pour toutes.
 | Env | URL Mapping `/` | Servi par |
 |---|---|---|
 | Dev | `activity-dev.theridge.fr` | tunnel Cloudflare nommé `the-ridge-dev` → Vite local |
-| Staging | `staging.theridge.fr` | appli Dokploy `staging` |
-| Prod | `theridge.fr` | appli Dokploy `production` |
+| Staging | `activity-staging.theridge.fr` | appli Dokploy `staging` (domaine en plus de `staging.theridge.fr`) |
+| Prod | `activity.theridge.fr` | appli Dokploy `production` (domaine en plus de `theridge.fr`) |
 
 Le tunnel de dev ne tourne que pendant `npm run dev` (sinon Cloudflare répond 1033) ; il
 faut `cloudflared` et ses identifiants (`cloudflared tunnel login`) sur la machine de dev.

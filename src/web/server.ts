@@ -21,12 +21,14 @@ export function startWebServer(client: BotClient): void {
   app.use(logsRoute(client));
   app.use(activityRoute(client));
 
-  // L'Activity Discord est servie à la racine : ses URL mappings pointent sur ce domaine sans chemin.
+  // Les URL mappings Discord pointent sur la racine des sous-domaines activity*.theridge.fr.
   const activityDist = path.join(process.cwd(), 'activity', 'dist');
-  if (fs.existsSync(activityDist)) {
-    app.use(express.static(activityDist));
-    app.get('/', (_req, res) => res.sendFile(path.join(activityDist, 'index.html')));
-  }
+  const hasActivity = fs.existsSync(activityDist);
+  if (hasActivity) app.use(express.static(activityDist, { index: false }));
+  app.get('/', (req, res) => {
+    if (hasActivity && req.hostname.startsWith('activity')) res.sendFile(path.join(activityDist, 'index.html'));
+    else res.redirect('/admin');
+  });
 
   // Page globe — sert l'HTML pour toute route /map/*
   app.get('/map', (_req, res) => {
