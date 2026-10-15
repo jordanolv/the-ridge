@@ -278,9 +278,21 @@ URL mappings du portail pointent sur le domaine sans chemin.
 npm run dev   # bot + serveur web (3001) + Vite (5173, proxy /api → 3001) + tunnel
 ```
 
-Portail Discord (une fois par application, donc staging et prod) : *Activities → Settings*
-activé ; *URL Mappings* `/` → `activity-dev.theridge.fr` (dev) ou domaine de l'appli Dokploy ; *OAuth2 →
-Redirects* : `https://127.0.0.1`. `DISCORD_CLIENT_ID` et `DISCORD_CLIENT_SECRET` dans l'env.
+Une application Discord n'a qu'un seul mapping `/` : chaque environnement a donc la sienne,
+réglée une fois pour toutes.
+
+| Env | URL Mapping `/` | Servi par |
+|---|---|---|
+| Dev | `activity-dev.theridge.fr` | tunnel Cloudflare nommé `the-ridge-dev` → Vite local |
+| Staging | `staging.theridge.fr` | appli Dokploy `staging` |
+| Prod | `theridge.fr` | appli Dokploy `production` |
+
+Le tunnel de dev ne tourne que pendant `npm run dev` (sinon Cloudflare répond 1033) ; il
+faut `cloudflared` et ses identifiants (`cloudflared tunnel login`) sur la machine de dev.
+
+Dans chaque application : *Activities → Settings* activé, *URL Mappings* comme ci-dessus,
+*OAuth2 → Redirects* : `https://127.0.0.1`. `DISCORD_CLIENT_ID` et `DISCORD_CLIENT_SECRET`
+de cette application dans l'env correspondant.
 
 ## Peak Hunters (montagnes)
 
