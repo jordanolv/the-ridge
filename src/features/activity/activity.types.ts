@@ -40,6 +40,104 @@ export interface HomeSummary {
     fragments: number;
     fragmentsPerExpedition: number;
   };
+  nextParty: PartyCard | null;
+}
+
+export interface RarityInfo {
+  id: string;
+  label: string;
+  color: string;
+}
+
+export interface CollectionMountain {
+  id: string;
+  label: string;
+  altitude: string;
+  elevation: number;
+  countries: string[];
+  flags: string[];
+  rarity: string;
+  lat: number | null;
+  lng: number | null;
+  image: string;
+  thumbnail: string;
+  unlockedAt: number | null;
+}
+
+export interface CollectionSummary {
+  rarities: RarityInfo[];
+  mountains: CollectionMountain[];
+}
+
+export type LeaderboardId = 'weekly' | 'voice' | 'messages' | 'streak' | 'mountains';
+export type StatUnit = 'points' | 'seconds' | 'messages' | 'days' | 'mountains' | 'parties';
+
+export interface LeaderboardEntry {
+  rank: number;
+  userId: string;
+  name: string;
+  value: number;
+}
+
+export interface Leaderboard {
+  id: LeaderboardId;
+  label: string;
+  unit: StatUnit;
+  entries: LeaderboardEntry[];
+  me: LeaderboardEntry | null;
+}
+
+export interface StatTotal {
+  id: string;
+  label: string;
+  unit: StatUnit;
+  value: number;
+  rank: number;
+}
+
+export interface GameScore {
+  id: string;
+  label: string;
+  emoji: string;
+  wins: number;
+  played: number;
+}
+
+export interface StatsSummary {
+  players: number;
+  totals: StatTotal[];
+  days: string[];
+  voice: number[];
+  messages: number[];
+  leaderboards: Leaderboard[];
+  games: GameScore[];
+}
+
+export type PartyStatus = 'pending' | 'started' | 'ended';
+
+export interface PartyCard {
+  id: string;
+  name: string;
+  game: string;
+  description: string | null;
+  status: PartyStatus;
+  startsAt: number;
+  startedAt: number | null;
+  endedAt: number | null;
+  color: string;
+  image: string | null;
+  maxSlots: number;
+  participants: { id: string; name: string }[];
+  attended: number;
+  joined: boolean;
+  rewards: { money: number; xp: number; expeditions: number } | null;
+}
+
+export interface PartiesSummary {
+  live: PartyCard[];
+  upcoming: PartyCard[];
+  past: PartyCard[];
+  attendedCount: number;
 }
 
 export interface PackTierInfo {

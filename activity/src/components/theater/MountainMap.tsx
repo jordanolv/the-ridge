@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Map as MapboxMap, Marker } from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
-import cspWorkerUrl from 'mapbox-gl/dist/mapbox-gl-csp-worker.js?url';
-
-export type LngLat = [number, number];
+import { GLOBE_ZOOM, SATELLITE_STYLE, addTerrainAndSky, loadMapbox, throughProxy, type LngLat } from '../../lib/mapbox';
+import { MapFrame } from '../MapFrame';
 
 export type CameraShot =
   | { id: string; kind: 'globe'; center: LngLat; duration: number }
@@ -20,16 +18,6 @@ export interface SummitMarker {
 /** Plus le sommet est haut, plus la caméra recule : à pitch égal, elle finirait dans la pente. */
 const summitZoom = (elevation: number) => (elevation >= 6000 ? 10.9 : elevation >= 3000 ? 11.6 : 12.3);
 const SUMMIT_PITCH = 66;
-const GLOBE_ZOOM = 1.35;
-
-/**
- * La CSP d'une Activity bloque les domaines de Mapbox : tout repasse par le serveur du bot.
- * L'URL est absolue parce que les tuiles sont demandées depuis le worker de la carte.
- */
-function throughProxy(url: string) {
-  const match = /^https:\/\/([a-z0-9-]+)\.mapbox\.com\/(.*)$/.exec(url);
-  return { url: match ? `${location.origin}/api/activity/mapbox/${match[1]}/${match[2]}` : url };
-}
 
 const linear = (t: number) => t;
 
@@ -77,16 +65,15 @@ export function MountainMap({ token, shot, markers }: { token: string; shot: Cam
   useEffect(() => {
     let cancelled = false;
 
-    void import('mapbox-gl')
-      .then(({ default: mapboxgl }) => {
+    void loadMapbox()
+      .then(mapboxgl => {
         if (cancelled || !container.current) return;
-        mapboxgl.workerUrl = cspWorkerUrl;
         markerClass.current = mapboxgl.Marker;
 
         const instance = new mapboxgl.Map({
           container: container.current,
           accessToken: token,
-          style: 'mapbox://styles/mapbox/satellite-v9',
+          style: SATELLITE_STYLE,
           projection: 'globe',
           center: [shot.kind === 'globe' ? shot.center[0] - 50 : 0, 20],
           zoom: GLOBE_ZOOM,
@@ -97,15 +84,7 @@ export function MountainMap({ token, shot, markers }: { token: string; shot: Cam
         map.current = instance;
 
         instance.on('style.load', () => {
-          instance.addSource('mapbox-dem', { type: 'raster-dem', url: 'mapbox://mapbox.mapbox-terrain-dem-v1', tileSize: 512, maxzoom: 14 });
-          instance.setTerrain({ source: 'mapbox-dem', exaggeration: 1.35 });
-          instance.setFog({
-            color: 'rgb(120, 140, 190)',
-            'high-color': 'rgb(36, 32, 92)',
-            'horizon-blend': 0.06,
-            'space-color': 'rgb(5, 6, 18)',
-            'star-intensity': 0.7,
-          });
+          addTerrainAndSky(instance);
           setReady(true);
         });
         instance.on('error', event => console.warn('[mapbox]', event.error));
@@ -147,10 +126,5 @@ export function MountainMap({ token, shot, markers }: { token: string; shot: Cam
   }, [ready, markers]);
 
   if (failed) return null;
-  // Le CSS de Mapbox, hors couche Tailwind, impose `position: relative` au conteneur : on le place via un parent.
-  return (
-    <div className={`absolute inset-0 transition-opacity duration-1000 ${ready ? 'opacity-100' : 'opacity-0'}`}>
-      <div ref={container} className="h-full w-full" />
-    </div>
-  );
+  return <MapFrame container={container} ready={ready} />;
 }

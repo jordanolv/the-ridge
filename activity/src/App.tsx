@@ -7,10 +7,12 @@ import { ErrorScreen, SplashScreen } from './components/Screens';
 import { fetchHome } from './lib/api';
 import { startLive } from './lib/live';
 import { connect, describeError, type Session } from './lib/session';
-import { SECTIONS, type SectionId } from './navigation';
-import { ComingSoon } from './pages/ComingSoon';
+import type { SectionId } from './navigation';
+import { Collection } from './pages/Collection';
 import { Home } from './pages/Home';
 import { Packs } from './pages/Packs';
+import { Parties } from './pages/Parties';
+import { Stats } from './pages/Stats';
 
 type State = { status: 'loading' } | { status: 'error'; message: string; detail: string } | { status: 'ready'; session: Session; home: HomeSummary };
 
@@ -64,8 +66,12 @@ export function App() {
                 <Home home={state.home} onNavigate={setSection} />
               ) : section === 'packs' ? (
                 <Packs session={state.session} />
+              ) : section === 'stats' ? (
+                <Stats session={state.session} myId={state.home.user.id} />
+              ) : section === 'parties' ? (
+                <Parties session={state.session} />
               ) : (
-                <ComingSoon key={section} section={SECTIONS.find(s => s.id === section)!} />
+                <Collection session={state.session} />
               )}
             </div>
           </main>

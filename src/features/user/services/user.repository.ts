@@ -220,6 +220,12 @@ export class UserRepository {
     return 1 + (await UserModel.countDocuments({ [field]: { $gt: value } }));
   }
 
+  async topBy(field: RankedField, limit: number): Promise<{ discordId: string; name: string; value: number }[]> {
+    const users = await UserModel.find({ [field]: { $gt: 0 } }).sort({ [field]: -1 }).limit(limit).select(`discordId name ${field}`).lean();
+    const [group, key] = field.split('.') as ['stats', keyof IUser['stats']];
+    return users.map(u => ({ discordId: u.discordId, name: u.name, value: Number(u[group]?.[key] ?? 0) }));
+  }
+
   async namesOf(discordIds: string[]): Promise<Map<string, string>> {
     const users = await UserModel.find({ discordId: { $in: discordIds } }).select('discordId name').lean();
     return new Map(users.map(u => [u.discordId, u.name]));

@@ -6,12 +6,11 @@ import { openPack } from '../../peak-hunters/services/pack.service';
 import type { ActivityUser, ExpeditionTierName, OpenPackResult, PackShow, PackTierInfo, ShowCard } from '../activity.types';
 import { ActivityLiveService } from './activity-live.service';
 import { hexColor } from './hex-color';
+import { mountainImagePath } from './mountain-image';
 
 const TIERS: ExpeditionTierName[] = ['sentier', 'falaise', 'sommet'];
 
 export const isPackTier = (value: unknown): value is ExpeditionTierName => TIERS.includes(value as ExpeditionTierName);
-
-export const mountainImagePath = (mountainId: string) => `/api/activity/mountains/${encodeURIComponent(mountainId)}/image`;
 
 function toShowCard(card: CardDraw): ShowCard {
   const { mountain, rarity } = card;

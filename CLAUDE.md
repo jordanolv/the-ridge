@@ -265,6 +265,12 @@ autres domaines (`theridge.fr`, `staging.theridge.fr`) redirigent `/` vers le da
   la même image sert staging et prod.
 - Ouverte hors Discord (pas de `frame_id` dans l'URL), elle passe en aperçu avec
   `activity/src/lib/sample.ts`.
+- Onglets : une page par section (`activity/src/pages/`), chacune charge son endpoint
+  (`/api/activity/home|packs|collection|stats|parties`) via `useResource`, avec ses données
+  d'aperçu dans `sample.ts`. Ajouter un onglet = une entrée dans `navigation.ts`, une page,
+  un endpoint + son service dans `src/features/activity/services/`.
+- Images relayées : sommets (`/api/activity/mountains/:id/image`, `?size=thumb` pour la
+  grille, redimensionnée par Cloudinary) et affiches de soirées (`/api/activity/parties/:id/image`).
 - **Direct** (`activity-live.service.ts`, WebSocket sur `/api/activity/live`) : une salle par
   Activity lancée (`instanceId` du SDK). Une ouverture de pack est tirée côté serveur puis
   diffusée avec une heure de départ ; chaque écran la joue au même instant d'après

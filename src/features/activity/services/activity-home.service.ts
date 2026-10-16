@@ -1,23 +1,20 @@
-import { FRAGMENTS_PER_EXPEDITION, RARITY_CONFIG } from '../../peak-hunters/constants/peak-hunters.constants';
+import { FRAGMENTS_PER_EXPEDITION } from '../../peak-hunters/constants/peak-hunters.constants';
 import { UserMountainsRepository } from '../../peak-hunters/repositories/user-mountains.repository';
 import { MountainService } from '../../peak-hunters/services/mountain.service';
 import { xpProgress } from '../../user/services/xp-progress';
 import { UserService } from '../../user/services/user.service';
-import type { MountainRarity } from '../../peak-hunters/types/peak-hunters.types';
-import { hexColor } from './hex-color';
+import { ActivityPartiesService } from './activity-parties.service';
+import { RARITY_ORDER, rarityInfo } from './rarities';
 import type { ActivityUser, ExpeditionTierName, HomeSummary, RarityProgress } from '../activity.types';
 
 const TIERS: ExpeditionTierName[] = ['sentier', 'falaise', 'sommet'];
-const RARITIES: MountainRarity[] = ['legendary', 'epic', 'rare', 'common'];
 
 function rarityProgress(ownedIds: Set<string>): RarityProgress[] {
   const all = MountainService.getAll();
-  return RARITIES.map(rarity => {
+  return RARITY_ORDER.map(rarity => {
     const ofRarity = all.filter(m => MountainService.getRarity(m) === rarity);
     return {
-      id: rarity,
-      label: RARITY_CONFIG[rarity].label,
-      color: hexColor(RARITY_CONFIG[rarity].color),
+      ...rarityInfo(rarity),
       owned: ofRarity.filter(m => ownedIds.has(m.id)).length,
       total: ofRarity.length,
     };
@@ -29,7 +26,11 @@ const perTier = (pick: (tier: ExpeditionTierName) => number) =>
 
 export class ActivityHomeService {
   static async summary(user: ActivityUser): Promise<HomeSummary> {
-    const [account, mountains] = await Promise.all([UserService.getUserByDiscordId(user.id), UserMountainsRepository.getByUserId(user.id)]);
+    const [account, mountains, nextParty] = await Promise.all([
+      UserService.getUserByDiscordId(user.id),
+      UserMountainsRepository.getByUserId(user.id),
+      ActivityPartiesService.next(user.id),
+    ]);
     const level = account?.profil?.lvl ?? 0;
     const xp = xpProgress(level, account?.profil?.exp ?? 0);
 
@@ -54,6 +55,7 @@ export class ActivityHomeService {
         fragments: mountains?.fragments ?? 0,
         fragmentsPerExpedition: FRAGMENTS_PER_EXPEDITION,
       },
+      nextParty,
     };
   }
 }

@@ -173,6 +173,10 @@ export class PartyService {
     return this.repo.findActiveEvents();
   }
 
+  static async getPastEvents(limit: number): Promise<PartyEvent[]> {
+    return this.repo.findPastEvents(limit);
+  }
+
   static async getEventById(eventId: string): Promise<PartyEvent | null> {
     return this.repo.findById(eventId);
   }

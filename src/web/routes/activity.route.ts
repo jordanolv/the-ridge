@@ -4,6 +4,10 @@ import { BotClient } from '../../bot/client';
 import { ActivityAuthService } from '../../features/activity/services/activity-auth.service';
 import { ActivityHomeService } from '../../features/activity/services/activity-home.service';
 import { ActivityPacksService, isPackTier } from '../../features/activity/services/activity-packs.service';
+import { ActivityCollectionService } from '../../features/activity/services/activity-collection.service';
+import { ActivityStatsService } from '../../features/activity/services/activity-stats.service';
+import { ActivityPartiesService } from '../../features/activity/services/activity-parties.service';
+import { isMountainImageSize, mountainImageSource } from '../../features/activity/services/mountain-image';
 import { MountainService } from '../../features/peak-hunters/services/mountain.service';
 import type { ActivityConfig, ActivityUser } from '../../features/activity/activity.types';
 import { defaultTheme } from '../../features/user/services/profile-card/engine/themes';
@@ -89,9 +93,33 @@ export default function activityRoute(client: BotClient): Router {
     res.json(await ActivityPacksService.open(activityUser(res), tier, typeof instanceId === 'string' ? instanceId : null));
   });
 
+  router.get('/api/activity/collection', requireActivityUser, async (_req, res) => {
+    res.json(await ActivityCollectionService.summary(activityUser(res).id));
+  });
+
+  router.get('/api/activity/stats', requireActivityUser, async (_req, res) => {
+    const user = activityUser(res);
+    res.json(await ActivityStatsService.summary(user.id, user.username));
+  });
+
+  router.get('/api/activity/parties', requireActivityUser, async (_req, res) => {
+    res.json(await ActivityPartiesService.summary(activityUser(res).id));
+  });
+
+  router.get('/api/activity/parties/:id/image', async (req, res) => {
+    const url = await ActivityPartiesService.imageUrl(req.params.id);
+    const image = url ? await fetchImage(url) : null;
+    if (!image) {
+      res.sendStatus(404);
+      return;
+    }
+    res.set('Cache-Control', 'public, max-age=3600').type(url!.match(/\.png(\?|$)/i) ? 'png' : 'jpg').send(image);
+  });
+
   router.get('/api/activity/mountains/:id/image', async (req, res) => {
     const mountain = MountainService.getById(req.params.id);
-    const image = mountain ? await fetchImage(mountain.image) : null;
+    const size = isMountainImageSize(req.query.size) ? req.query.size : 'full';
+    const image = mountain ? await fetchImage(mountainImageSource(mountain.image, size)) : null;
     if (!image) {
       res.sendStatus(404);
       return;

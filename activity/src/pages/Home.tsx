@@ -1,8 +1,9 @@
 import { Coins, Flame, Mountain, Package, PartyPopper, Sparkles, TrendingDown, TrendingUp, Zap } from 'lucide-react';
 import type { ExpeditionTierName, HomeSummary } from '../../../src/features/activity/activity.types';
 import { Avatar } from '../components/Avatar';
-import { Badge, Card, CardTitle, ProgressBar } from '../components/ui';
-import { formatNumber, greeting, percentChange, plural } from '../lib/format';
+import { Badge, Card, CardTitle, Kpi, ProgressBar } from '../components/ui';
+import { ParticipantStack, PartyCover } from '../components/parties/PartyParts';
+import { formatNumber, formatPartyDate, greeting, percentChange, plural } from '../lib/format';
 import type { SectionId } from '../navigation';
 
 const TIERS: { id: ExpeditionTierName; label: string; color: string }[] = [
@@ -12,19 +13,6 @@ const TIERS: { id: ExpeditionTierName; label: string; color: string }[] = [
 ];
 
 const today = () => new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
-
-function Kpi({ icon, label, value, detail, delay }: { icon: React.ReactNode; label: string; value: string; detail?: React.ReactNode; delay: number }) {
-  return (
-    <Card delay={delay} className="flex flex-col gap-1">
-      <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-white/55">
-        {icon}
-        {label}
-      </p>
-      <p className="truncate text-3xl font-black tracking-tight">{value}</p>
-      {detail && <div className="text-sm text-white/55">{detail}</div>}
-    </Card>
-  );
-}
 
 export function Home({ home, onNavigate }: { home: HomeSummary; onNavigate: (id: SectionId) => void }) {
   const { user, profile, peakHunters } = home;
@@ -149,12 +137,27 @@ export function Home({ home, onNavigate }: { home: HomeSummary; onNavigate: (id:
         </Card>
 
         <Card delay={420} className="flex flex-col">
-          <CardTitle icon={<PartyPopper size={16} />}>Soirées</CardTitle>
-          <div className="flex flex-1 flex-col items-center justify-center gap-2 py-4 text-center">
-            <PartyPopper size={36} className="text-glow-pink/70" />
-            <p className="font-semibold">Aucune soirée en cours</p>
-            <p className="text-sm text-white/55">Les soirées vocales du serveur apparaîtront ici, en direct.</p>
-          </div>
+          <CardTitle icon={<PartyPopper size={16} />} aside={home.nextParty?.status === 'started' && <Badge className="text-rose-200">En cours</Badge>}>
+            Soirées
+          </CardTitle>
+          {home.nextParty ? (
+            <div className="flex flex-1 flex-col gap-3">
+              <PartyCover party={home.nextParty} className="h-28 rounded-xl" />
+              <div>
+                <p className="truncate font-bold">{home.nextParty.name}</p>
+                <p className="truncate text-sm text-white/55">
+                  {home.nextParty.status === 'started' ? `${home.nextParty.game} · en ce moment` : `${formatPartyDate(home.nextParty.startsAt)} · ${home.nextParty.game}`}
+                </p>
+              </div>
+              <ParticipantStack party={home.nextParty} />
+            </div>
+          ) : (
+            <div className="flex flex-1 flex-col items-center justify-center gap-2 py-4 text-center">
+              <PartyPopper size={36} className="text-glow-pink/70" />
+              <p className="font-semibold">Aucune soirée prévue</p>
+              <p className="text-sm text-white/55">Les soirées du serveur apparaîtront ici dès qu'elles sont annoncées.</p>
+            </div>
+          )}
           <button onClick={() => onNavigate('parties')} className="mt-4 rounded-xl border border-white/15 py-2.5 font-semibold text-white/80 transition hover:bg-white/5">
             Voir les soirées
           </button>
