@@ -4,7 +4,8 @@ import type { ActivityUser, PackShow } from '../../../../src/features/activity/a
 import { segmentAt, type ShowSegment } from '../../../../src/features/activity/pack-show.timeline';
 import { serverNow, skip, useLive } from '../../lib/live';
 import { Avatar } from '../Avatar';
-import { MountainMap, type CameraShot, type LngLat, type SummitMarker } from './MountainMap';
+import type { LngLat } from '../../lib/mapbox';
+import { MountainMap, type CameraShot, type SummitMarker } from './MountainMap';
 import { FloatingReactions, ReactionBar } from './Reactions';
 import { CardBack, CardFront, PackStage, SummaryStage, isPremium } from './stages';
 
