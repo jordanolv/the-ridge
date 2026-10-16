@@ -6,6 +6,7 @@ import path from 'path';
 import { Events, REST, Routes } from 'discord.js';
 import chalk from 'chalk';
 import { CronManager } from '../shared/cron/cron-manager';
+import { ensureActivityEntryPoint } from '../features/activity/services/activity-entry-point.service';
 
 function attachGatewayHealthLogs(client: BotClient): void {
   client.on(Events.ShardDisconnect, (event, shardId) => {
@@ -78,6 +79,7 @@ export async function startBot() {
           Routes.applicationGuildCommands(process.env.DISCORD_CLIENT_ID || '', process.env.GUILD_ID),
           { body: commandsData }
         );
+        await ensureActivityEntryPoint(rest, process.env.DISCORD_CLIENT_ID || '');
         console.log(chalk.magenta('🔧 [DEPLOY]') + chalk.green(` Terminé (${Date.now() - deployStart}ms)`));
       }
     }

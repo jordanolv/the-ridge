@@ -27,3 +27,15 @@ export interface RaidRarityConfig {
   baseXp: number;
   baseCoins: number;
 }
+
+export interface PackOpenedEvent {
+  userId: string;
+  tier: ExpeditionTier;
+  cards: { mountain: { id: string; mountainLabel: string }; rarity: MountainRarity; isDuplicate: boolean }[];
+}
+
+declare module '../../../shared/events/bot-event-bus' {
+  interface BotEventMap {
+    'peak-hunters:pack:opened': PackOpenedEvent;
+  }
+}
