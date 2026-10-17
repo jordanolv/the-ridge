@@ -28,6 +28,7 @@ import { formatExpeditionsLine } from './expedition.service';
 import { renderPackStrip } from './pack-strip.service';
 import { REVEAL_ANIMATION_MS, ensureRevealAnimation } from './reveal-animation.service';
 import { LogService } from '../../../shared/logs/logs.service';
+import { BotEventBus } from '../../../shared/events/bot-event-bus';
 import type { ExpeditionTier } from '../types/peak-hunters.types';
 
 export const PACK_BUTTON_PREFIX = 'mountain:pack';
@@ -285,32 +286,52 @@ async function packMessage(interaction: ButtonInteraction, tier: ExpeditionTier,
   return options => interaction.webhook.editMessage(message, options);
 }
 
+export type PackOpening = { ok: true; cards: CardDraw[] } | { ok: false; reason: 'no-pack' | 'draw-failed' };
+
+/** Dépense le pack, tire ses cartes et l'annonce : la même ouverture pour Discord et l'Activity. */
+export async function openPack(userId: string, tier: ExpeditionTier): Promise<PackOpening> {
+  if (!(await UserMountainsRepository.spendPack(userId, tier))) return { ok: false, reason: 'no-pack' };
+
+  const cards = withRarestLast(await drawCards(userId, packTiers(tier)));
+  if (cards.length === 0) {
+    await UserMountainsRepository.addPacks(userId, tier, 1);
+    return { ok: false, reason: 'draw-failed' };
+  }
+
+  BotEventBus.emit('peak-hunters:pack:opened', { userId, tier, cards });
+
+  const { label, emoji } = EXPEDITION_TIER_CONFIG[tier];
+  const list = cards.map(c => `${RARITY_CONFIG[c.rarity].emoji} ${c.mountain.mountainLabel}${c.isDuplicate ? ' 🔁' : ''}`).join(', ');
+  await LogService.info(`<@${userId}> a ouvert un **pack ${label}** ${emoji}\n${list}`, {
+    feature: LOG_FEATURE,
+    title: `${emoji} Pack ${label} ouvert`,
+  });
+
+  return { ok: true, cards };
+}
+
 /**
  * `fromPackId` : le bilan d'où part l'ouverture, qui perd ses boutons et reste dans le fil.
  * `keepSource` : le message du bouton reste tel quel, le pack s'ouvre à côté.
  */
-async function openPack(
+async function startOpening(
   interaction: ButtonInteraction,
   tier: ExpeditionTier,
   userId: string,
   fromPackId?: string,
   keepSource = fromPackId !== undefined,
 ): Promise<void> {
-  if (!(await UserMountainsRepository.spendPack(userId, tier))) {
-    await interaction.followUp({
-      content: `❌ Tu n'as plus de pack ${EXPEDITION_TIER_CONFIG[tier].label} — passe par la boutique (\`/shop\`).`,
-      flags: MessageFlags.Ephemeral,
-    });
+  const opened = await openPack(userId, tier);
+  if ('reason' in opened) {
+    const content =
+      opened.reason === 'no-pack'
+        ? `❌ Tu n'as plus de pack ${EXPEDITION_TIER_CONFIG[tier].label} — passe par la boutique (\`/shop\`).`
+        : "❌ Erreur lors du tirage, ton pack t'a été rendu.";
+    await interaction.followUp({ content, flags: MessageFlags.Ephemeral });
     return;
   }
 
-  const cards = withRarestLast(await drawCards(userId, packTiers(tier)));
-  if (cards.length === 0) {
-    await UserMountainsRepository.addPacks(userId, tier, 1);
-    await interaction.followUp({ content: '❌ Erreur lors du tirage, ton pack t\'a été rendu.', flags: MessageFlags.Ephemeral });
-    return;
-  }
-
+  const { cards } = opened;
   const previous = opening.get(userId);
   if (previous?.summary && previous.id === fromPackId) {
     await renderSummary(options => interaction.editReply(options), previous.summary.archived, previous.summary.strip);
@@ -319,13 +340,6 @@ async function openPack(
   const pack: OpeningPack = { id: Date.now().toString(36), tier, cards, revealed: 0, busy: false };
   opening.set(userId, pack);
   prewarmAnimations(cards);
-
-  const { label, emoji } = EXPEDITION_TIER_CONFIG[tier];
-  const list = cards.map(c => `${RARITY_CONFIG[c.rarity].emoji} ${c.mountain.mountainLabel}${c.isDuplicate ? ' 🔁' : ''}`).join(', ');
-  await LogService.info(`<@${userId}> a ouvert un **pack ${label}** ${emoji}\n${list}`, {
-    feature: LOG_FEATURE,
-    title: `${emoji} Pack ${label} ouvert`,
-  });
 
   await revealNext(await packMessage(interaction, tier, keepSource), pack, userId);
 }
@@ -357,12 +371,12 @@ export async function handlePackButton(interaction: ButtonInteraction): Promise<
   await interaction.deferUpdate();
 
   if (action === 'start') {
-    await openPack(interaction, tier as ExpeditionTier, ownerId, undefined, true);
+    await startOpening(interaction, tier as ExpeditionTier, ownerId, undefined, true);
     return;
   }
 
   if (action === 'open' || action === 'reopen') {
-    await openPack(interaction, tier as ExpeditionTier, ownerId, action === 'reopen' ? packId : undefined);
+    await startOpening(interaction, tier as ExpeditionTier, ownerId, action === 'reopen' ? packId : undefined);
     return;
   }
 

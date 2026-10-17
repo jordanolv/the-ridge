@@ -14,8 +14,9 @@ Bot Discord communautaire du serveur The Ridge. TypeScript, Discord.js v14, Mong
 ## Lancer le bot
 
 ```bash
-npm run dev      # swc, pas de build
-npm run watch    # idem + rechargement à chaud
+npm run dev      # bot + Activity (Vite) + tunnel, swc, pas de build
+npm run dev:bot  # le bot seul
+npm run watch    # le bot seul + rechargement à chaud
 npm run build    # tsc + tsc-alias + copie des assets — ce que vérifie la CI
 ```
 
@@ -244,6 +245,61 @@ boutons, le fond flouté et le test de rendu suivent tout seuls.
 - Le flou sous les panneaux est cuit une fois par thème × onglet (`engine/backdrop.ts`),
   préparé au démarrage (`ready`) : un `backdrop-filter` direct doublerait le temps de rendu.
 - Aperçu sans bot : `node -r @swc-node/register scripts/preview-card.ts [onglet|all] [thème]`.
+
+## Activity Discord (`activity/`)
+
+Le « camp de base » : une app web lancée depuis un salon vocal, qui tourne dans Discord.
+Front Vite + React + Tailwind dans `activity/` (dépendances à part), API dans
+`src/web/routes/activity.route.ts` + `src/features/activity/`. Le serveur web du bot sert
+l'interface **à la racine des domaines `activity*`** et l'API sous `/api/activity/*` : un
+seul conteneur, les URL mappings du portail pointent sur le domaine sans chemin, et les
+autres domaines (`theridge.fr`, `staging.theridge.fr`) redirigent `/` vers le dashboard.
+
+- Auth : `authorize` côté Activity → `POST /api/activity/token` (le secret client reste
+  serveur) → `authenticate`. Les appels suivants envoient le jeton Discord en Bearer ;
+  `ActivityAuthService.identify` le vérifie (cache 10 min).
+- Tout passe par ce domaine, images comprises (`/api/activity/avatar/:id`,
+  `/api/activity/brand/:asset`) : la CSP d'une Activity bloque les autres domaines.
+- Le contrat d'API est `src/features/activity/activity.types.ts`, importé tel quel par le front.
+- Rien n'est figé au build : l'Activity lit son client id via `/api/activity/config`,
+  la même image sert staging et prod.
+- Ouverte hors Discord (pas de `frame_id` dans l'URL), elle passe en aperçu avec
+  `activity/src/lib/sample.ts`.
+- Onglets : une page par section (`activity/src/pages/`), chacune charge son endpoint
+  (`/api/activity/home|packs|collection|stats|parties`) via `useResource`, avec ses données
+  d'aperçu dans `sample.ts`. Ajouter un onglet = une entrée dans `navigation.ts`, une page,
+  un endpoint + son service dans `src/features/activity/services/`.
+- Images relayées : sommets (`/api/activity/mountains/:id/image`, `?size=thumb` pour la
+  grille, redimensionnée par Cloudinary) et affiches de soirées (`/api/activity/parties/:id/image`).
+- **Direct** (`activity-live.service.ts`, WebSocket sur `/api/activity/live`) : une salle par
+  Activity lancée (`instanceId` du SDK). Une ouverture de pack est tirée côté serveur puis
+  diffusée avec une heure de départ ; chaque écran la joue au même instant d'après
+  `pack-show.timeline.ts`, partagé avec le front. Les ouvertures d'une salle passent en file.
+  Le fil du camp écoute `peak-hunters:pack:opened` sur le bus : il voit aussi les packs
+  ouverts depuis Discord.
+- **Mapbox** : la cinématique vole vers chaque sommet. Styles et tuiles passent par
+  `/api/activity/mapbox/*` (CSP) ; `MAPBOX_TOKEN` (jeton public `pk.`) dans l'env, sans lui
+  l'ouverture se joue sur un fond étoilé.
+
+```bash
+npm run dev   # bot + serveur web (3001) + Vite (5173, proxy /api → 3001) + tunnel
+```
+
+Une application Discord n'a qu'un seul mapping `/` : chaque environnement a donc la sienne,
+réglée une fois pour toutes.
+
+| Env | URL Mapping `/` | Servi par |
+|---|---|---|
+| Dev | `activity-dev.theridge.fr` | tunnel Cloudflare nommé `the-ridge-dev` → Vite local |
+| Staging | `activity-staging.theridge.fr` | appli Dokploy `staging` (domaine en plus de `staging.theridge.fr`) |
+| Prod | `activity.theridge.fr` | appli Dokploy `production` (domaine en plus de `theridge.fr`) |
+
+Le tunnel de dev ne tourne que pendant `npm run dev` (sinon Cloudflare répond 1033) ; il
+faut `cloudflared` et ses identifiants (`cloudflared tunnel login`) sur la machine de dev.
+
+Dans chaque application : *Activities → Settings* activé, *URL Mappings* comme ci-dessus,
+*OAuth2 → Redirects* : `https://127.0.0.1`. `DISCORD_CLIENT_ID` et `DISCORD_CLIENT_SECRET`
+de cette application dans l'env correspondant.
 
 ## Peak Hunters (montagnes)
 
