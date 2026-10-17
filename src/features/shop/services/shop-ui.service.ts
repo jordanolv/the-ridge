@@ -18,6 +18,7 @@ import {
 import {
   COLOR_PRESETS,
   MAX_QUANTITY,
+  PACK_WEEKLY_BUDGET,
   SHOP_CATEGORIES,
   colorVariantId,
   formatHex,
@@ -27,6 +28,7 @@ import {
   type ShopCategoryId,
   type ShopItem,
   type ShopVariant,
+  type ShopWallet,
 } from '../catalog';
 import { packOpenId } from '../../peak-hunters/services/pack.service';
 import type { ExpeditionTier } from '../../peak-hunters/types/peak-hunters.types';
@@ -96,16 +98,30 @@ function buildCategoryRow(active: ShopCategoryId, qty: number): ActionRowBuilder
   );
 }
 
+function canBuyFromCatalog(item: ShopItem, qty: number, wallet: ShopWallet): boolean {
+  if (item.soon) return false;
+  if (item.durationDays) return true;
+  const total = item.price * qty;
+  return wallet.balance >= total && (!packTierOf(item) || wallet.packBudgetLeft >= total);
+}
+
+function packBudgetLine(left: number): string {
+  const spent = PACK_WEEKLY_BUDGET - left;
+  return left > 0
+    ? `-# 🧗 Limite de la semaine : **${spent} / ${PACK_WEEKLY_BUDGET}** 💰 dépensés en packs`
+    : `-# 🧗 Limite de la semaine atteinte (${PACK_WEEKLY_BUDGET} 💰 en packs) — elle repart à zéro lundi`;
+}
+
 function catalogButtonLabel(item: ShopItem, qty: number): string {
   if (item.soon) return 'Bientôt';
   if (item.durationDays || qty === 1) return `${item.price} 💰`;
   return `×${qty} — ${item.price * qty} 💰`;
 }
 
-export function buildCatalogContainer(user: User, balance: number, category: ShopCategoryId, qty: number): ContainerBuilder {
+export function buildCatalogContainer(user: User, wallet: ShopWallet, category: ShopCategoryId, qty: number): ContainerBuilder {
   const header = [
     '## 🛒 Boutique',
-    `-# **${user.displayName}** · solde **${balance}** 💰`,
+    `-# **${user.displayName}** · solde **${wallet.balance}** 💰`,
   ].join('\n');
 
   const container = new ContainerBuilder()
@@ -131,15 +147,18 @@ export function buildCatalogContainer(user: User, balance: number, category: Sho
             .setCustomId(catalogButtonId(item, qty))
             .setLabel(catalogButtonLabel(item, qty))
             .setStyle(item.soon ? ButtonStyle.Secondary : ButtonStyle.Primary)
-            .setDisabled(item.soon === true || (!item.durationDays && balance < item.price * qty)),
+            .setDisabled(!canBuyFromCatalog(item, qty, wallet)),
         ),
     );
   }
 
   if (items.some(item => !item.durationDays)) {
+    const quantityHint = items.some(item => packTierOf(item))
+      ? `${packBudgetLine(wallet.packBudgetLeft)}\n-# Quantité à acheter`
+      : '-# Quantité à acheter';
     container
       .addSeparatorComponents(new SeparatorBuilder())
-      .addTextDisplayComponents(new TextDisplayBuilder().setContent('-# Quantité à acheter'))
+      .addTextDisplayComponents(new TextDisplayBuilder().setContent(quantityHint))
       .addActionRowComponents(buildQuantityRow(`×${qty}`, qty, q => homeId(category, q)));
   }
 
@@ -321,7 +340,7 @@ export function buildResultContainer(
   item: ShopItem,
   variant: ShopVariant | undefined,
   qty: number,
-  balance: number,
+  wallet: ShopWallet,
   userId: string,
   expiresAt?: Date,
 ): ContainerBuilder {
@@ -331,9 +350,11 @@ export function buildResultContainer(
     `## ✅ ${label}`,
     expiresAt ? `-# Actif jusqu'au ${relative(expiresAt)}` : `-# ${quantityLabel(item, qty)} ajouté à ton inventaire.`,
     '',
-    `Il te reste **${balance}** 💰`,
+    `Il te reste **${wallet.balance}** 💰`,
   ];
-  if (packTier) lines.push('', '-# Tes packs t\'attendent dans `/me onglet:Inventaire`, tu peux les ouvrir quand tu veux.');
+  if (packTier) {
+    lines.push('', '-# Tes packs t\'attendent dans `/me onglet:Inventaire`, tu peux les ouvrir quand tu veux.', packBudgetLine(wallet.packBudgetLeft));
+  }
 
   const buttons = new ActionRowBuilder<ButtonBuilder>();
   if (packTier) {
@@ -347,7 +368,7 @@ export function buildResultContainer(
         .setCustomId(buyId(item.id, undefined, 1))
         .setLabel(`Encore un — ${item.price} 💰`)
         .setStyle(ButtonStyle.Primary)
-        .setDisabled(balance < item.price),
+        .setDisabled(!canBuyFromCatalog(item, 1, wallet)),
     );
   }
   buttons.addComponents(

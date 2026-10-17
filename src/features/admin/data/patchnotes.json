@@ -555,7 +555,7 @@
           {
             "title": "💰 Nouvelle monnaie : ton solde perd un zéro",
             "items": [
-              "**Tous les soldes sont divisés par 10.** Personne n'y perd : les écarts et le classement restent exactement les mêmes",
+              "**Tous les soldes sont divisés par 10**, puis **plafonnés à 5 000 💰** : au-delà, le surplus est retiré, pour que personne ne démarre la nouvelle économie avec un trésor impossible à rattraper. Pour presque tout le monde, rien ne change : les écarts et le classement restent les mêmes",
               "Les prix et les gains passent tous à la nouvelle échelle, pour que **chaque montant veuille enfin dire quelque chose**",
               "Les gains en vocal à la minute disparaissent : ils sont remplacés par **la paie du lundi**"
             ]
@@ -573,6 +573,7 @@
             "items": [
               "🎨 **Rôle coloré** — 40 💰 / mois : ton propre rôle, à la couleur que tu veux (code hexa accepté, dégradé si le serveur le permet)",
               "🎁 **Packs Peak Hunters**, achetés en un clic : **Sentier** 15 💰 (3 cartes) · **Falaise** 25 💰 (5 cartes, la dernière avec de meilleures chances) · **Sommet** 45 💰 (5 cartes, la dernière Épique ou Légendaire)",
+              "Les packs sont limités à **150 💰 par semaine** et par joueur, remis à zéro le lundi : la collection reste une chasse, même pour les plus riches",
               "Les locations s'achètent de 1 à 6 mois d'un coup, les packs à la quantité"
             ]
           },
@@ -591,6 +592,15 @@
               "`/me onglet:` pour ouvrir directement le bon, `/me membre:` pour voir le profil de quelqu'un",
               "L'onglet **Inventaire** montre tes packs et te permet de les ouvrir",
               "`/stats` est retiré : tout son contenu est dans les onglets Activité et Jeux"
+            ]
+          },
+          {
+            "title": "🏕️ Le camp de base — une Activity Discord",
+            "items": [
+              "Dans un salon vocal, lance **Camp de base** depuis le bouton des Activités : une appli The Ridge qui s'ouvre directement dans Discord, pour tous ceux du salon",
+              "**Ouvre tes packs en direct** : tout le salon voit tes cartes se révéler au même moment, et peut réagir 🔥 😱 👏",
+              "**Collection** : tes 289 sommets en grille ou sur un **globe 3D**, avec filtres, recherche et la fiche de chaque montagne",
+              "**Stats** : ton activité sur 30 jours, tes classements et tes jeux · **Soirées** : celle en cours, les prochaines et les dernières"
             ]
           }
         ]
@@ -617,7 +627,7 @@
           {
             "title": "🏔️ Peak Hunters",
             "items": [
-                    "Les soirées peuvent maintenant récompenser en **expéditions**"
+              "Les soirées peuvent maintenant récompenser en **expéditions**"
             ]
           },
           {

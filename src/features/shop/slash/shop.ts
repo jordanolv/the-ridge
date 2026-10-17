@@ -11,10 +11,10 @@ export default {
   async execute(interaction: ChatInputCommandInteraction): Promise<void> {
     await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
-    const balance = await ShopService.getBalance(interaction.user.id);
+    const wallet = await ShopService.getWallet(interaction.user.id);
 
     await interaction.editReply({
-      components: [buildCatalogContainer(interaction.user, balance, SHOP_CATEGORIES[0].id, 1)],
+      components: [buildCatalogContainer(interaction.user, wallet, SHOP_CATEGORIES[0].id, 1)],
       flags: MessageFlags.IsComponentsV2,
     });
   },

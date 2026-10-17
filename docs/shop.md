@@ -162,8 +162,9 @@ après redénomination est de ~50 RC.
 **Le puits tient par la collection, pas par le prix unitaire.** Finir les 289
 montagnes coûte ~11 000 RC en packs (simulé, sans compter les fragments des doublons),
 soit environ deux ans de dépense pour un joueur médian qui y met la moitié de sa paie,
-et à peu près le solde du compte le plus riche. Le jour où des joueurs approchent de la
-fin, la réponse reste d'**ajouter des montagnes**.
+et plus que n'importe quel solde après le plafond de 5 000 (`economy.md` §8). La limite
+hebdomadaire (ci-dessous) empêche de toute façon de l'acheter d'un coup. Le jour où des
+joueurs approchent de la fin, la réponse reste d'**ajouter des montagnes**.
 
 ### Fragments et boutique
 
@@ -176,17 +177,33 @@ Les fragments sont le **chemin gratuit** : celui des 73 comptes sur 83 qui ne to
 pas de paie, et la valeur résiduelle des doublons. Ne pas les rendre plus chers pour
 « protéger » la boutique.
 
-### Pas de prix progressif, pas de limite
+### Une limite de 150 RC de packs par semaine
 
-Envisagé pour empêcher un gros solde d'acheter cinquante packs d'un coup, puis écarté :
-un joueur qui brûle 12 000 RC en packs est le meilleur scénario possible pour la masse
-monétaire. Son seul coût est qu'il termine sa collection plus vite — et les doublons
-continuent de rendre des fragments (`fragmentsOnDuplicate`), donc un pack garde une
-valeur après complétion.
+Chaque joueur peut dépenser au plus **150 RC en packs par semaine** (lundi → dimanche,
+heure de Paris), tous packs confondus. Constante `PACK_WEEKLY_BUDGET` dans `catalog.ts`,
+dépense suivie dans la collection `shop_pack_budgets` ; `/shop` affiche où on en est.
 
-Avec 289 montagnes en base (144 communes, 83 rares, 44 épiques, 18 légendaires), la
-collection tient le rythme (cf. ci-dessus). Si elle devient triviale à finir, la réponse est
-**d'ajouter des montagnes**, pas de rationner la boutique.
+La boutique est à prix fixes : sans limite, un gros solde ne fait monter aucun prix, il
+**finit Peak Hunters le premier soir**. Le seul vrai coût d'un riche, c'est que la
+collection perd son sens pour lui, et devant tout le serveur.
+
+La limite ne gêne pas un joueur ordinaire : la paie médiane est de ~237 RC par semaine,
+et personne n'en met 150 dans les packs. Elle ne touche que ceux qui ont un stock. Elle
+fixe aussi la vitesse maximale de complétion, la même pour tous :
+
+| Limite / semaine | Collection complète au plus tôt (en Falaises) |
+|---|---:|
+| 100 | ~2 ans |
+| **150** | **~16 mois** |
+| 250 | ~10 mois |
+
+Les expéditions gratuites et les fragments raccourcissent ces durées, pour tout le monde
+pareil. **Ne pas la monter pour « libérer » la boutique** : c'est elle qui fait de la
+collection un jeu long, pas les prix. La vraie réponse à une collection trop vite finie
+reste d'ajouter des montagnes.
+
+Un prix progressif (le n-ième pack de la semaine plus cher) a été écarté : il dit la
+même chose qu'une limite, en moins lisible, et casse l'ancrage d'une carte = un café.
 
 ### Le design de carte `/me`
 
@@ -294,8 +311,9 @@ Ne pas les reproposer sans argument nouveau.
 
 ## 7. Le palier prestige — non tranché
 
-`economy.md` §9 : 8 comptes détiennent 75 % de la masse, le plus riche ~14 000 RC
-après redénomination. Aucun loyer à 40 RC n'absorbe ça.
+`economy.md` §9 : 8 comptes détiennent 75 % de la masse. Après la redénomination, les
+soldes sont plafonnés à 5 000 (`economy.md` §8) : cinq comptes y sont, une dizaine
+au-dessus de 2 000. Aucun loyer à 40 RC n'absorbe ça.
 
 Piste actuelle — **Le Sommet, aux enchères permanentes** :
 
@@ -304,8 +322,8 @@ Piste actuelle — **Le Sommet, aux enchères permanentes** :
 > détenteur récupère 50 % (`transfer`), le reste part en `burn`.
 
 C'est le seul objet permanent qui reste un puits récurrent : il brûle à chaque
-passage de main et il ne vise que le haut de la distribution. Prix plancher proposé :
-10 000.
+passage de main et il ne vise que le haut de la distribution. Prix plancher : **à revoir
+sous le plafond de 5 000** — l'ancien 10 000 n'est plus atteignable par personne.
 
 Reste à trancher : le plancher, le pas d'enchère, et ce qui se passe si personne ne
 rachète pendant des mois (un détenteur à vie est un puits mort).

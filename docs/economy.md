@@ -253,12 +253,22 @@ Ancrée sur la paie médiane (237 RC / semaine, ~1 030 / mois — §3) :
 Tout est divisé par 10. C'est ce qu'a fait la France en 1960 avec le nouveau franc, et
 ça s'explique en une phrase : *« ton solde perd un zéro »*.
 
-Les soldes existants sont conservés à l'identique en valeur relative — personne n'est
-lésé, les rangs sont préservés.
+**Puis tout solde au-dessus de 5 000 RC est ramené à 5 000.** L'excédent est détruit et
+journalisé en `burn` dans `bot_logs`, un log par compte.
 
 ```js
-updateMany({}, [{ $set: { 'profil.money': { $round: [{ $divide: ['$profil.money', 10] }, 0] } } }])
+updateMany({}, [{ $set: { 'profil.money': { $min: [{ $round: [{ $divide: ['$profil.money', 10] }, 0] }, 5000] } } }])
 ```
+
+Mesuré sur la prod le 2026-10-17 : 5 comptes sur 91 sont plafonnés (16 418, 15 738,
+9 222, 9 120, 7 382 après ÷10), dont celui de l'admin, et 32 880 RC sont détruits. La
+masse passe de 93 400 à 60 500 ; la médiane (50) et le p90 (2 835) ne bougent pas.
+
+Pourquoi 5 000 : c'est environ 21 semaines de paie médiane et deux fois le p90, donc
+toujours un très gros solde, mais plus un trésor que personne ne peut rattraper. Sans
+plafond, deux comptes détenaient chacun ~17 % de la masse, et le palier prestige (§9,
+`shop.md` §7) n'aurait eu qu'un acheteur possible. La promesse « personne n'y perd »
+reste vraie pour 94 % du serveur ; le patchnote dit franchement ce qui arrive aux autres.
 
 Un solde de 50 000 coins devient 5 000 RC. L'arrondi absorbe au passage les soldes
 fractionnaires hérités du money/minute.
@@ -348,7 +358,7 @@ pas ici.
 ### Ce qu'il reste à trancher
 
 Le seul paramètre encore ouvert est le **prix du palier prestige** de la boutique.
-Il doit absorber le solde du plus riche après redénomination, soit ~14 000 RC.
+Il doit absorber le solde du plus riche après redénomination, soit 5 000 RC (plafond, §8).
 
 Pour rejouer ces mesures : l'onglet *Paie hebdo* du dashboard simule le calcul sur
 les `lastWeekActivityPoints` réels sans rien verser, et la page *Économie* donne la
@@ -376,7 +386,7 @@ L'ordre compte : chaque étape suppose la précédente.
    docker exec <conteneur-bot> node scripts/redenominate.mjs           # lire les chiffres
    docker exec <conteneur-bot> node scripts/redenominate.mjs --apply
    ```
-   Masse attendue : ~80 000, médiane ~50, max ~14 000.
+   Masse attendue : ~60 500, médiane ~50, max 5 000, 5 comptes plafonnés.
 5. Dashboard → *Paie hebdo* : **activer**, paramètres 250 / 40 % / 1 800. Sans ça,
    personne ne gagne plus rien : le money/minute n'existe plus.
 6. `/patchnote` dans le salon des annonces. L'euro n'y est jamais nommé (§1).

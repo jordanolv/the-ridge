@@ -86,49 +86,42 @@ jamais nommé. **À relire, et mettre le `timestamp` au jour de la prod.**
 
 ---
 
-## 3. Ce qui reste à trancher
+## 3. Décidé le 2026-10-17, puis ce qui reste à trancher
 
-### Le solde de l'admin — 🔴 avant la migration
+### Plafond de 5 000 RC à la migration
 
-Le compte de l'admin est à **161 916**, soit **16 192 RC** après redénomination —
-au-dessus du maximum relevé en septembre (~14 000), donc probablement le plus gros
-solde du serveur.
+Le problème de départ : le compte de l'admin (16 418 après ÷10) et un autre (15 738)
+pouvaient chacun finir Peak Hunters le premier soir et détenaient ~17 % de la masse.
+Diviser plus fort pour tout le monde n'aurait rien changé aux proportions et aurait
+appauvri les petits soldes. Remettre à zéro aurait puni tous ceux qui ont économisé.
 
-| | Valeur |
-|---|---:|
-| Part de la masse (~80 000 après migration) | ~20 % |
-| En semaines de paie médiane (237) | 68 |
-| Rapport au p90 (~2 500) | ×6,5 |
-| Rapport au solde médian (~50) | ×300 |
+Décision : `redenominate.mjs` divise par 10 **puis plafonne à 5 000**, l'excédent en
+`burn` dans `bot_logs`. Simulé sur la prod le 2026-10-17 (dry-run, et `--apply` sur une
+copie) :
 
-Ce que ça casse vraiment :
+| | Avant | Après ÷10 + plafond |
+|---|---:|---:|
+| Masse | 933 816 | 60 505 |
+| Médiane | 503 | 50 |
+| p90 | 28 348 | 2 835 |
+| Max | 164 183 | 5 000 |
 
-- **Pas les prix.** La boutique est à prix fixes, il n'y a pas de marché entre
-  joueurs : un gros solde ne fait rien monter pour les autres.
-- **Le palier prestige** (ci-dessous) : enchère à 10 000 puis +10 %. L'admin le prend
-  et personne n'atteint jamais 11 000 pour le reprendre — un puits mort.
-- **L'image** : l'admin et dev du bot qui détient un cinquième de la monnaie.
+5 comptes plafonnés sur 91 (jordan., kommu, apoz2212, flow_flo74, moumouz), 32 880 RC
+détruits. Le détail est dans `economy.md` §8.
 
-Options :
+### Limite de 150 RC de packs par semaine
 
-| Option | Pour | Contre |
-|---|---|---|
-| **Plafonner son propre compte avant la migration** (au niveau du 2ᵉ solde du serveur) ← recommandé | règle le problème sans toucher à la promesse « ton solde perd un zéro » | un choix personnel à faire |
-| Garder le solde | aucune action | exclure le compte des enchères prestige, et assumer l'image |
-| Changer la redénomination pour tous (÷ plus fort en haut, impôt) | — | casse la promesse « personne n'y perd », pour tout le serveur. **Écarté.** |
-
-Si plafond : le niveau du 2ᵉ solde se lit sur la page *Économie* du dashboard
-(distribution des soldes). L'ajustement passe par la commande admin `/money` avec un
-montant négatif : elle le loggue déjà en `burn` (`economy.md` §5). Le faire **avant**
-le script, ou après en divisant le plafond par 10.
+Même un solde de 5 000 achète 200 Falaises d'un coup. La boutique limite donc la dépense
+en packs à 150 RC par joueur et par semaine (`shop.md` §4) : la collection prend au
+moins ~16 mois à finir, pour tout le monde. Un joueur ordinaire ne la sent pas.
 
 ### Le palier prestige — 🔴 pas bloquant pour la prod
 
 `shop.md` §7 : « Le Sommet » aux enchères permanentes, un seul détenteur, rachat à
 +10 %, 50 % rendus à l'ancien détenteur (`transfer`), le reste en `burn`. Restent :
 
-- le **plancher** : 10 000 proposé, à revoir selon la décision sur le solde admin —
-  il doit être atteignable par le haut de la distribution, pas par un seul compte ;
+- le **plancher** : l'ancien 10 000 n'est plus atteignable avec le plafond de 5 000 —
+  à fixer autour de 3 000–4 000 pour que plusieurs comptes puissent se le disputer ;
 - le **pas d'enchère** ;
 - le **détenteur à vie** : que se passe-t-il si personne ne rachète pendant des mois
   (décote progressive du prix de rachat ? loyer pour le garder ?).
@@ -148,12 +141,11 @@ Le détail est dans `economy.md` §10. En résumé :
 - [ ] Relire et fusionner cette PR dans `dev`
 - [ ] Staging : `redenominate.mjs` (simulation puis `--apply`), `/shop` s'ouvre,
       acheter et ouvrir un pack de chaque type, onglet *Paie hebdo*
-- [ ] Trancher le solde admin (§3)
 - [ ] Mettre le `timestamp` du patchnote 1.11.0 au jour J
 - [ ] Prod, avant la fusion : clôturer les bets ouverts et les soirées avec récompense
 - [ ] PR `dev` → `main` en **merge commit**, à une heure creuse
 - [ ] Aucune partie d'arcade en cours, puis `docker exec <conteneur-bot> node scripts/redenominate.mjs`
-      (lire les chiffres : masse ~80 000, médiane ~50) puis `--apply`
+      (lire les chiffres : masse ~60 500, médiane ~50, 5 comptes plafonnés) puis `--apply`
 - [ ] Dashboard → *Paie hebdo* → **activer** (250 / 40 % / 1 800)
 - [ ] `/patchnote` dans le salon des annonces
 - [ ] Le lundi suivant : page *Économie*, masse émise ~2 500, pas de double versement
