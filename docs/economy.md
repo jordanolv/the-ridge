@@ -10,19 +10,20 @@ le modifier.**
 
 ## État d'avancement
 
-Rien de ce qui suit n'est en production, à une exception près. Ne pars pas du principe
-que le code applique déjà ces règles.
+Tout est implémenté sur `dev` ; rien n'est encore en production. La mise en prod suit
+la procédure du §10.
 
 | | État |
 |---|---|
 | Champ `flow` sur les logs économie | ✅ implémenté |
 | Log du rake des bets (`burn`) | ✅ implémenté |
-| Ancrage 1 RC ≈ 1 € | 🟡 décidé, pas appliqué |
+| Ancrage 1 RC ≈ 1 € | ✅ appliqué aux primes et à la boutique |
 | Redénomination ÷10 | 🟡 script prêt, **pas exécuté** |
 | Salaire hebdomadaire | ✅ implémenté, **désactivé** par défaut |
 | Suppression du money/minute | ✅ implémenté |
 | Recalage des primes de jeu | ✅ implémenté |
-| Boutique (puits) | 🔴 à concevoir |
+| Boutique (puits) | ✅ implémentée — voir [`shop.md`](shop.md) |
+| Palier prestige | 🔴 à trancher (`shop.md` §7) |
 
 ---
 
@@ -235,14 +236,13 @@ loyers. C'est ce qui fait un circuit plutôt qu'un réservoir.
 
 ### Grille de prix indicative
 
-Ancrée sur la médiane (210 RC / semaine, ~910 / mois) :
+Ancrée sur la paie médiane (237 RC / semaine, ~1 030 / mois — §3) :
 
 | Objet | Prix | Équivalent réel |
 |---|---:|---|
-| Consommable, achat d'impulsion | 2–5 | un café |
+| Consommable, achat d'impulsion | 2–5 | un café — une carte Peak Hunters |
 | Cosmétique 7 jours | 15 | une place de cinéma |
 | Rôle coloré 30 jours | 40 | un abonnement |
-| Pseudo custom 30 jours | 60 | un abonnement |
 | Emoji perso, permanent | 300 | — |
 | Prestige, permanent, unique | à calibrer | voir §9 |
 
@@ -280,6 +280,10 @@ de s'exécuter s'il reste des bets ouverts ou verrouillés, ou des soirées non 
 avec une récompense : réglés après la migration, ils verseraient dix fois trop. Les
 paris d'arcade (shifumi, morpion, P4, battle) vivent en mémoire et ne sont pas
 détectables — ne pas migrer pendant une partie.
+
+Les prix de la boutique sont déjà à la nouvelle échelle : elle reste **fermée** tant
+que le marqueur `redenominate-v1` n'est pas posé, pour qu'aucun solde non migré ne
+puisse acheter entre le déploiement et le script.
 
 Les `bot_logs` antérieurs restent en ancienne échelle. La page Économie mélangera les
 deux jusqu'à expiration du TTL de 90 jours ; ça ne se corrige pas, ça se sait.
@@ -349,3 +353,33 @@ Il doit absorber le solde du plus riche après redénomination, soit ~14 000 RC.
 Pour rejouer ces mesures : l'onglet *Paie hebdo* du dashboard simule le calcul sur
 les `lastWeekActivityPoints` réels sans rien verser, et la page *Économie* donne la
 distribution des soldes.
+
+---
+
+## 10. Mise en production
+
+L'ordre compte : chaque étape suppose la précédente.
+
+**Avant la PR `dev` → `main`**
+
+1. Sur staging : `node scripts/redenominate.mjs` (simulation) puis `--apply`, vérifier
+   que `/shop` s'ouvre, acheter et ouvrir un pack, regarder l'onglet *Paie hebdo*.
+2. Sur la prod, à l'heure prévue : clôturer ou rembourser les bets ouverts, et
+   terminer les soirées avec récompense. Le script refuse de tourner sinon.
+
+**Le jour J, à une heure creuse**
+
+3. Fusionner la PR `dev` → `main` en **merge commit**. Dokploy déploie. `/shop`
+   répond « ouvre dans quelques minutes » tant que l'étape 4 n'est pas faite.
+4. Pas de partie d'arcade en cours, puis :
+   ```bash
+   docker exec <conteneur-bot> node scripts/redenominate.mjs           # lire les chiffres
+   docker exec <conteneur-bot> node scripts/redenominate.mjs --apply
+   ```
+   Masse attendue : ~80 000, médiane ~50, max ~14 000.
+5. Dashboard → *Paie hebdo* : **activer**, paramètres 250 / 40 % / 1 800. Sans ça,
+   personne ne gagne plus rien : le money/minute n'existe plus.
+6. `/patchnote` dans le salon des annonces. L'euro n'y est jamais nommé (§1).
+7. Le lundi suivant : vérifier sur la page *Économie* la masse émise (~2 500) et
+   l'absence de double versement.
+

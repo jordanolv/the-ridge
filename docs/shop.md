@@ -20,6 +20,7 @@ qui entre, la boutique décide de celui qui sort.
 | Packs Peak Hunters | ✅ achetables, stockés en inventaire |
 | Design de carte `/me` | 🟡 câblé, en attente des images de fond |
 | Ouverture animée des packs | ✅ un pack à la fois, carte par carte (§5) |
+| Fermeture tant que la redénomination n'a pas tourné | ✅ implémenté (§8) |
 | Palier prestige | 🔴 à trancher (§7) |
 
 ---
@@ -71,7 +72,7 @@ Référence de revenu : **paie médiane 237 RC / semaine**, soit ~1 030 / mois.
 
 | Bande | Prix | Ce que c'est |
 |---|---:|---|
-| Impulsion | 2–5 | un café |
+| Impulsion | 2–5 | un café — le prix d'une carte |
 | Petit plaisir | 15–40 | une place de cinéma, un abonnement |
 | Achat réfléchi | 75–150 | une sortie, un jeu |
 | Gros achat | 200–600 | un objet qu'on économise une ou deux semaines |
@@ -84,9 +85,9 @@ Référence de revenu : **paie médiane 237 RC / semaine**, soit ~1 030 / mois.
 | Article | Prix | Durée | Statut |
 |---|---:|---|---|
 | Rôle coloré perso | 40 | 30 j | ✅ validé |
-| Pack Sentier — 3 cartes | 150 | consommable | ✅ validé |
-| Pack Falaise — 5 cartes | 300 | consommable | ✅ validé |
-| Pack Sommet — 5 cartes | 600 | consommable | ✅ validé |
+| Pack Sentier — 3 cartes | 15 | consommable | ✅ validé |
+| Pack Falaise — 5 cartes | 25 | consommable | ✅ validé |
+| Pack Sommet — 5 cartes | 45 | consommable | ✅ validé |
 | Design de carte `/me` | 50 | 30 j | ✅ validé |
 | Emoji perso | 300 | permanent | 🟡 proposé |
 | Le Sommet | 10 000+ | permanent, unique | 🟡 proposé (§7) |
@@ -99,15 +100,27 @@ même chose en plus cher, elle vend l'ouverture.
 
 | Pack | Cartes | Table des N−1 premières | Table de la dernière | Prix |
 |---|---:|---|---|---:|
-| Sentier | 3 | `sentier` | `sentier` | 150 |
-| Falaise | 5 | `sentier` | `falaise` — ≥ Rare en pratique | 300 |
-| Sommet | 5 | `sentier` | `sommet` — Épique ou Légendaire garantie | 600 |
+| Sentier | 3 | `sentier` | `sentier` | 15 |
+| Falaise | 5 | `sentier` | `falaise` — meilleures chances, communes possibles | 25 |
+| Sommet | 5 | `sentier` | `sommet` — Épique ou Légendaire garantie | 45 |
 
 **Aucune nouvelle table de probabilités.** `EXPEDITION_TIER_RARITY_WEIGHTS` existe
 déjà avec ses trois entrées ; elles cessent d'être des « niveaux d'expédition » pour
-devenir des **qualités de slot**. La table `sommet` (0 % commune, 10 % rare, 65 %
-épique, 25 % légendaire) garantit déjà par construction l'Épique ou mieux — c'est
-littéralement sa description dans `EXPEDITION_TIER_CONFIG`.
+devenir des **qualités de slot** :
+
+| Table | Commune | Rare | Épique | Légendaire |
+|---|---:|---:|---:|---:|
+| `sentier` | 60 | 25 | 12 | 3 |
+| `falaise` | 40 | 35 | 20 | 5 |
+| `sommet` | 0 | 10 | 65 | 25 |
+
+Seul le Sommet garantit une rareté. La Falaise améliore les chances sans rien promettre :
+sa dernière carte peut être commune (40 %), et c'est voulu — un pack qui ne déçoit
+jamais n'a plus de moment fort. Son texte en boutique ne promet donc rien d'autre que
+« de meilleures chances ».
+
+Pas de table modifiée pour les packs : `falaise` et `sommet` servent aussi aux
+expéditions gratuites, et le jeu est pensé sur le long terme.
 
 Structure volée aux boosters Pokémon, et pour la même raison : des cartes banales qui
 défilent, **une carte du fond qui décide de tout**. Sans slot garanti, un pack à
@@ -115,35 +128,64 @@ défilent, **une carte du fond qui décide de tout**. Sans slot garanti, un pack
 
 ### Comment les prix sont fixés
 
-Unité de compte : **une carte au tirage normal = 50 RC**. Le supplément d'un slot
-garanti est son coût de rareté — un Épique sort à 12 % au tirage normal, donc il vaut
-environ 8 cartes.
+**Une carte = un café ≈ 5 RC** (`economy.md` §1 et §7 : un consommable, achat
+d'impulsion, 2–5). Le joueur doit pouvoir lire le prix sans calcul : trois cafés pour
+un Sentier, une place de cinéma pour une Falaise, un repas pour un Sommet.
 
 ```
-Sentier  = 3 × 50                        = 150
-Falaise  = 4 × 50 + slot Rare (100)      = 300
-Sommet   = 4 × 50 + slot Épique (400)    = 600
+Sentier  = 3 cartes × 5               = 15
+Falaise  = 1⅔ Sentier                 = 25
+Sommet   = 3 Sentiers                 = 45
 ```
 
-Le Sentier à 150 est l'entrée de gamme délibérée : **les deux tiers d'une paie
-médiane**, donc un achat réel pour un joueur moyen et pas seulement pour les huit
-comptes qui tiennent 75 % de la masse.
+Les packs chers ne sont **pas** tarifés par carte : ils se comparent au même budget
+dépensé en Sentiers. Un pack plus cher donne moins de cartes mais plus de haut de
+tableau — sinon il ne serait qu'un piège pour qui ne fait pas le calcul. Simulé sur
+450 RC :
 
-Repère de contrôle : une expédition gratuite coûte 20 fragments, soit 5 h de vocal.
-Un pack Sentier à 150 vaut donc 15 h de vocal achetées en une commande. **La boutique
-est un raccourci cher, pas un remplacement du vocal** — si ce rapport s'inverse, les
-fragments n'ont plus de raison d'exister.
+| 450 RC en… | Communes | Rares | Épiques | Légendaires |
+|---|---:|---:|---:|---:|
+| 30 Sentiers | 54 | 22,5 | 10,8 | **2,7** |
+| 18 Falaises | 50 | **24** | **12** | 3,1 |
+| 10 Sommets | 24 | 11 | 11,3 | **3,7** |
+
+Le Sentier est le volume, la Falaise le milieu de tableau, le Sommet la chasse aux
+légendaires. Aucun ne domine les deux autres. **Ne pas monter un pack cher sans
+refaire ce tableau** : à 30, la Falaise repasse sous deux Sentiers ; l'ancienne grille
+(150 / 300 / 600) donnait un Sommet battu sur tous les plans par quatre Sentiers.
+
+L'ancienne grille partait d'« une carte = 50 RC », un chiffre qui ne nommait aucun
+équivalent réel — 150 € pour trois cartes cassait l'ancrage exactement comme la prime
+de 750 (`economy.md` §6). Elle excluait aussi la moitié du serveur : le solde médian
+après redénomination est de ~50 RC.
+
+**Le puits tient par la collection, pas par le prix unitaire.** Finir les 289
+montagnes coûte ~11 000 RC en packs (simulé, sans compter les fragments des doublons),
+soit environ deux ans de dépense pour un joueur médian qui y met la moitié de sa paie,
+et à peu près le solde du compte le plus riche. Le jour où des joueurs approchent de la
+fin, la réponse reste d'**ajouter des montagnes**.
+
+### Fragments et boutique
+
+Les fragments ne concurrencent pas la boutique, ils servent un autre public. Une heure
+de vocal rapporte ~0,2 carte en fragments et ~48 RC de paie, soit une dizaine de cartes
+en boutique. Ce n'est pas un problème : l'argent de la paie vient du vocal, donc la
+boutique ne remplace pas le vocal, elle le convertit.
+
+Les fragments sont le **chemin gratuit** : celui des 73 comptes sur 83 qui ne touchent
+pas de paie, et la valeur résiduelle des doublons. Ne pas les rendre plus chers pour
+« protéger » la boutique.
 
 ### Pas de prix progressif, pas de limite
 
 Envisagé pour empêcher un gros solde d'acheter cinquante packs d'un coup, puis écarté :
-un joueur qui brûle 14 000 RC en packs est le meilleur scénario possible pour la masse
+un joueur qui brûle 12 000 RC en packs est le meilleur scénario possible pour la masse
 monétaire. Son seul coût est qu'il termine sa collection plus vite — et les doublons
 continuent de rendre des fragments (`fragmentsOnDuplicate`), donc un pack garde une
 valeur après complétion.
 
 Avec 289 montagnes en base (144 communes, 83 rares, 44 épiques, 18 légendaires), la
-collection tient largement le rythme. Si elle devient triviale à finir, la réponse est
+collection tient le rythme (cf. ci-dessus). Si elle devient triviale à finir, la réponse est
 **d'ajouter des montagnes**, pas de rationner la boutique.
 
 ### Le design de carte `/me`
@@ -325,7 +367,12 @@ La quantité d'une location (`−` / `+`, plafond 6) multiplie le prix **et** la
 3 mois de rôle coloré = 120 RC. Tout l'état de navigation tient dans le `customId`
 (`shop:view:<article>:<variante>:<quantité>`), donc aucune session à stocker.
 
-Trois points qui ne se devinent pas :
+Quatre points qui ne se devinent pas :
+
+- **La boutique est fermée tant que `redenominate-v1` n'est pas dans `migrations`.**
+  Les prix sont à la nouvelle échelle ; entre le déploiement et le script, un solde
+  non migré achèterait dix fois trop. Sur une base locale, lancer
+  `node scripts/redenominate.mjs --apply` une fois pour l'ouvrir.
 
 - **Le débit est conditionnel** (`'profil.money': { $gte: prix }` dans le filtre du
   `updateOne`), pas un `read` puis un `$inc`. Deux clics simultanés sur *Acheter* ne
