@@ -17,7 +17,7 @@ export async function fetchPacks(session: Session): Promise<PackTierInfo[]> {
 }
 
 export async function openPack(session: Session, tier: ExpeditionTierName): Promise<OpenPackResult> {
-  if (session.mode === 'preview') return { ok: true, show: samplePackShow(tier) };
+  if (session.mode === 'preview') return { ok: true, show: samplePackShow(tier), remaining: 3 };
   return postJson<OpenPackResult>('/api/activity/packs/open', { tier, instanceId: session.instanceId }, session.accessToken);
 }
 

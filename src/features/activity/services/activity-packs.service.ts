@@ -59,6 +59,8 @@ export class ActivityPacksService {
       cards: opened.cards.map(toShowCard),
       skippedAt: null,
     };
-    return { ok: true, show: ActivityLiveService.schedule(instanceId, show) };
+    const doc = await UserMountainsRepository.getByUserId(user.id);
+    const remaining = doc ? UserMountainsRepository.packsOf(doc, tier) : 0;
+    return { ok: true, show: ActivityLiveService.schedule(instanceId, show), remaining };
   }
 }

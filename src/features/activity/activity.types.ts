@@ -178,7 +178,8 @@ export interface PackShow {
   skippedAt: number | null;
 }
 
-export type OpenPackResult = { ok: true; show: PackShow } | { ok: false; reason: 'no-pack' | 'draw-failed' };
+/** `remaining` : les packs de ce type qui restent après celui-ci, pour proposer d'enchaîner. */
+export type OpenPackResult = { ok: true; show: PackShow; remaining: number } | { ok: false; reason: 'no-pack' | 'draw-failed' };
 
 export interface FeedEntry {
   id: string;

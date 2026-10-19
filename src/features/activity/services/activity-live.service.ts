@@ -6,7 +6,7 @@ import { BotEventBus } from '../../../shared/events/bot-event-bus';
 import { EXPEDITION_TIER_CONFIG, RARITY_CONFIG } from '../../peak-hunters/constants/peak-hunters.constants';
 import type { PackOpenedEvent } from '../../peak-hunters/types/peak-hunters.types';
 import { REACTIONS, type ActivityUser, type FeedEntry, type LiveClientMessage, type LiveServerMessage, type PackShow } from '../activity.types';
-import { showEnd } from '../pack-show.timeline';
+import { segmentAt, showEnd } from '../pack-show.timeline';
 import { ActivityAuthService } from './activity-auth.service';
 import { hexColor } from './hex-color';
 
@@ -180,8 +180,9 @@ export class ActivityLiveService {
   }
 
   /**
-   * Place l'ouverture à la suite de celles du même joueur et la diffuse à la salle. Hors salle
-   * (joueur pas connecté au direct), elle part tout de suite et seul l'ouvreur la verra.
+   * Place l'ouverture à la suite de celles du même joueur et la diffuse à la salle. Un pack ouvert
+   * depuis le récap du précédent part tout de suite, le récap s'efface. Hors salle (joueur pas
+   * connecté au direct), elle part tout de suite et seul l'ouvreur la verra.
    */
   static schedule(instanceId: string | null, show: Omit<PackShow, 'startsAt'>): PackShow {
     const room = instanceId ? rooms.get(instanceId) : undefined;
@@ -189,7 +190,9 @@ export class ActivityLiveService {
     if (!room || !inRoom) return { ...show, startsAt: Date.now() + SHOW_LEAD_MS };
 
     const queue = showsOf(room, show.opener.id);
-    const previousEnd = queue.length > 0 ? showEnd(queue[queue.length - 1]) : 0;
+    const previous = queue[queue.length - 1];
+    const previousOnSummary = previous && segmentAt(previous, Date.now())?.segment.kind === 'summary';
+    const previousEnd = previous && !previousOnSummary ? showEnd(previous) : 0;
     const scheduled: PackShow = { ...show, startsAt: Math.max(Date.now() + SHOW_LEAD_MS, previousEnd) };
     room.shows.push(scheduled);
     broadcast(room, { type: 'shows', shows: room.shows });

@@ -1,8 +1,10 @@
-import { Eye, X } from 'lucide-react';
+import { Eye, Package, X } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { ActivityUser, PackShow } from '../../../../src/features/activity/activity.types';
 import { segmentAt, type ShowSegment } from '../../../../src/features/activity/pack-show.timeline';
 import { serverNow, skip, useLive } from '../../lib/live';
+import { openAndPlay, useOpening } from '../../lib/opening';
+import type { Session } from '../../lib/session';
 import { Avatar } from '../Avatar';
 import type { LngLat } from '../../lib/mapbox';
 import { MountainMap, type CameraShot, type SummitMarker } from './MountainMap';
@@ -64,7 +66,23 @@ function ProgressDots({ show, segment }: { show: PackShow; segment: ShowSegment 
   );
 }
 
-function Theater({ show, now, me, participants, mapboxToken, onHide }: { show: PackShow; now: number; me: ActivityUser; participants: ActivityUser[]; mapboxToken: string | null; onHide: () => void }) {
+function OpenAnother({ session, show }: { session: Session; show: PackShow }) {
+  const { opening, remaining } = useOpening();
+  const left = remaining[show.tier] ?? 0;
+  if (left === 0) return null;
+  return (
+    <button
+      onClick={() => void openAndPlay(session, show.tier)}
+      disabled={opening !== null}
+      className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-sm font-bold text-night-950 transition enabled:hover:brightness-110 disabled:opacity-60"
+      style={{ background: `linear-gradient(90deg, ${show.tierColor}, #67e8f9)` }}
+    >
+      <Package size={15} /> {opening ? 'Ouverture…' : `Encore un · ${left}`}
+    </button>
+  );
+}
+
+function Theater({ session, show, now, me, participants, mapboxToken, onHide }: { session: Session; show: PackShow; now: number; me: ActivityUser; participants: ActivityUser[]; mapboxToken: string | null; onHide: () => void }) {
   const { reactions } = useLive();
   const { segment, elapsed } = segmentAt(show, now)!;
   const key = segmentKey(show, segment);
@@ -103,6 +121,7 @@ function Theater({ show, now, me, participants, mapboxToken, onHide }: { show: P
             <Avatar key={user.id} userId={user.id} name={user.displayName} size={28} />
           ))}
         </div>
+        {isOpener && segment.kind === 'summary' && <OpenAnother session={session} show={show} />}
         {isOpener && segment.kind !== 'summary' ? (
           <button onClick={() => skip(show)} className="rounded-xl border border-white/15 bg-night-950/40 px-3 py-1.5 text-sm font-semibold text-white/80 transition hover:bg-white/10">
             Passer
@@ -173,12 +192,14 @@ const withoutId = (set: ReadonlySet<string>, id: string) => new Set([...set].fil
  * Les ouvertures de pack de la salle, calées sur la même horloge chez tout le monde. Celui
  * qui ouvre la voit en plein écran ; les autres ont un bandeau et la rejoignent s'ils veulent.
  */
-export function PackTheater({ me, mapboxToken, onOwnShowEnd }: { me: ActivityUser; mapboxToken: string | null; onOwnShowEnd: () => void }) {
+export function PackTheater({ session, me, mapboxToken, onOwnShowEnd }: { session: Session; me: ActivityUser; mapboxToken: string | null; onOwnShowEnd: () => void }) {
   const { shows, participants } = useLive();
   const [watching, setWatching] = useState<ReadonlySet<string>>(new Set());
   const [dismissed, setDismissed] = useState<ReadonlySet<string>>(new Set());
   const now = useServerClock(shows.length > 0);
-  const playing = shows.filter(show => !dismissed.has(show.id) && segmentAt(show, now) !== null);
+  const started = shows.filter(show => !dismissed.has(show.id) && segmentAt(show, now) !== null);
+  // Un pack lancé depuis le récap du précédent démarre pendant ce récap : seul le plus récent compte.
+  const playing = started.filter(show => !started.some(other => other.opener.id === show.opener.id && other.startsAt > show.startsAt));
   const current = playing.find(show => show.opener.id === me.id) ?? playing.find(show => watching.has(show.id)) ?? playing[0] ?? null;
 
   const ownShowId = current && current.opener.id === me.id ? current.id : null;
@@ -205,6 +226,7 @@ export function PackTheater({ me, mapboxToken, onOwnShowEnd }: { me: ActivityUse
   return (
     <Theater
       key={current.id}
+      session={session}
       show={current}
       now={now}
       me={me}
