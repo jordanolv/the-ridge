@@ -30,13 +30,16 @@ interface Patchnote {
   sections: PatchSection[];
 }
 
+/** Discord refuse un message Components V2 dont le texte dépasse 4 000 caractères au total. */
+const MESSAGE_TEXT_LIMIT = 4000;
+
 const SECTION_CONFIG: Record<SectionType, { label: string; color: number }> = {
   new:    { label: '✅ Nouveautés', color: 0x2ecc71 },
   update: { label: '🔄 Updates',    color: 0x3498db },
   fix:    { label: '🔧 Correctifs', color: 0xe67e22 },
 };
 
-function buildPatchnoteContainers(note: Patchnote): ContainerBuilder[] {
+export function buildPatchnoteContainers(note: Patchnote): ContainerBuilder[] {
   const containers: ContainerBuilder[] = [];
 
   const header = new ContainerBuilder()
@@ -82,6 +85,32 @@ function buildPatchnoteContainers(note: Patchnote): ContainerBuilder[] {
   return containers;
 }
 
+function textLength(container: ContainerBuilder): number {
+  return container.components.reduce(
+    (sum, component) => sum + (component instanceof TextDisplayBuilder ? component.data.content?.length ?? 0 : 0),
+    0,
+  );
+}
+
+export function packIntoMessages(containers: ContainerBuilder[]): ContainerBuilder[][] {
+  const messages: ContainerBuilder[][] = [];
+  let current: ContainerBuilder[] = [];
+  let length = 0;
+
+  for (const container of containers) {
+    const size = textLength(container);
+    if (current.length && length + size > MESSAGE_TEXT_LIMIT) {
+      messages.push(current);
+      current = [];
+      length = 0;
+    }
+    current.push(container);
+    length += size;
+  }
+  if (current.length) messages.push(current);
+  return messages;
+}
+
 async function loadPatchnotes(): Promise<Patchnote[]> {
   const srcPath = path.resolve(process.cwd(), 'src', 'features', 'admin', 'data', 'patchnotes.json');
   const distPath = path.resolve(process.cwd(), 'dist', 'features', 'admin', 'data', 'patchnotes.json');
@@ -115,14 +144,13 @@ export default {
     }
 
     const latest = notes[notes.length - 1];
-    const containers = buildPatchnoteContainers(latest);
+    const messages = packIntoMessages(buildPatchnoteContainers(latest));
 
     await interaction.reply({ content: '📨 Envoyé !', flags: MessageFlags.Ephemeral });
 
     const channel = interaction.channel as TextChannel;
-    await channel.send({
-      components: containers,
-      flags: MessageFlags.IsComponentsV2,
-    });
+    for (const components of messages) {
+      await channel.send({ components, flags: MessageFlags.IsComponentsV2 });
+    }
   },
 };
