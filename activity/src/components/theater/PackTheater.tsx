@@ -178,7 +178,8 @@ export function PackTheater({ me, mapboxToken, onOwnShowEnd }: { me: ActivityUse
   const [watching, setWatching] = useState<ReadonlySet<string>>(new Set());
   const [dismissed, setDismissed] = useState<ReadonlySet<string>>(new Set());
   const now = useServerClock(shows.length > 0);
-  const current = shows.find(show => !dismissed.has(show.id) && segmentAt(show, now) !== null) ?? null;
+  const playing = shows.filter(show => !dismissed.has(show.id) && segmentAt(show, now) !== null);
+  const current = playing.find(show => show.opener.id === me.id) ?? playing.find(show => watching.has(show.id)) ?? playing[0] ?? null;
 
   const ownShowId = current && current.opener.id === me.id ? current.id : null;
   const previousOwnShow = useRef<string | null>(null);

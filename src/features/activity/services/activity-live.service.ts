@@ -56,10 +56,15 @@ function pendingShows(room: Room): PackShow[] {
   return room.shows;
 }
 
-/** Les ouvertures d'une salle passent l'une après l'autre : chacune commence à la fin de la précédente. */
-function reschedule(room: Room): void {
+const showsOf = (room: Room, openerId: string) => pendingShows(room).filter(show => show.opener.id === openerId);
+
+/**
+ * Les ouvertures d'un même joueur s'enchaînent ; celles de joueurs différents se jouent en même
+ * temps, sinon chacun attend la fin de tous les packs ouverts avant lui dans la salle.
+ */
+function reschedule(room: Room, openerId: string): void {
   let cursor = Date.now() + SHOW_LEAD_MS;
-  for (const show of pendingShows(room)) {
+  for (const show of showsOf(room, openerId)) {
     if (show.startsAt > Date.now()) show.startsAt = Math.max(cursor, Date.now() + SHOW_LEAD_MS);
     cursor = showEnd(show);
   }
@@ -87,7 +92,7 @@ function handleMessage(room: Room, member: Member, message: LiveClientMessage): 
     const show = pendingShows(room).find(s => s.id === message.showId);
     if (!show || show.opener.id !== member.user.id || show.skippedAt !== null || show.startsAt > now) return;
     show.skippedAt = now;
-    reschedule(room);
+    reschedule(room, member.user.id);
     broadcast(room, { type: 'shows', shows: room.shows });
   }
 }
@@ -175,15 +180,15 @@ export class ActivityLiveService {
   }
 
   /**
-   * Place l'ouverture dans la file de la salle et la diffuse. Hors salle (joueur pas connecté
-   * au direct), elle part tout de suite et seul l'ouvreur la verra.
+   * Place l'ouverture à la suite de celles du même joueur et la diffuse à la salle. Hors salle
+   * (joueur pas connecté au direct), elle part tout de suite et seul l'ouvreur la verra.
    */
   static schedule(instanceId: string | null, show: Omit<PackShow, 'startsAt'>): PackShow {
     const room = instanceId ? rooms.get(instanceId) : undefined;
     const inRoom = room && [...room.members].some(member => member.user.id === show.opener.id);
     if (!room || !inRoom) return { ...show, startsAt: Date.now() + SHOW_LEAD_MS };
 
-    const queue = pendingShows(room);
+    const queue = showsOf(room, show.opener.id);
     const previousEnd = queue.length > 0 ? showEnd(queue[queue.length - 1]) : 0;
     const scheduled: PackShow = { ...show, startsAt: Math.max(Date.now() + SHOW_LEAD_MS, previousEnd) };
     room.shows.push(scheduled);

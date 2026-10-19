@@ -275,7 +275,8 @@ autres domaines (`theridge.fr`, `staging.theridge.fr`) redirigent `/` vers le da
 - **Direct** (`activity-live.service.ts`, WebSocket sur `/api/activity/live`) : une salle par
   Activity lancée (`instanceId` du SDK). Une ouverture de pack est tirée côté serveur puis
   diffusée avec une heure de départ ; chaque écran la joue au même instant d'après
-  `pack-show.timeline.ts`, partagé avec le front. Les ouvertures d'une salle passent en file.
+  `pack-show.timeline.ts`, partagé avec le front. Les ouvertures d'un même joueur passent en file ;
+  celles de joueurs différents se jouent en même temps, la sienne en plein écran, les autres en bandeau.
   Le fil du camp écoute `peak-hunters:pack:opened` sur le bus : il voit aussi les packs
   ouverts depuis Discord.
 - **Mapbox** : la cinématique vole vers chaque sommet. Styles et tuiles passent par
