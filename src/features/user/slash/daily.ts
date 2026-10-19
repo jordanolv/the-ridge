@@ -7,6 +7,7 @@ import { parisMidnightUTC, toParisDayYMD } from '../../../shared/time/day-split'
 import { DailyStoryService } from '../services/daily-story.service';
 import { awardExpeditions } from '../../peak-hunters/services/expedition.service';
 import { dropMountain } from '../../peak-hunters/services/mountain.service';
+import { rc } from '../../../shared/economy/currency';
 
 const MAX_MONEY = 10;
 const MAX_XP = 100;
@@ -106,7 +107,7 @@ export default {
       const fields = [
         {
           name: '💰 Argent',
-          value: `+${moneyReward} 💰`,
+          value: `+${moneyReward} ${rc()}`,
           inline: true
         },
         {

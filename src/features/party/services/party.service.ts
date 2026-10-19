@@ -12,6 +12,7 @@ import AppConfigModel from '../../discord/models/app-config.model';
 import { getGuildId } from '../../../shared/guild';
 import { LevelingService } from '../../leveling/services/leveling.service';
 import { awardExpeditions } from '../../peak-hunters/services/expedition.service';
+import { rc } from '../../../shared/economy/currency';
 
 export interface CreateEventInput {
   name: string;
@@ -322,7 +323,7 @@ export class PartyService {
         : '*Aucun*';
 
       const rewardParts: string[] = [];
-      if (moneyPerParticipant > 0) rewardParts.push(`💰 **${moneyPerParticipant}** / personne`);
+      if (moneyPerParticipant > 0) rewardParts.push(`${rc()} **${moneyPerParticipant}** / personne`);
       if (xpPerParticipant > 0) rewardParts.push(`⭐ **${xpPerParticipant} XP** / personne`);
       if (expeditionsPerParticipant > 0) rewardParts.push(`🏔️ **${expeditionsPerParticipant}** expédition${expeditionsPerParticipant > 1 ? 's' : ''} / personne`);
 

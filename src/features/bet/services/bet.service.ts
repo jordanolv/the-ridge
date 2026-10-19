@@ -3,6 +3,7 @@ import { IBet } from '../models/bet.model';
 import { UserService } from '../../user/services/user.service';
 import UserModel from '../../user/models/user.model';
 import { LogService } from '../../../shared/logs/logs.service';
+import { rc } from '../../../shared/economy/currency';
 
 const OPEN_STATUSES = ['open', 'locked'];
 
@@ -17,14 +18,14 @@ export class BetService {
     if (!bet) return { success: false, message: 'Bet introuvable.' };
     if (bet.status !== 'open') return { success: false, message: 'Les paris sont fermés.' };
     if (optionIndex < 0 || optionIndex >= bet.options.length) return { success: false, message: 'Option invalide.' };
-    if (!Number.isInteger(amount) || amount < 1) return { success: false, message: 'La mise minimum est de 1 💰.' };
+    if (!Number.isInteger(amount) || amount < 1) return { success: false, message: `La mise minimum est de 1 ${rc()}.` };
     if (bet.entries.some(e => e.userId === userId)) {
       return { success: false, message: 'Tu as déjà misé sur ce bet.' };
     }
 
     if (!(await UserService.tryDebit(userId, amount))) {
       const balance = await UserService.getUserMoney(userId);
-      return { success: false, message: `Solde insuffisant. Tu as **${Math.floor(balance).toLocaleString('fr-FR')}** 💰.` };
+      return { success: false, message: `Solde insuffisant. Tu as **${Math.floor(balance).toLocaleString('fr-FR')}** ${rc()}.` };
     }
 
     const updated = await BetRepository.addEntry(betId, userId, optionIndex, amount);
