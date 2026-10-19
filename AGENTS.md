@@ -21,7 +21,8 @@ concentrer sur ce qui n'aurait pas sa place en prod.
   - un mauvais `flow` : `mint` (création), `burn` (destruction), `transfer` (entre
     joueurs, des deux côtés) ;
   - un montant qui peut devenir fractionnaire sans être arrondi avant écriture ;
-  - une nouvelle source de revenu, ou une prime hors de la bande de `economy.md` §6 ;
+  - une nouvelle source de revenu, ou une prime qui ne correspond ni à la bande ni aux
+    valeurs déjà validées de `economy.md` §6 (raids 20/50/100, daily 0–10 en font partie) ;
   - une violation des invariants de `economy.md` §4 : paie indexée sur les qualifiés et
     pas sur `users.length`, scores lus avant le reset des `activityPoints`, paie idempotente ;
   - un moyen de faire passer de l'argent d'un compte à l'autre hors des bets (perdre
