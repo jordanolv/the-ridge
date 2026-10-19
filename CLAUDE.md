@@ -135,9 +135,10 @@ await LogService.economy(userId, amount, 'Bingo — gain', 'arcade', 'mint');
   `UserService.updateUserMoney(discordId, amount, reason, flow)`, soit par un appel explicite
   quand le `$inc` est fait à la main. Sans ça la page Économie ment.
 - Le `flow` dit ce que le mouvement fait à la masse monétaire : `mint` (création, défaut),
-  `burn` (destruction), `transfer` (circulation entre joueurs, masse inchangée). Un pari PvP
-  ou un duel d'arcade est un `transfer` des deux côtés — le compter en `mint`/`burn`
-  gonflerait l'inflation affichée.
+  `burn` (destruction), `transfer` (circulation entre joueurs, masse inchangée). Une mise de
+  `/bet` est un `transfer` des deux côtés — la compter en `mint`/`burn` gonflerait
+  l'inflation affichée. Les duels d'arcade ne se jouent plus avec de l'argent : perdre
+  exprès contre un complice suffisait à faire passer de l'argent d'un compte à l'autre.
 - Les messages sont écrits en markup Discord (`<@id>`, `<#id>`) ; `renderMentions`
   (`src/web/logs-render.ts`) les résout côté serveur pour le dashboard.
 

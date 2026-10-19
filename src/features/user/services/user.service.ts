@@ -81,6 +81,15 @@ export class UserService {
     return updated;
   }
 
+  /** Débite seulement si le solde suffit, en une écriture : deux débits simultanés ne passent pas tous les deux. */
+  static async tryDebit(discordId: string, amount: number): Promise<boolean> {
+    const res = await UserModel.updateOne(
+      { discordId, 'profil.money': { $gte: amount } },
+      { $inc: { 'profil.money': -amount } },
+    );
+    return res.modifiedCount === 1;
+  }
+
   static async getUserMoney(discordId: string): Promise<number> {
     const user = await UserModel.findOne({ discordId });
     return user?.profil?.money || 0;

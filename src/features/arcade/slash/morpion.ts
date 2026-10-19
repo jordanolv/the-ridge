@@ -21,7 +21,6 @@ interface MorpionGame {
   player1: User;
   player2: User;
   currentPlayer: User;
-  bet: number;
   timeout?: NodeJS.Timeout;
 }
 
@@ -36,18 +35,10 @@ export default {
         .setName('adversaire')
         .setDescription('L\'adversaire à défier')
         .setRequired(false)
-    )
-    .addIntegerOption(option =>
-      option
-        .setName('mise')
-        .setDescription('Montant des RidgeCoins à miser')
-        .setRequired(false)
-        .setMinValue(0)
     ),
 
   async execute(interaction: ChatInputCommandInteraction) {
     const opponent = interaction.options.getUser('adversaire');
-    const bet = interaction.options.getInteger('mise') ?? 0;
 
     if (!opponent) {
       await interaction.reply({ content: '❌ Le mode solo n\'est pas encore disponible. Utilisez `/morpion adversaire:@user` pour jouer contre un joueur.', flags: MessageFlags.Ephemeral });
@@ -56,7 +47,7 @@ export default {
 
     await interaction.deferReply();
 
-    const error = await ArcadeValidationService.validatePvPGame(interaction.user, opponent, bet, 'morpion');
+    const error = await ArcadeValidationService.validatePvPGame(interaction.user, opponent, 'morpion');
     if (error) {
       await interaction.editReply({ content: error });
       return;
@@ -67,14 +58,13 @@ export default {
       opponent,
       gameName: 'Morpion',
       gameEmoji: '❌',
-      bet,
     });
     if (!accepted) return;
 
-    await this.startPvPGame(interaction, interaction.user, opponent, bet);
+    await this.startPvPGame(interaction, interaction.user, opponent);
   },
 
-  async startPvPGame(interaction: ChatInputCommandInteraction, player1: User, player2: User, bet: number) {
+  async startPvPGame(interaction: ChatInputCommandInteraction, player1: User, player2: User) {
     const gameId = `${player1.id}-${player2.id}-${Date.now()}`;
     const grid = MorpionService.createEmptyGrid();
 
@@ -83,7 +73,6 @@ export default {
       player1,
       player2,
       currentPlayer: player1,
-      bet
     };
 
     pendingGames.set(gameId, game);
@@ -147,7 +136,6 @@ export default {
       .setColor(0xff0000)
       .setFooter({
         text: `Premier à aligner 3 symboles` +
-              (bet > 0 ? ` • Mise: ${bet} RidgeCoins` : '') +
               ` • /morpion`
       });
 
@@ -269,7 +257,6 @@ export default {
           .setColor(game.currentPlayer.id === game.player1.id ? 0xff0000 : 0x00aaff)
           .setFooter({
             text: `Premier à aligner 3 symboles` +
-                  (bet > 0 ? ` • Mise: ${bet} RidgeCoins` : '') +
                   ` • /morpion`
           });
 
@@ -313,11 +300,6 @@ export default {
         await UserService.recordArcadeLoss(loser.id, 'morpion');
         await ArcadeStatsService.incrementGameCount('morpion');
 
-        if (game.bet > 0) {
-          await UserService.updateUserMoney(loser.id, -game.bet, 'Morpion — pari perdu', 'transfer');
-          await UserService.updateUserMoney(winner.id, game.bet, 'Morpion — pari gagné', 'transfer');
-          victoryMsg += `\n\n💰 **+${game.bet}** RidgeCoins pour ${winner.username}`;
-        }
       } catch (error) {
         console.error('Erreur lors de la fin de partie:', error);
       }
@@ -333,7 +315,6 @@ export default {
       .setColor(result === 'draw' ? 0xffaa00 : 0xffd700)
       .setFooter({
         text: `Premier à aligner 3 symboles` +
-              (game.bet > 0 ? ` • Mise: ${game.bet} RidgeCoins` : '') +
               ` • /morpion`
       });
 

@@ -5,7 +5,7 @@ import { ChatGamingService } from '../../chat-gaming/services/chat-gaming.servic
 import { UserService } from '../../user/services/user.service';
 import { ContainerBuilder, TextDisplayBuilder, SeparatorBuilder, MessageFlags } from 'discord.js';
 import { LogService } from '../../../shared/logs/logs.service';
-import { NotFoundError } from './party.types';
+import { NotFoundError, ValidationError } from './party.types';
 import { PartyEvent } from '../models/party-event.model';
 import UserModel from '../../user/models/user.model';
 import AppConfigModel from '../../discord/models/app-config.model';
@@ -32,6 +32,9 @@ export interface EndEventInput {
   xpAmount?: number;
   expeditionAmount?: number;
 }
+
+/** Une prime collective : au niveau d'un raid légendaire, le plus gros gain d'événement (economy.md §6). */
+export const PARTY_MAX_MONEY_REWARD = 100;
 
 export class PartyService {
   private static repo = new PartyRepository();
@@ -205,17 +208,22 @@ export class PartyService {
     const event = await this.repo.findById(eventId);
     if (!event) throw new NotFoundError('Événement non trouvé');
 
-    const updated = await this.repo.update(eventId, {
-      status: 'ended',
+    if ((data.rewardAmount ?? 0) > PARTY_MAX_MONEY_REWARD) {
+      throw new ValidationError(`Récompense limitée à ${PARTY_MAX_MONEY_REWARD} 💰 par présent`);
+    }
+
+    const attendedParticipants = [...new Set(data.attendedParticipants)];
+    const updated = await this.repo.endOnce(eventId, {
       endedAt: new Date(),
-      attendedParticipants: data.attendedParticipants,
+      attendedParticipants,
       rewardAmount: data.rewardAmount ?? 0,
       xpAmount: data.xpAmount ?? 0,
       expeditionAmount: data.expeditionAmount ?? 0,
     });
+    if (!updated) throw new ValidationError('Cette soirée est déjà terminée');
 
-    if (data.attendedParticipants.length > 0) {
-      await this.distributeRewards(client, updated, data.attendedParticipants, data.rewardAmount ?? 0, data.xpAmount ?? 0, data.expeditionAmount ?? 0);
+    if (attendedParticipants.length > 0) {
+      await this.distributeRewards(client, updated, attendedParticipants, data.rewardAmount ?? 0, data.xpAmount ?? 0, data.expeditionAmount ?? 0);
     }
 
     try {
@@ -232,8 +240,8 @@ export class PartyService {
     await DiscordPartyService.removeAllReactions(client, updated);
     await DiscordPartyService.archiveThread(client, updated);
 
-    const attendedList = data.attendedParticipants.length > 0
-      ? data.attendedParticipants.map(id => `<@${id}>`).join(', ')
+    const attendedList = attendedParticipants.length > 0
+      ? attendedParticipants.map(id => `<@${id}>`).join(', ')
       : '*aucun*';
     const rewardLine = [
       data.rewardAmount ? `💰 ${data.rewardAmount}/pers` : null,
@@ -269,8 +277,7 @@ export class PartyService {
         await UserModel.findOneAndUpdate(
           { discordId: participantId },
           {
-            ...(rewardAmount > 0 && { $inc: { 'profil.money': rewardAmount } }),
-            $inc: { 'stats.partyParticipated': 1 },
+            $inc: { 'stats.partyParticipated': 1, ...(rewardAmount > 0 && { 'profil.money': rewardAmount }) },
           },
         );
 

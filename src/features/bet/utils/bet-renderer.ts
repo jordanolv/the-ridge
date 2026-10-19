@@ -33,7 +33,7 @@ export function buildBetMessage(bet: IBet): ContainerBuilder[] {
 
   const headerLines = [
     `# 🎲 ${bet.title}`,
-    `${STATUS_LABELS[bet.status]}  ·  Pot total : **${totalPot.toLocaleString('fr-FR')} coins**`,
+    `${STATUS_LABELS[bet.status]}  ·  Pot total : **${totalPot.toLocaleString('fr-FR')}** 💰`,
   ];
 
   if (bet.status === 'closed' && bet.winnerIndex !== undefined) {
@@ -50,13 +50,13 @@ export function buildBetMessage(bet: IBet): ContainerBuilder[] {
     const odds = BetService.getOddsMultiplier(bet, i);
     const oddsLabel = totalPot === 0 ? '—' : `×${odds.toFixed(1)}`;
     const isWinner = bet.status === 'closed' && bet.winnerIndex === i;
-    const header = `${isWinner ? '✅ ' : ''}${emoji} **${opt.name}** — ${opt.totalAmount.toLocaleString('fr-FR')} coins (${opt.entryCount} parieur${opt.entryCount !== 1 ? 's' : ''})  ·  cote ${oddsLabel}`;
+    const header = `${isWinner ? '✅ ' : ''}${emoji} **${opt.name}** — ${opt.totalAmount.toLocaleString('fr-FR')} 💰 (${opt.entryCount} parieur${opt.entryCount !== 1 ? 's' : ''})  ·  cote ${oddsLabel}`;
 
     if (!showEntries) return [header];
 
     const entries = bet.entries.filter(e => e.optionIndex === i);
     const entriesLine = entries.length > 0
-      ? `-# ${entries.map(e => `<@${e.userId}> ${e.amount.toLocaleString('fr-FR')} coins`).join('  ·  ')}`
+      ? `-# ${entries.map(e => `<@${e.userId}> ${e.amount.toLocaleString('fr-FR')} 💰`).join('  ·  ')}`
       : '-# *Aucun pari*';
 
     return [header, entriesLine];
@@ -79,7 +79,7 @@ export function buildBetMessage(bet: IBet): ContainerBuilder[] {
           return new StringSelectMenuOptionBuilder()
             .setLabel(opt.name)
             .setValue(String(i))
-            .setDescription(`${opt.totalAmount.toLocaleString('fr-FR')} coins misés · cote ${oddsLabel}`);
+            .setDescription(`${opt.totalAmount.toLocaleString('fr-FR')} 💰 misés · cote ${oddsLabel}`);
         }),
       );
     container.addSeparatorComponents(new SeparatorBuilder().setDivider(false));

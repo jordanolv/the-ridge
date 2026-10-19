@@ -190,7 +190,7 @@ directement ou via `UserService.updateUserMoney(discordId, amount, reason, flow)
 | `flow` | Sens | Exemples |
 |---|---|---|
 | `mint` | création monétaire | salaire, primes de jeu, anniversaire, ajustement admin positif |
-| `transfer` | joueur → joueur, somme nulle | paris arcade, mises et gains de bets |
+| `transfer` | joueur → joueur, somme nulle | mises et gains de bets |
 | `burn` | destruction | achats en boutique, rake des bets, ajustement admin négatif |
 
 Sans ce champ, la page Économie ment : un pari entre deux joueurs écrit un `-X` et un
@@ -288,8 +288,8 @@ docker exec <conteneur-bot> node scripts/redenominate.mjs --apply   # execution
 **`profil.money` n'est pas le seul endroit où dorment des montants.** Le script refuse
 de s'exécuter s'il reste des bets ouverts ou verrouillés, ou des soirées non terminées
 avec une récompense : réglés après la migration, ils verseraient dix fois trop. Les
-paris d'arcade (shifumi, morpion, P4, battle) vivent en mémoire et ne sont pas
-détectables — ne pas migrer pendant une partie.
+duels d'arcade ne misent plus d'argent depuis la 1.11.0 : il n'y a plus rien à attendre
+de ce côté.
 
 Les prix de la boutique sont déjà à la nouvelle échelle : elle reste **fermée** tant
 que le marqueur `redenominate-v1` n'est pas posé, pour qu'aucun solde non migré ne
@@ -381,7 +381,7 @@ L'ordre compte : chaque étape suppose la précédente.
 
 3. Fusionner la PR `dev` → `main` en **merge commit**. Dokploy déploie. `/shop`
    répond « ouvre dans quelques minutes » tant que l'étape 4 n'est pas faite.
-4. Pas de partie d'arcade en cours, puis :
+4. Puis :
    ```bash
    docker exec <conteneur-bot> node scripts/redenominate.mjs           # lire les chiffres
    docker exec <conteneur-bot> node scripts/redenominate.mjs --apply
