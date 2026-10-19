@@ -82,12 +82,10 @@ export function skip(show: PackShow): void {
   send({ type: 'skip', showId: show.id });
 }
 
+/** Appliquée tout de suite à l'écran sans attendre l'aller-retour ; la diffusion du serveur fait foi ensuite. */
 export function setSpeed(show: PackShow, speed: ShowSpeed): void {
-  if (state.status === 'preview') {
-    update({ shows: state.shows.map(s => (s.id === show.id ? { ...s, ...withSpeed(s, speed, serverNow()) } : s)) });
-    return;
-  }
-  send({ type: 'speed', showId: show.id, speed });
+  update({ shows: state.shows.map(s => (s.id === show.id ? { ...s, ...withSpeed(s, speed, serverNow()) } : s)) });
+  if (state.status !== 'preview') send({ type: 'speed', showId: show.id, speed });
 }
 
 export function startLive(session: Session, user: ActivityUser): () => void {
