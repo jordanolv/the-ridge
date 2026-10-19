@@ -17,7 +17,8 @@ concentrer sur ce qui n'aurait pas sa place en prod.
 - **Argent.** Tout changement de `profil.money`, d'une récompense ou d'un prix se lit
   contre [`docs/economy.md`](docs/economy.md) et [`docs/shop.md`](docs/shop.md). Signaler :
   - un mouvement d'argent qui ne passe pas par `LogService.economy`, directement ou via
-    `UserService.updateUserMoney` ;
+    `UserService.updateUserMoney`. Exception : le remboursement qui annule un débit jamais
+    journalisé (livraison ratée en boutique, `docs/shop.md`) ne laisse volontairement aucune trace ;
   - un mauvais `flow` : `mint` (création), `burn` (destruction), `transfer` (entre
     joueurs, des deux côtés) ;
   - un montant qui peut devenir fractionnaire sans être arrondi avant écriture ;
