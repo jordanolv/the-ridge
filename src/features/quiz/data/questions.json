@@ -7298,13 +7298,13 @@
     "theme": "Divers",
     "question": "Comment s'appelle le petit du hérisson ?",
     "choices": [
-      "Le choupisson",
       "Le piquillon",
       "Le hérissonneau",
-      "Le picot"
+      "Le picot",
+      "Le hérisseau"
     ],
-    "answer": 0,
-    "explanation": "Ce mot-valise n'est pas officiel, mais il est très répandu ; « hérissonneau » se dit aussi.",
+    "answer": 1,
+    "explanation": "On entend aussi « choupisson », un mot-valise affectueux mais non officiel.",
     "category": "culture-g"
   },
   {

@@ -134,7 +134,6 @@ function generateCalcul(): Riddle {
 
 const anagramKey = (word: string) => `anagramme:${word}`;
 
-/** Ce qui identifie une énigme d'un jour à l'autre : le mot pour une anagramme, l'énoncé sinon. */
 export function riddleKey(riddle: Riddle): string {
   return riddle.type === 'anagramme' ? anagramKey(riddle.answers[0]) : `${riddle.type}:${riddle.question}`;
 }
@@ -160,7 +159,13 @@ export class EnigmeBankService {
   /** Un type au hasard, puis une énigme de ce type pas encore posée récemment (générée ou piochée dans la banque). */
   static pickRiddle(recent: readonly string[] = []): Riddle {
     const type = pick(Object.keys(ENIGME_TYPE_LABELS) as EnigmeType[]);
-    if (type in GENERATORS) return GENERATORS[type as keyof typeof GENERATORS](recent);
+    if (type in GENERATORS) {
+      const generate = GENERATORS[type as keyof typeof GENERATORS];
+      const seen = new Set(recent);
+      let riddle = generate(recent);
+      for (let tries = 0; tries < 20 && seen.has(riddleKey(riddle)); tries++) riddle = generate(recent);
+      return riddle;
+    }
 
     return pickLeastRecent(BANK.filter((r) => r.type === type), riddleKey, recent)!;
   }
