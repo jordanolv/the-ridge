@@ -1,18 +1,14 @@
 import { Layers, Package, Radio, Users } from 'lucide-react';
 import { useCallback, useEffect, useState, type CSSProperties } from 'react';
-import type { ExpeditionTierName, PackTierInfo } from '../../../src/features/activity/activity.types';
+import type { PackTierInfo } from '../../../src/features/activity/activity.types';
 import { Avatar } from '../components/Avatar';
 import { Logo } from '../components/Logo';
 import { Badge, Card, CardTitle } from '../components/ui';
-import { fetchPacks, openPack } from '../lib/api';
+import { fetchPacks } from '../lib/api';
 import { formatNumber, timeAgo } from '../lib/format';
-import { addShow, useLive } from '../lib/live';
+import { useLive } from '../lib/live';
+import { openAndPlay, useOpening } from '../lib/opening';
 import type { Session } from '../lib/session';
-
-const FAILURES = {
-  'no-pack': "Tu n'as plus de pack de ce type : passe par la boutique (/shop).",
-  'draw-failed': "Le tirage a échoué, ton pack t'a été rendu.",
-};
 
 function PackTier({ tier, delay, busy, onOpen }: { tier: PackTierInfo; delay: number; busy: boolean; onOpen: () => void }) {
   const empty = tier.owned === 0;
@@ -107,29 +103,13 @@ function CampFeed() {
 
 export function Packs({ session }: { session: Session }) {
   const [tiers, setTiers] = useState<PackTierInfo[] | null>(null);
-  const [opening, setOpening] = useState<ExpeditionTierName | null>(null);
-  const [failure, setFailure] = useState<string | null>(null);
+  const { opening, failure, opened } = useOpening();
 
   const refresh = useCallback(() => fetchPacks(session).then(setTiers), [session]);
 
   useEffect(() => {
     void refresh();
-  }, [refresh]);
-
-  const open = async (tier: ExpeditionTierName) => {
-    setOpening(tier);
-    setFailure(null);
-    try {
-      const result = await openPack(session, tier);
-      if (result.ok) addShow(result.show);
-      else setFailure(FAILURES[result.reason]);
-      await refresh();
-    } catch {
-      setFailure("L'ouverture a échoué. Réessaie dans un instant.");
-    } finally {
-      setOpening(null);
-    }
-  };
+  }, [refresh, opened, failure]);
 
   return (
     <div className="flex flex-col gap-5">
@@ -142,7 +122,7 @@ export function Packs({ session }: { session: Session }) {
 
       <div className="grid gap-4 sm:grid-cols-3">
         {(tiers ?? []).map((tier, index) => (
-          <PackTier key={tier.id} tier={tier} delay={60 + index * 60} busy={opening !== null} onOpen={() => void open(tier.id)} />
+          <PackTier key={tier.id} tier={tier} delay={60 + index * 60} busy={opening !== null} onOpen={() => void openAndPlay(session, tier.id)} />
         ))}
       </div>
 

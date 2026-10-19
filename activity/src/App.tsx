@@ -76,7 +76,7 @@ export function App() {
             </div>
           </main>
           <BottomNav active={section} onSelect={setSection} />
-          <PackTheater me={state.home.user} mapboxToken={state.session.config.mapboxToken} onOwnShowEnd={refreshHome} />
+          <PackTheater session={state.session} me={state.home.user} mapboxToken={state.session.config.mapboxToken} onOwnShowEnd={refreshHome} />
         </div>
       )}
     </>
