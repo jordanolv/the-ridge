@@ -299,7 +299,7 @@ Les `bot_logs` antérieurs restent en ancienne échelle. La page Économie méla
 deux jusqu'à expiration du TTL de 90 jours ; ça ne se corrige pas, ça se sait.
 
 Les constantes, elles, sont déjà recalées dans le code : solde de départ 500 → 50,
-anniversaire 100–1000 → 10–100, `baseCoins` des raids 200/500/1000 → 20/50/100.
+anniversaire 100–1000 → 200 fixes (un vrai cadeau, une fois par an), `baseCoins` des raids 200/500/1000 → 20/50/100.
 
 Le money/minute du vocal a disparu. Le **daily** a été conservé mais ramené de 0–100 à
 0–10 : à l'ancienne échelle il versait 148 % d'un salaire hebdomadaire médian, à la
