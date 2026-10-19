@@ -184,8 +184,8 @@ export interface PackShow {
 export const SHOW_SPEEDS = [1, 2, 4] as const;
 export type ShowSpeed = (typeof SHOW_SPEEDS)[number];
 
-/** `remaining` : les packs de ce type qui restent après celui-ci, pour proposer d'enchaîner. */
-export type OpenPackResult = { ok: true; show: PackShow; remaining: number } | { ok: false; reason: 'no-pack' | 'draw-failed' };
+/** `packs` : ce qui reste après celui-ci, pour proposer d'enchaîner depuis le récap. */
+export type OpenPackResult = { ok: true; show: PackShow; packs: PackTierInfo[] } | { ok: false; reason: 'no-pack' | 'draw-failed' };
 
 export interface FeedEntry {
   id: string;

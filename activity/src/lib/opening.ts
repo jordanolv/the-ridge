@@ -1,5 +1,5 @@
 import { useSyncExternalStore } from 'react';
-import type { ExpeditionTierName } from '../../../src/features/activity/activity.types';
+import type { ExpeditionTierName, PackTierInfo } from '../../../src/features/activity/activity.types';
 import { openPack } from './api';
 import { addShow } from './live';
 import type { Session } from './session';
@@ -7,7 +7,8 @@ import type { Session } from './session';
 export interface OpeningState {
   opening: ExpeditionTierName | null;
   failure: string | null;
-  remaining: Partial<Record<ExpeditionTierName, number>>;
+  /** Les packs restants après la dernière ouverture, proposés sur le récap. */
+  packs: PackTierInfo[];
   /** Augmente à chaque ouverture réussie, d'où qu'elle vienne : la page Packs s'y recharge. */
   opened: number;
 }
@@ -17,7 +18,7 @@ const FAILURES = {
   'draw-failed': "Le tirage a échoué, ton pack t'a été rendu.",
 };
 
-let state: OpeningState = { opening: null, failure: null, remaining: {}, opened: 0 };
+let state: OpeningState = { opening: null, failure: null, packs: [], opened: 0 };
 const listeners = new Set<() => void>();
 
 function update(patch: Partial<OpeningState>): void {
@@ -33,9 +34,9 @@ export async function openAndPlay(session: Session, tier: ExpeditionTierName): P
     const result = await openPack(session, tier);
     if (result.ok) {
       addShow(result.show);
-      update({ remaining: { ...state.remaining, [tier]: result.remaining }, opened: state.opened + 1 });
+      update({ packs: result.packs, opened: state.opened + 1 });
     } else {
-      update({ failure: FAILURES[result.reason], remaining: { ...state.remaining, [tier]: 0 } });
+      update({ failure: FAILURES[result.reason], packs: state.packs.map(p => (p.id === tier ? { ...p, owned: 0 } : p)) });
     }
   } catch {
     update({ failure: "L'ouverture a échoué. Réessaie dans un instant." });

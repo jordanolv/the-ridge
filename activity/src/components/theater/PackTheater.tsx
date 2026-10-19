@@ -1,6 +1,6 @@
 import { Eye, Package, X } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { ActivityUser, PackShow, ShowSpeed } from '../../../../src/features/activity/activity.types';
+import { SHOW_SPEEDS, type ActivityUser, type PackShow } from '../../../../src/features/activity/activity.types';
 import { segmentAt, type ShowSegment } from '../../../../src/features/activity/pack-show.timeline';
 import { serverNow, setSpeed, skip, useLive } from '../../lib/live';
 import { openAndPlay, useOpening } from '../../lib/opening';
@@ -27,8 +27,6 @@ function useServerClock(running: boolean): number {
 const position = (card: PackShow['cards'][number]): LngLat | null => (card.lat !== null && card.lng !== null ? [card.lng, card.lat] : null);
 
 const segmentKey = (show: PackShow, segment: ShowSegment) => `${show.id}:${segment.kind}:${'card' in segment ? segment.card : ''}`;
-
-const FAST_SPEEDS: ShowSpeed[] = [2, 4];
 
 function shotFor(show: PackShow, segment: ShowSegment, remaining: number): CameraShot {
   // Le globe de l'intro repartirait de zéro à chaque changement de vitesse ; les autres plans reprennent d'où ils sont.
@@ -69,31 +67,37 @@ function ProgressDots({ show, segment }: { show: PackShow; segment: ShowSegment 
   );
 }
 
-function OpenAnother({ session, show }: { session: Session; show: PackShow }) {
-  const { opening, remaining } = useOpening();
-  const left = remaining[show.tier] ?? 0;
-  if (left === 0) return null;
+/** Sur le récap : relancer un pack, du même type en premier, sans repasser par la page Packs. */
+function NextPacks({ session, show }: { session: Session; show: PackShow }) {
+  const { opening, packs } = useOpening();
+  const available = packs.filter(pack => pack.owned > 0).sort((a, b) => Number(b.id === show.tier) - Number(a.id === show.tier));
+  if (available.length === 0) return null;
   return (
-    <button
-      onClick={() => void openAndPlay(session, show.tier)}
-      disabled={opening !== null}
-      className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-sm font-bold text-night-950 transition enabled:hover:brightness-110 disabled:opacity-60"
-      style={{ background: `linear-gradient(90deg, ${show.tierColor}, #67e8f9)` }}
-    >
-      <Package size={15} /> {opening ? 'Ouverture…' : `Encore un · ${left}`}
-    </button>
+    <div className="flex flex-wrap justify-center gap-2">
+      {available.map(pack => (
+        <button
+          key={pack.id}
+          onClick={() => void openAndPlay(session, pack.id)}
+          disabled={opening !== null}
+          className="flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-sm font-bold text-night-950 shadow-lg transition enabled:hover:brightness-110 disabled:opacity-60"
+          style={{ background: `linear-gradient(90deg, ${pack.color}, #67e8f9)` }}
+        >
+          <Package size={15} /> {opening === pack.id ? 'Ouverture…' : `${pack.id === show.tier ? 'Encore un' : 'Ouvrir un'} ${pack.label} · ${pack.owned}`}
+        </button>
+      ))}
+    </div>
   );
 }
 
 function SpeedButtons({ show }: { show: PackShow }) {
   return (
     <div className="flex overflow-hidden rounded-xl border border-white/15 bg-night-950/40">
-      {FAST_SPEEDS.map(speed => {
+      {SHOW_SPEEDS.map(speed => {
         const active = show.speed === speed;
         return (
           <button
             key={speed}
-            onClick={() => setSpeed(show, active ? 1 : speed)}
+            onClick={() => !active && setSpeed(show, speed)}
             aria-pressed={active}
             className={`px-2.5 py-1.5 text-sm font-bold transition ${active ? 'bg-white text-night-950' : 'text-white/80 hover:bg-white/10'}`}
           >
@@ -145,7 +149,6 @@ function Theater({ session, show, now, me, participants, mapboxToken, onHide }: 
             <Avatar key={user.id} userId={user.id} name={user.displayName} size={28} />
           ))}
         </div>
-        {isOpener && segment.kind === 'summary' && <OpenAnother session={session} show={show} />}
         {isOpener && segment.kind !== 'summary' && <SpeedButtons show={show} />}
         {isOpener && segment.kind !== 'summary' ? (
           <button onClick={() => skip(show)} className="rounded-xl border border-white/15 bg-night-950/40 px-3 py-1.5 text-sm font-semibold text-white/80 transition hover:bg-white/10">
@@ -162,7 +165,12 @@ function Theater({ session, show, now, me, participants, mapboxToken, onHide }: 
         {segment.kind === 'intro' && <PackStage show={show} progress={progress} />}
         {segment.kind === 'flight' && card && <CardBack key={key} card={card} index={segment.card} total={show.cards.length} progress={progress} />}
         {segment.kind === 'reveal' && card && <CardFront key={key} card={card} />}
-        {segment.kind === 'summary' && <SummaryStage show={show} />}
+        {segment.kind === 'summary' && (
+          <div className="flex w-full flex-col items-center gap-3">
+            <SummaryStage show={show} />
+            {isOpener && <NextPacks session={session} show={show} />}
+          </div>
+        )}
       </div>
 
       <FloatingReactions reactions={reactions} />
