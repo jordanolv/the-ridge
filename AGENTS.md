@@ -33,8 +33,9 @@ concentrer sur ce qui n'aurait pas sa place en prod.
 - **Ownership des interactions.** Un bouton ou un menu doit vérifier que celui qui
   clique a le droit d'agir (`interaction.message.interactionMetadata?.user.id`).
 - **Sécurité du serveur web.** Une route qui lit ou modifie des données de joueur ou de
-  config sans `requireAdmin` (dashboard) ou `requireActivityUser` (Activity), un secret
-  exposé au front. Sont publiques par conception, ne pas les signaler :
+  config sans authentification, un secret exposé au front. Les mécanismes en place :
+  `requireAdmin` (dashboard), `requireActivityUser` (Activity), et le JWT signé par
+  `WebService.generateMapUrl` (carte `/api/map/*`). Sont publiques par conception, ne pas les signaler :
   `POST /api/admin/login`, `POST /api/activity/token` (l'amorçage de l'auth),
   `/api/activity/config`, et les images relayées (`brand`, `avatar`, `mountains/:id/image`,
   `parties/:id/image`, `mapbox/*`), chargées par le navigateur ou Mapbox sans jeton.
