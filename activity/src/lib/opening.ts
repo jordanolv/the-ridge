@@ -36,7 +36,8 @@ export async function openAndPlay(session: Session, tier: ExpeditionTierName): P
       addShow(result.show);
       update({ packs: result.packs, opened: state.opened + 1 });
     } else {
-      update({ failure: FAILURES[result.reason], packs: state.packs.map(p => (p.id === tier ? { ...p, owned: 0 } : p)) });
+      const packs = result.reason === 'no-pack' ? state.packs.map(p => (p.id === tier ? { ...p, owned: 0 } : p)) : state.packs;
+      update({ failure: FAILURES[result.reason], packs });
     }
   } catch {
     update({ failure: "L'ouverture a échoué. Réessaie dans un instant." });

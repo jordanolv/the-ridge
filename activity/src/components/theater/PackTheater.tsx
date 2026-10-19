@@ -119,7 +119,7 @@ function Theater({ session, show, now, me, participants, mapboxToken, onHide }: 
   const markers = useMemo(() => revealedMarkers(show, segment), [key]);
 
   const card = 'card' in segment ? show.cards[segment.card] : null;
-  const impact = segment.kind === 'reveal' && card !== null && elapsed / speed < REVEAL_IMPACT_MS;
+  const impact = segment.kind === 'reveal' && card !== null && elapsed < REVEAL_IMPACT_MS;
   const isOpener = show.opener.id === me.id;
   const progress = Math.min(1, elapsed / segment.duration);
 
@@ -231,7 +231,6 @@ export function PackTheater({ session, me, mapboxToken, onOwnShowEnd }: { sessio
   const [dismissed, setDismissed] = useState<ReadonlySet<string>>(new Set());
   const now = useServerClock(shows.length > 0);
   const started = shows.filter(show => !dismissed.has(show.id) && segmentAt(show, now) !== null);
-  // Un pack lancé depuis le récap du précédent démarre pendant ce récap : seul le plus récent compte.
   const playing = started.filter(show => !started.some(other => other.opener.id === show.opener.id && other.startsAt > show.startsAt));
   const current = playing.find(show => show.opener.id === me.id) ?? playing.find(show => watching.has(show.id)) ?? null;
 

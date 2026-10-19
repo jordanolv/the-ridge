@@ -59,6 +59,6 @@ export class ActivityPacksService {
       cards: opened.cards.map(toShowCard),
       skippedAt: null,
     };
-    return { ok: true, show: ActivityLiveService.schedule(instanceId, show), packs: await this.tiers(user.id) };
+    return { ok: true, show: ActivityLiveService.schedule(instanceId, show), packs: await this.tiers(user.id).catch(() => []) };
   }
 }
