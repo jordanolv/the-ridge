@@ -27,7 +27,7 @@ import { ArcadeScheduleService } from '../../schedule/services/arcade-schedule.s
 import { GameResultRepository } from '../../results/repositories/game-result.repository';
 import { EnigmeRepository } from '../repositories/enigme.repository';
 import type { IEnigmeStateDoc, Riddle, Solver } from '../models/enigme-state.model';
-import { EnigmeBankService, ENIGME_TYPE_LABELS } from './enigme-bank.service';
+import { EnigmeBankService, ENIGME_TYPE_LABELS, riddleKey } from './enigme-bank.service';
 import { podiumSolvers, rankSolvers } from './enigme-ranking';
 import {
   ENIGME_ACCENT_COLOR,
@@ -255,7 +255,7 @@ export class EnigmeService {
       return;
     }
 
-    const riddle = EnigmeBankService.pickRiddle();
+    const riddle = EnigmeBankService.pickRiddle((await EnigmeRepository.get())?.recentRiddleKeys ?? []);
     await GamesForumService.setThreadLocked(client, post.id, false);
     const message = await post.send({
       components: [this.buildSpawnContainer(riddle, endsAt), this.buildRevealRow()],
@@ -267,7 +267,7 @@ export class EnigmeService {
       `🧩 **L'énigme du jour est là !** ${ENIGME_TYPE_LABELS[riddle.type]} · révélation à ${ENIGME_REVEAL_HOUR}h → <#${post.id}>`,
     );
 
-    await EnigmeRepository.setActive({ threadId: post.id, messageId: message.id, riddle, endsAt, announceMessageId });
+    await EnigmeRepository.setActive({ threadId: post.id, messageId: message.id, riddle, riddleKey: riddleKey(riddle), endsAt, announceMessageId });
     this.scheduleTimer(endsAt, () => this.resolve(client));
 
     LogService.info(`Énigme lancée dans <#${post.id}> (${ENIGME_TYPE_LABELS[riddle.type]}, réponse **${riddle.answers[0]}**)`, { feature: LOG_FEATURE, title: '🧩 Spawn' }).catch(() => {});

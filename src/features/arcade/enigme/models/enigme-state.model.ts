@@ -53,6 +53,10 @@ export class EnigmeState {
 
   @prop()
   announceMessageId?: string;
+
+  /** Clés des dernières énigmes posées, de la plus ancienne à la plus récente (anti-répétition) */
+  @prop({ type: () => [String], default: [] })
+  recentRiddleKeys?: string[];
 }
 
 const EnigmeStateModel = getModelForClass(EnigmeState, {

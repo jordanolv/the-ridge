@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { shuffle, createBag } from './bag';
+import { shuffle, createBag, pickLeastRecent } from './bag';
 
 test('shuffle garde exactement les mêmes éléments', () => {
   const src = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -37,4 +37,20 @@ test('le sac se recharge au cycle suivant', () => {
 
 test('un sac vide est une erreur de programmation, pas un crash au tirage', () => {
   assert.throws(() => createBag([]), /liste vide/);
+});
+
+test('pickLeastRecent ne ressort jamais une entrée récente tant qu\'il en reste de neuves', () => {
+  const items = ['a', 'b', 'c', 'd'];
+  for (let i = 0; i < 200; i++) {
+    assert.equal(pickLeastRecent(items, (x) => x, ['a', 'c', 'd']), 'b');
+  }
+});
+
+test('pickLeastRecent reprend la plus ancienne quand tout est déjà sorti', () => {
+  const items = ['a', 'b', 'c'];
+  assert.equal(pickLeastRecent(items, (x) => x, ['b', 'c', 'a', 'c']), 'b');
+});
+
+test('pickLeastRecent sur une liste vide ne renvoie rien', () => {
+  assert.equal(pickLeastRecent([], (x: string) => x, []), undefined);
 });
