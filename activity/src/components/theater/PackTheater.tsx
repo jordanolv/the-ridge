@@ -1,8 +1,8 @@
 import { Eye, Package, X } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import type { ActivityUser, PackShow } from '../../../../src/features/activity/activity.types';
+import type { ActivityUser, PackShow, ShowSpeed } from '../../../../src/features/activity/activity.types';
 import { segmentAt, type ShowSegment } from '../../../../src/features/activity/pack-show.timeline';
-import { serverNow, skip, useLive } from '../../lib/live';
+import { serverNow, setSpeed, skip, useLive } from '../../lib/live';
 import { openAndPlay, useOpening } from '../../lib/opening';
 import type { Session } from '../../lib/session';
 import { Avatar } from '../Avatar';
@@ -28,8 +28,11 @@ const position = (card: PackShow['cards'][number]): LngLat | null => (card.lat !
 
 const segmentKey = (show: PackShow, segment: ShowSegment) => `${show.id}:${segment.kind}:${'card' in segment ? segment.card : ''}`;
 
+const FAST_SPEEDS: ShowSpeed[] = [2, 4];
+
 function shotFor(show: PackShow, segment: ShowSegment, remaining: number): CameraShot {
-  const id = segmentKey(show, segment);
+  // Le globe de l'intro repartirait de zéro à chaque changement de vitesse ; les autres plans reprennent d'où ils sont.
+  const id = segment.kind === 'intro' ? segmentKey(show, segment) : `${segmentKey(show, segment)}:${show.speed}`;
   const points = show.cards.map(position).filter((p): p is LngLat => p !== null);
   const first = points[0] ?? [0, 20];
 
@@ -82,17 +85,37 @@ function OpenAnother({ session, show }: { session: Session; show: PackShow }) {
   );
 }
 
+function SpeedButtons({ show }: { show: PackShow }) {
+  return (
+    <div className="flex overflow-hidden rounded-xl border border-white/15 bg-night-950/40">
+      {FAST_SPEEDS.map(speed => {
+        const active = show.speed === speed;
+        return (
+          <button
+            key={speed}
+            onClick={() => setSpeed(show, active ? 1 : speed)}
+            aria-pressed={active}
+            className={`px-2.5 py-1.5 text-sm font-bold transition ${active ? 'bg-white text-night-950' : 'text-white/80 hover:bg-white/10'}`}
+          >
+            ×{speed}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 function Theater({ session, show, now, me, participants, mapboxToken, onHide }: { session: Session; show: PackShow; now: number; me: ActivityUser; participants: ActivityUser[]; mapboxToken: string | null; onHide: () => void }) {
   const { reactions } = useLive();
-  const { segment, elapsed } = segmentAt(show, now)!;
+  const { segment, elapsed, speed } = segmentAt(show, now)!;
   const key = segmentKey(show, segment);
-  const remaining = segment.duration - elapsed;
+  const remaining = (segment.duration - elapsed) / speed;
   // Calculé à l'entrée du segment : un joueur qui arrive en cours de route rattrape le même plan.
-  const shot = useMemo(() => shotFor(show, segment, remaining), [key]);
+  const shot = useMemo(() => shotFor(show, segment, remaining), [key, speed]);
   const markers = useMemo(() => revealedMarkers(show, segment), [key]);
 
   const card = 'card' in segment ? show.cards[segment.card] : null;
-  const impact = segment.kind === 'reveal' && card !== null && elapsed < REVEAL_IMPACT_MS;
+  const impact = segment.kind === 'reveal' && card !== null && elapsed / speed < REVEAL_IMPACT_MS;
   const isOpener = show.opener.id === me.id;
   const progress = Math.min(1, elapsed / segment.duration);
 
@@ -111,6 +134,7 @@ function Theater({ session, show, now, me, participants, mapboxToken, onHide }: 
             <span className="font-bold" style={{ color: show.tierColor }}>
               {show.tierLabel}
             </span>
+            {speed > 1 && <span className="ml-2 rounded-md bg-white/15 px-1.5 py-0.5 text-xs font-bold">×{speed}</span>}
           </p>
           <div className="mt-1.5">
             <ProgressDots show={show} segment={segment} />
@@ -122,6 +146,7 @@ function Theater({ session, show, now, me, participants, mapboxToken, onHide }: 
           ))}
         </div>
         {isOpener && segment.kind === 'summary' && <OpenAnother session={session} show={show} />}
+        {isOpener && segment.kind !== 'summary' && <SpeedButtons show={show} />}
         {isOpener && segment.kind !== 'summary' ? (
           <button onClick={() => skip(show)} className="rounded-xl border border-white/15 bg-night-950/40 px-3 py-1.5 text-sm font-semibold text-white/80 transition hover:bg-white/10">
             Passer

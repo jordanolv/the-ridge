@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from 'react';
-import type { ActivityUser, FeedEntry, LiveClientMessage, LiveReaction, LiveServerMessage, PackShow, ReactionEmoji } from '../../../src/features/activity/activity.types';
-import { showEnd } from '../../../src/features/activity/pack-show.timeline';
+import type { ActivityUser, FeedEntry, LiveClientMessage, LiveReaction, LiveServerMessage, PackShow, ReactionEmoji, ShowSpeed } from '../../../src/features/activity/activity.types';
+import { showEnd, withSpeed } from '../../../src/features/activity/pack-show.timeline';
 import { SAMPLE_FEED } from './sample';
 import type { Session } from './session';
 
@@ -80,6 +80,14 @@ export function skip(show: PackShow): void {
     return;
   }
   send({ type: 'skip', showId: show.id });
+}
+
+export function setSpeed(show: PackShow, speed: ShowSpeed): void {
+  if (state.status === 'preview') {
+    update({ shows: state.shows.map(s => (s.id === show.id ? { ...s, ...withSpeed(s, speed, serverNow()) } : s)) });
+    return;
+  }
+  send({ type: 'speed', showId: show.id, speed });
 }
 
 export function startLive(session: Session, user: ActivityUser): () => void {

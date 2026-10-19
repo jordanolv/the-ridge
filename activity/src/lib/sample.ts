@@ -61,6 +61,8 @@ export function samplePackShow(tier: ExpeditionTierName): PackShow {
     cards: SAMPLE_CARDS.slice(SAMPLE_CARDS.length - pack.cards),
     startsAt: Date.now() + 300,
     skippedAt: null,
+    speed: 1,
+    paceAnchor: null,
   };
 }
 

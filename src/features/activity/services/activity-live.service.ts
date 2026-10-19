@@ -5,8 +5,8 @@ import type { BotClient } from '../../../bot/client';
 import { BotEventBus } from '../../../shared/events/bot-event-bus';
 import { EXPEDITION_TIER_CONFIG, RARITY_CONFIG } from '../../peak-hunters/constants/peak-hunters.constants';
 import type { PackOpenedEvent } from '../../peak-hunters/types/peak-hunters.types';
-import { REACTIONS, type ActivityUser, type FeedEntry, type LiveClientMessage, type LiveServerMessage, type PackShow } from '../activity.types';
-import { segmentAt, showEnd } from '../pack-show.timeline';
+import { REACTIONS, SHOW_SPEEDS, type ActivityUser, type FeedEntry, type LiveClientMessage, type LiveServerMessage, type PackShow, type ShowSpeed } from '../activity.types';
+import { segmentAt, showEnd, withSpeed } from '../pack-show.timeline';
 import { ActivityAuthService } from './activity-auth.service';
 import { hexColor } from './hex-color';
 
@@ -30,6 +30,8 @@ interface Member {
 interface Room {
   members: Set<Member>;
   shows: PackShow[];
+  /** La vitesse choisie par chaque joueur, reprise pour ses packs suivants. */
+  speeds: Map<string, ShowSpeed>;
 }
 
 /** Une salle par Activity lancée (`instanceId` du SDK) : les joueurs d'un même salon vocal. */
@@ -83,18 +85,26 @@ function handleMessage(room: Room, member: Member, message: LiveClientMessage): 
     return;
   }
 
-  if (message.type === 'skip') {
+  if (message.type === 'skip' || message.type === 'speed') {
     const now = Date.now();
     const show = pendingShows(room).find(s => s.id === message.showId);
     if (!show || show.opener.id !== member.user.id || show.skippedAt !== null || show.startsAt > now) return;
-    show.skippedAt = now;
+    if (segmentAt(show, now)?.segment.kind === 'summary') return;
+
+    if (message.type === 'skip') show.skippedAt = now;
+    else if (SHOW_SPEEDS.includes(message.speed)) {
+      Object.assign(show, withSpeed(show, message.speed, now));
+      for (const queued of showsOf(room, member.user.id)) if (queued.startsAt > now) queued.speed = message.speed;
+      room.speeds.set(member.user.id, message.speed);
+    } else return;
+
     reschedule(room, member.user.id);
     broadcast(room, { type: 'shows', shows: room.shows });
   }
 }
 
 function join(ws: WebSocket, user: ActivityUser, instanceId: string): void {
-  const room = rooms.get(instanceId) ?? { members: new Set(), shows: [] };
+  const room = rooms.get(instanceId) ?? { members: new Set(), shows: [], speeds: new Map() };
   rooms.set(instanceId, room);
 
   const member: Member = { ws, user, alive: true, lastReactionAt: 0 };
@@ -180,16 +190,21 @@ export class ActivityLiveService {
    * depuis le récap du précédent part tout de suite, le récap s'efface. Hors salle (joueur pas
    * connecté au direct), elle part tout de suite et seul l'ouvreur la verra.
    */
-  static schedule(instanceId: string | null, show: Omit<PackShow, 'startsAt'>): PackShow {
+  static schedule(instanceId: string | null, show: Omit<PackShow, 'startsAt' | 'speed' | 'paceAnchor'>): PackShow {
     const room = instanceId ? rooms.get(instanceId) : undefined;
     const inRoom = room && [...room.members].some(member => member.user.id === show.opener.id);
-    if (!room || !inRoom) return { ...show, startsAt: Date.now() + SHOW_LEAD_MS };
+    if (!room || !inRoom) return { ...show, startsAt: Date.now() + SHOW_LEAD_MS, speed: 1, paceAnchor: null };
 
     const queue = showsOf(room, show.opener.id);
     const previous = queue[queue.length - 1];
     const previousOnSummary = previous && segmentAt(previous, Date.now())?.segment.kind === 'summary';
     const previousEnd = previous && !previousOnSummary ? showEnd(previous) : 0;
-    const scheduled: PackShow = { ...show, startsAt: Math.max(Date.now() + SHOW_LEAD_MS, previousEnd) };
+    const scheduled: PackShow = {
+      ...show,
+      startsAt: Math.max(Date.now() + SHOW_LEAD_MS, previousEnd),
+      speed: room.speeds.get(show.opener.id) ?? 1,
+      paceAnchor: null,
+    };
     room.shows.push(scheduled);
     broadcast(room, { type: 'shows', shows: room.shows });
     return scheduled;

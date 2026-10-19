@@ -50,7 +50,7 @@ export class ActivityPacksService {
     const opened = await openPack(user.id, tier);
     if ('reason' in opened) return opened;
 
-    const show: Omit<PackShow, 'startsAt'> = {
+    const show: Omit<PackShow, 'startsAt' | 'speed' | 'paceAnchor'> = {
       id: randomUUID(),
       opener: user,
       tier,

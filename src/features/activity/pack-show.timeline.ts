@@ -1,4 +1,4 @@
-import type { PackShow } from './activity.types';
+import type { PackShow, ShowSpeed } from './activity.types';
 
 /** Durées de l'ouverture partagée, en ms. Le serveur s'en sert pour enchaîner les ouvertures. */
 export const SHOW_TIMING = {
@@ -31,25 +31,45 @@ export function showSegments(cardCount: number): ShowSegment[] {
   return segments;
 }
 
-type ShowClock = Pick<PackShow, 'startsAt' | 'skippedAt'> & { cards: unknown[] };
+type ShowClock = Pick<PackShow, 'startsAt' | 'skippedAt' | 'speed' | 'paceAnchor'> & { cards: unknown[] };
 
-export function showEnd(show: ShowClock): number {
-  if (show.skippedAt !== null) return show.skippedAt + SHOW_TIMING.summary;
-  const segments = showSegments(show.cards.length);
-  const last = segments[segments.length - 1];
-  return show.startsAt + last.start + last.duration;
+const anchorOf = (show: ShowClock) => show.paceAnchor ?? { at: show.startsAt, t: 0 };
+
+const showTime = (show: ShowClock, now: number) => {
+  const anchor = anchorOf(show);
+  return anchor.t + (now - anchor.at) * show.speed;
+};
+
+const summarySegment = (show: ShowClock) => showSegments(show.cards.length).at(-1)!;
+
+/** Le récap se joue toujours à vitesse normale, pour laisser le temps de le lire. */
+export function summaryStart(show: ShowClock): number {
+  if (show.skippedAt !== null) return show.skippedAt;
+  const anchor = anchorOf(show);
+  return anchor.at + (summarySegment(show).start - anchor.t) / show.speed;
 }
 
-/** Le segment joué à l'instant `now`, et le temps écoulé dedans ; `null` avant le début ou après la fin. */
-export function segmentAt(show: ShowClock, now: number): { segment: ShowSegment; elapsed: number } | null {
+export function showEnd(show: ShowClock): number {
+  return summaryStart(show) + SHOW_TIMING.summary;
+}
+
+/**
+ * Le segment joué à l'instant `now`, le temps écoulé dedans (à l'échelle de l'ouverture) et la
+ * vitesse à laquelle il défile ; `null` avant le début ou après la fin.
+ */
+export function segmentAt(show: ShowClock, now: number): { segment: ShowSegment; elapsed: number; speed: number } | null {
   if (now < show.startsAt || now >= showEnd(show)) return null;
 
-  const segments = showSegments(show.cards.length);
-  if (show.skippedAt !== null && now >= show.skippedAt) {
-    return { segment: segments[segments.length - 1], elapsed: now - show.skippedAt };
-  }
+  const summaryAt = summaryStart(show);
+  if (now >= summaryAt) return { segment: summarySegment(show), elapsed: now - summaryAt, speed: 1 };
 
-  const t = now - show.startsAt;
+  const t = showTime(show, now);
+  const segments = showSegments(show.cards.length);
   const segment = segments.find(s => t < s.start + s.duration) ?? segments[segments.length - 1];
-  return { segment, elapsed: t - segment.start };
+  return { segment, elapsed: t - segment.start, speed: show.speed };
+}
+
+/** Change la vitesse à l'instant `now` sans faire sauter l'ouverture : la position actuelle devient le nouveau point de départ. */
+export function withSpeed(show: ShowClock, speed: ShowSpeed, now: number): Pick<PackShow, 'speed' | 'paceAnchor'> {
+  return { speed, paceAnchor: { at: now, t: showTime(show, now) } };
 }
