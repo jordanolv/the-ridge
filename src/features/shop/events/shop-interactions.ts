@@ -1,5 +1,5 @@
 import { ButtonInteraction, MessageFlags, ModalSubmitInteraction, StringSelectMenuInteraction } from 'discord.js';
-import { clampQuantity, colorVariantId, findCategory, findItem, findVariant, parseHex, type ShopCategoryId } from '../catalog';
+import { PACK_WEEKLY_BUDGET, clampQuantity, colorVariantId, findCategory, findItem, findVariant, parseHex, type ShopCategoryId } from '../catalog';
 import { ShopService, type PurchaseFailure } from '../services/shop.service';
 import { supportsGradient } from '../services/color-role.service';
 import {
@@ -16,6 +16,8 @@ import {
 export { SHOP_PREFIX, COLOR_MODAL_ID };
 
 const FAILURE_MESSAGE: Record<PurchaseFailure, string> = {
+  closed: "🔧 La boutique ouvre dans quelques minutes, reviens d'ici peu.",
+  limit: `🧗 Ça dépasse ta limite de packs de la semaine (${PACK_WEEKLY_BUDGET} 💰). Elle repart à zéro lundi.`,
   soon: "⏳ Cet article n'est pas encore disponible.",
   variant: "❌ Choisis une couleur avant d'acheter.",
   funds: '❌ Solde insuffisant — un autre achat est peut-être passé avant celui-ci.',
@@ -26,10 +28,10 @@ type ShopInteraction = ButtonInteraction | StringSelectMenuInteraction | ModalSu
 
 async function showCatalog(interaction: ShopInteraction, category?: ShopCategoryId, qty = 1): Promise<void> {
   if (interaction.isModalSubmit() && !interaction.isFromMessage()) return;
-  const balance = await ShopService.getBalance(interaction.user.id);
+  const wallet = await ShopService.getWallet(interaction.user.id);
 
   await interaction.update({
-    components: [buildCatalogContainer(interaction.user, balance, category ?? findCategory(undefined).id, clampQuantity(qty))],
+    components: [buildCatalogContainer(interaction.user, wallet, category ?? findCategory(undefined).id, clampQuantity(qty))],
     flags: MessageFlags.IsComponentsV2,
   });
 }
@@ -84,7 +86,7 @@ async function buy(
         item,
         variantId ? findVariant(item, variantId) : undefined,
         quantity,
-        result.balance,
+        result.wallet,
         interaction.user.id,
         result.expiresAt,
       ),

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Redénomination ÷10 des soldes — voir economy.md §8.
+ * Redénomination ÷10 des soldes, plafonnés à CAP — voir economy.md §8.
  * Opération unique. Dry-run par défaut ; `--apply` pour écrire.
  *
  *   node scripts/redenominate.mjs
@@ -10,6 +10,7 @@ import 'dotenv/config';
 import { MongoClient } from 'mongodb';
 
 const FACTOR = 10;
+const CAP = 5000;
 const MIGRATION_ID = 'redenominate-v1';
 const apply = process.argv.includes('--apply');
 
@@ -63,18 +64,29 @@ try {
     process.exit(1);
   }
 
-  const users = await db.collection('users').find({}, { projection: { 'profil.money': 1 } }).toArray();
+  const users = await db
+    .collection('users')
+    .find({}, { projection: { discordId: 1, name: 1, 'profil.money': 1 } })
+    .toArray();
   const before = users.map((u) => u?.profil?.money ?? 0);
-  const after = before.map((v) => Math.round(v / FACTOR));
+  const divided = before.map((v) => Math.round(v / FACTOR));
+  const after = divided.map((v) => Math.min(v, CAP));
+  const capped = users
+    .map((u, i) => ({ id: u.discordId, name: u.name ?? u.discordId, divided: divided[i], burnt: divided[i] - after[i] }))
+    .filter((u) => u.burnt > 0)
+    .sort((x, y) => y.burnt - x.burnt);
 
   const a = summarise(before);
   const b = summarise(after);
 
-  console.log(`${users.length} comptes · facteur ÷${FACTOR}\n`);
+  console.log(`${users.length} comptes · facteur ÷${FACTOR} · plafond ${fmt(CAP)}\n`);
   console.log(''.padEnd(10) + 'avant'.padStart(14) + 'apres'.padStart(14));
   for (const [label, key] of [['masse', 'masse'], ['mediane', 'mediane'], ['p90', 'p90'], ['max', 'max']]) {
     console.log(label.padEnd(10) + fmt(a[key]).padStart(14) + fmt(b[key]).padStart(14));
   }
+
+  console.log(`\n${capped.length} compte(s) plafonné(s), ${fmt(capped.reduce((s, u) => s + u.burnt, 0))} détruits :`);
+  for (const u of capped) console.log(`  ${String(u.name).padEnd(20)} ${fmt(u.divided).padStart(8)} → ${fmt(CAP)}`);
 
   if (!apply) {
     console.log('\nDry-run — rien n a été écrit. Relancer avec --apply pour exécuter.');
@@ -82,12 +94,30 @@ try {
   }
 
   const res = await db.collection('users').updateMany({}, [
-    { $set: { 'profil.money': { $round: [{ $divide: ['$profil.money', FACTOR] }, 0] } } },
+    { $set: { 'profil.money': { $min: [{ $round: [{ $divide: ['$profil.money', FACTOR] }, 0] }, CAP] } } },
   ]);
+  const now = new Date();
+  if (capped.length) {
+    await db.collection('bot_logs').insertMany(
+      capped.map((u) => ({
+        level: 'info',
+        kind: 'economy',
+        feature: '💰 Redénomination',
+        title: `Redénomination — plafond ${CAP}`,
+        userId: u.id,
+        amount: -u.burnt,
+        flow: 'burn',
+        message: `<@${u.id}> -${u.burnt} 💰 — Redénomination, solde plafonné à ${CAP}`,
+        createdAt: now,
+      })),
+    );
+  }
   await db.collection('migrations').insertOne({
     _id: MIGRATION_ID,
-    appliedAt: new Date(),
+    appliedAt: now,
     factor: FACTOR,
+    cap: CAP,
+    capped: capped.length,
     matched: res.matchedCount,
     modified: res.modifiedCount,
   });

@@ -1,17 +1,46 @@
 import { Guild, GuildMember } from 'discord.js';
+import mongoose from 'mongoose';
 import UserModel from '../../user/models/user.model';
 import { LogService } from '../../../shared/logs/logs.service';
 import { ShopRentalRepository } from '../repositories/shop-rental.repository';
+import { PackBudgetRepository } from '../repositories/pack-budget.repository';
+import { parisWeekKey } from '../../../shared/time/week-key';
 import { ColorRoleService } from './color-role.service';
-import { clampQuantity, findVariant, packTierOf, quantityLabel, type ShopItem, type ShopVariant } from '../catalog';
+import {
+  PACK_WEEKLY_BUDGET,
+  clampQuantity,
+  findVariant,
+  packTierOf,
+  quantityLabel,
+  type ShopItem,
+  type ShopVariant,
+  type ShopWallet,
+} from '../catalog';
 import { grantPacks } from '../../peak-hunters/services/pack.service';
 import type { ExpeditionTier } from '../../peak-hunters/types/peak-hunters.types';
 
 const LOG_FEATURE = '🛒 Boutique';
+const REDENOMINATION_MARKER = 'redenominate-v1';
 
-export type PurchaseFailure = 'soon' | 'variant' | 'funds' | 'grant';
+let redenominated = false;
+
+/**
+ * Les prix sont à la nouvelle échelle (economy.md §8). Entre le déploiement et
+ * `scripts/redenominate.mjs --apply`, les soldes valent encore dix fois trop :
+ * la boutique reste fermée tant que le marqueur de migration n'est pas posé.
+ */
+async function isRedenominated(): Promise<boolean> {
+  if (redenominated) return true;
+  const marker = await mongoose.connection.db
+    ?.collection<{ _id: string }>('migrations')
+    .findOne({ _id: REDENOMINATION_MARKER });
+  redenominated = marker != null;
+  return redenominated;
+}
+
+export type PurchaseFailure = 'closed' | 'soon' | 'variant' | 'limit' | 'funds' | 'grant';
 export type PurchaseResult =
-  | { ok: true; expiresAt?: Date; balance: number }
+  | { ok: true; expiresAt?: Date; wallet: ShopWallet }
   | { ok: false; reason: PurchaseFailure };
 
 /**
@@ -64,6 +93,7 @@ export class ShopService {
     variantId?: string,
     quantity = 1,
   ): Promise<PurchaseResult> {
+    if (!(await isRedenominated())) return { ok: false, reason: 'closed' };
     if (item.soon) return { ok: false, reason: 'soon' };
 
     const variant = variantId ? findVariant(item, variantId) : undefined;
@@ -71,8 +101,17 @@ export class ShopService {
 
     const qty = clampQuantity(quantity);
     const total = item.price * qty;
+    const weekKey = parisWeekKey(new Date());
+    const isPack = packTierOf(item) !== undefined;
+    const releaseBudget = () => (isPack ? PackBudgetRepository.release(member.id, weekKey, total) : Promise.resolve());
 
-    if (!(await debit(member.id, total))) return { ok: false, reason: 'funds' };
+    if (isPack && !(await PackBudgetRepository.reserve(member.id, weekKey, total, PACK_WEEKLY_BUDGET))) {
+      return { ok: false, reason: 'limit' };
+    }
+    if (!(await debit(member.id, total))) {
+      await releaseBudget();
+      return { ok: false, reason: 'funds' };
+    }
 
     let expiresAt: Date | undefined;
     try {
@@ -82,6 +121,7 @@ export class ShopService {
       }
     } catch (err) {
       await UserModel.updateOne({ discordId: member.id }, { $inc: { 'profil.money': total } });
+      await releaseBudget();
       console.error(`[Shop] Livraison échouée pour ${item.id}, achat remboursé:`, err);
       return { ok: false, reason: 'grant' };
     }
@@ -90,7 +130,15 @@ export class ShopService {
     const suffix = qty > 1 ? ` (${quantityLabel(item, qty)})` : '';
     await LogService.economy(member.id, -total, `Boutique — ${label}${suffix}`, LOG_FEATURE, 'burn');
 
-    return { ok: true, expiresAt, balance: await this.getBalance(member.id) };
+    return { ok: true, expiresAt, wallet: await this.getWallet(member.id) };
+  }
+
+  static async getWallet(userId: string): Promise<ShopWallet> {
+    const [balance, spent] = await Promise.all([
+      this.getBalance(userId),
+      PackBudgetRepository.spent(userId, parisWeekKey(new Date())),
+    ]);
+    return { balance, packBudgetLeft: Math.max(0, PACK_WEEKLY_BUDGET - spent) };
   }
 
   static async getBalance(userId: string): Promise<number> {

@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { computePayroll, parisWeekKey, ActivityScore } from './payroll.service';
+import { computePayroll, ActivityScore } from './payroll.service';
+import { parisWeekKey } from '../../../shared/time/week-key';
 
 const PARAMS = { budgetPerActive: 250, smicPercent: 40, qualificationThreshold: 1800 };
 

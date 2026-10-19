@@ -55,15 +55,15 @@ export const SHOP_ITEMS: ShopItem[] = [
     label: 'Pack Sentier',
     emoji: '<:sentierTier:1493914305824034907>',
     description: '3 cartes au tirage normal.',
-    price: 150,
+    price: 15,
   },
   {
     id: 'pack-falaise',
     category: 'packs',
     label: 'Pack Falaise',
     emoji: '<:falaiseTier:1493914310282448916>',
-    description: '5 cartes, la dernière Rare ou mieux.',
-    price: 300,
+    description: '5 cartes, la dernière avec de meilleures chances de Rare et d’Épique.',
+    price: 25,
   },
   {
     id: 'pack-sommet',
@@ -71,7 +71,7 @@ export const SHOP_ITEMS: ShopItem[] = [
     label: 'Pack Sommet',
     emoji: '<:sommetTier:1493914307698884608>',
     description: '5 cartes, la dernière Épique ou Légendaire garantie.',
-    price: 600,
+    price: 45,
   },
   {
     id: 'profile-theme',
@@ -165,6 +165,14 @@ export function parseColorVariant(id: string): ShopVariant | undefined {
 }
 
 export const MAX_QUANTITY = 6;
+
+/** Dépense maximale en packs par joueur et par semaine (lundi → dimanche, Paris) — voir docs/shop.md §4. */
+export const PACK_WEEKLY_BUDGET = 150;
+
+export interface ShopWallet {
+  balance: number;
+  packBudgetLeft: number;
+}
 
 export function clampQuantity(qty: number): number {
   if (!Number.isFinite(qty)) return 1;

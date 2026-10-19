@@ -9,6 +9,8 @@ import {
   itemsOf,
   findVariant,
   MAX_QUANTITY,
+  PACK_WEEKLY_BUDGET,
+  packTierOf,
   parseColorVariant,
   parseHex,
   quantityLabel,
@@ -92,4 +94,10 @@ test('une catégorie inconnue retombe sur la première', () => {
   assert.equal(findCategory('nimporte').id, SHOP_CATEGORIES[0].id);
   assert.equal(findCategory(undefined).id, SHOP_CATEGORIES[0].id);
   assert.equal(findCategory('cosmetics').id, 'cosmetics');
+});
+
+test('la limite hebdomadaire laisse acheter au moins un pack de chaque type', () => {
+  const packs = SHOP_ITEMS.filter(item => packTierOf(item));
+  assert.ok(packs.length > 0);
+  for (const pack of packs) assert.ok(pack.price <= PACK_WEEKLY_BUDGET, pack.id);
 });
