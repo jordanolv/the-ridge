@@ -109,11 +109,11 @@ copie) :
 5 comptes plafonnés sur 91 (jordan., kommu, apoz2212, flow_flo74, moumouz), 32 880 RC
 détruits. Le détail est dans `economy.md` §8.
 
-### Limite de 150 RC de packs par semaine
+### Limite de 200 RC de packs par semaine
 
 Même un solde de 5 000 achète 200 Falaises d'un coup. La boutique limite donc la dépense
-en packs à 150 RC par joueur et par semaine (`shop.md` §4) : la collection prend au
-moins ~16 mois à finir, pour tout le monde. Un joueur ordinaire ne la sent pas.
+en packs à 200 RC par joueur et par semaine (`shop.md` §4) : la collection prend au
+moins ~1 an à finir, pour tout le monde. Un joueur ordinaire ne la sent pas.
 
 ### Le palier prestige — 🔴 pas bloquant pour la prod
 

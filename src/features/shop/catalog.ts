@@ -167,7 +167,7 @@ export function parseColorVariant(id: string): ShopVariant | undefined {
 export const MAX_QUANTITY = 6;
 
 /** Dépense maximale en packs par joueur et par semaine (lundi → dimanche, Paris) — voir docs/shop.md §4. */
-export const PACK_WEEKLY_BUDGET = 150;
+export const PACK_WEEKLY_BUDGET = 200;
 
 export interface ShopWallet {
   balance: number;
