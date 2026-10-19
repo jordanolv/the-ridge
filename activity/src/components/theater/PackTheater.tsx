@@ -153,7 +153,7 @@ function LiveBanner({ show, segment, onWatch, onDismiss }: { show: PackShow; seg
   const revealed = revealedCount(show, segment);
   const latest = revealed > 0 ? show.cards[revealed - 1] : null;
   return (
-    <div className="glass animate-rise fixed bottom-24 right-3 z-40 flex w-[min(22rem,calc(100%-1.5rem))] items-center gap-3 p-3 md:bottom-4">
+    <div className="glass animate-rise flex items-center gap-3 p-3">
       <Avatar userId={show.opener.id} name={show.opener.displayName} size={40} />
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm">
@@ -200,7 +200,7 @@ export function PackTheater({ session, me, mapboxToken, onOwnShowEnd }: { sessio
   const started = shows.filter(show => !dismissed.has(show.id) && segmentAt(show, now) !== null);
   // Un pack lancé depuis le récap du précédent démarre pendant ce récap : seul le plus récent compte.
   const playing = started.filter(show => !started.some(other => other.opener.id === show.opener.id && other.startsAt > show.startsAt));
-  const current = playing.find(show => show.opener.id === me.id) ?? playing.find(show => watching.has(show.id)) ?? playing[0] ?? null;
+  const current = playing.find(show => show.opener.id === me.id) ?? playing.find(show => watching.has(show.id)) ?? null;
 
   const ownShowId = current && current.opener.id === me.id ? current.id : null;
   const previousOwnShow = useRef<string | null>(null);
@@ -209,19 +209,24 @@ export function PackTheater({ session, me, mapboxToken, onOwnShowEnd }: { sessio
     previousOwnShow.current = ownShowId;
   }, [ownShowId, onOwnShowEnd]);
 
-  if (!current) return null;
-
-  const isOpener = current.opener.id === me.id;
-  if (!isOpener && !watching.has(current.id)) {
+  if (!current) {
+    if (playing.length === 0) return null;
     return (
-      <LiveBanner
-        show={current}
-        segment={segmentAt(current, now)!.segment}
-        onWatch={() => setWatching(withId(watching, current.id))}
-        onDismiss={() => setDismissed(withId(dismissed, current.id))}
-      />
+      <div className="fixed bottom-24 right-3 z-40 flex w-[min(22rem,calc(100%-1.5rem))] flex-col gap-2 md:bottom-4">
+        {playing.map(show => (
+          <LiveBanner
+            key={show.id}
+            show={show}
+            segment={segmentAt(show, now)!.segment}
+            onWatch={() => setWatching(withId(watching, show.id))}
+            onDismiss={() => setDismissed(withId(dismissed, show.id))}
+          />
+        ))}
+      </div>
     );
   }
+
+  const isOpener = current.opener.id === me.id;
 
   return (
     <Theater

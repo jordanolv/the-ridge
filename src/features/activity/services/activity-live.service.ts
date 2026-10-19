@@ -58,10 +58,6 @@ function pendingShows(room: Room): PackShow[] {
 
 const showsOf = (room: Room, openerId: string) => pendingShows(room).filter(show => show.opener.id === openerId);
 
-/**
- * Les ouvertures d'un même joueur s'enchaînent ; celles de joueurs différents se jouent en même
- * temps, sinon chacun attend la fin de tous les packs ouverts avant lui dans la salle.
- */
 function reschedule(room: Room, openerId: string): void {
   let cursor = Date.now() + SHOW_LEAD_MS;
   for (const show of showsOf(room, openerId)) {
