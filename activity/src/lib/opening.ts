@@ -7,7 +7,6 @@ import type { Session } from './session';
 export interface OpeningState {
   opening: ExpeditionTierName | null;
   failure: string | null;
-  /** Les packs restants après la dernière ouverture, proposés sur le récap. */
   packs: PackTierInfo[];
   /** Augmente à chaque ouverture réussie, d'où qu'elle vienne : la page Packs s'y recharge. */
   opened: number;
@@ -26,7 +25,6 @@ function update(patch: Partial<OpeningState>): void {
   for (const listener of listeners) listener();
 }
 
-/** Ouvre un pack, depuis la page Packs comme depuis le récap du précédent. */
 export async function openAndPlay(session: Session, tier: ExpeditionTierName): Promise<void> {
   if (state.opening) return;
   update({ opening: tier, failure: null });
