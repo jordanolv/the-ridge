@@ -30,8 +30,12 @@ concentrer sur ce qui n'aurait pas sa place en prod.
   relancés au redémarrage, lecture puis écriture non atomique sur un solde.
 - **Ownership des interactions.** Un bouton ou un menu doit vérifier que celui qui
   clique a le droit d'agir (`interaction.message.interactionMetadata?.user.id`).
-- **Sécurité du serveur web.** Routes `/api/admin/*` sans `requireAdmin`, routes
-  `/api/activity/*` sans vérification du jeton Discord, secrets exposés au front.
+- **Sécurité du serveur web.** Une route qui lit ou modifie des données de joueur ou de
+  config sans `requireAdmin` (dashboard) ou `requireActivityUser` (Activity), un secret
+  exposé au front. Sont publiques par conception, ne pas les signaler :
+  `POST /api/admin/login`, `POST /api/activity/token` (l'amorçage de l'auth),
+  `/api/activity/config`, et les images relayées (`brand`, `avatar`, `mountains/:id/image`,
+  `parties/:id/image`, `mapbox/*`), chargées par le navigateur ou Mapbox sans jeton.
 - **Données.** Changement de modèle TypeGoose sans prise en compte des documents
   existants ; renommage d'un préfixe de `customId` (`mountain:` notamment) sans migration.
 
