@@ -1877,7 +1877,7 @@
   },
   {
     "id": "q135",
-    "category": "culture-g",
+    "category": "histoire",
     "theme": "Histoire",
     "question": "En quelle année l'Homme a-t-il marché sur la Lune pour la première fois ?",
     "choices": [
@@ -1891,7 +1891,7 @@
   },
   {
     "id": "q136",
-    "category": "culture-g",
+    "category": "arts",
     "theme": "Art",
     "question": "Qui a peint la Joconde ?",
     "choices": [
@@ -1905,7 +1905,7 @@
   },
   {
     "id": "q137",
-    "category": "culture-g",
+    "category": "sciences",
     "theme": "Sciences",
     "question": "Combien d'os compte le squelette humain adulte ?",
     "choices": [
@@ -1919,7 +1919,7 @@
   },
   {
     "id": "q138",
-    "category": "culture-g",
+    "category": "sciences",
     "theme": "Sciences",
     "question": "Quel est le symbole chimique de l'or ?",
     "choices": [
@@ -1933,7 +1933,7 @@
   },
   {
     "id": "q139",
-    "category": "culture-g",
+    "category": "arts",
     "theme": "Littérature",
     "question": "Qui a écrit Les Misérables ?",
     "choices": [
@@ -1947,7 +1947,7 @@
   },
   {
     "id": "q140",
-    "category": "culture-g",
+    "category": "sciences",
     "theme": "Sciences",
     "question": "Quelle planète est la plus proche du Soleil ?",
     "choices": [
@@ -1961,7 +1961,7 @@
   },
   {
     "id": "q141",
-    "category": "culture-g",
+    "category": "histoire",
     "theme": "Histoire",
     "question": "En quelle année le mur de Berlin est-il tombé ?",
     "choices": [
@@ -1975,7 +1975,7 @@
   },
   {
     "id": "q142",
-    "category": "culture-g",
+    "category": "arts",
     "theme": "Littérature",
     "question": "Qui a écrit Le Petit Prince ?",
     "choices": [
@@ -1989,7 +1989,7 @@
   },
   {
     "id": "q143",
-    "category": "culture-g",
+    "category": "arts",
     "theme": "Art",
     "question": "Quel peintre s'est tranché une partie de l'oreille ?",
     "choices": [
@@ -2003,7 +2003,7 @@
   },
   {
     "id": "q144",
-    "category": "culture-g",
+    "category": "sciences",
     "theme": "Sciences",
     "question": "Qui a formulé la théorie de la relativité ?",
     "choices": [
@@ -2017,7 +2017,7 @@
   },
   {
     "id": "q145",
-    "category": "culture-g",
+    "category": "histoire",
     "theme": "Histoire",
     "question": "Quel roi de France était surnommé le « Roi-Soleil » ?",
     "choices": [
@@ -2031,7 +2031,7 @@
   },
   {
     "id": "q146",
-    "category": "culture-g",
+    "category": "sciences",
     "theme": "Sciences",
     "question": "Quelle est la vitesse approximative de la lumière dans le vide ?",
     "choices": [
@@ -2045,7 +2045,7 @@
   },
   {
     "id": "q147",
-    "category": "culture-g",
+    "category": "sciences",
     "theme": "Sciences",
     "question": "Quel organe du corps humain produit l'insuline ?",
     "choices": [
@@ -2059,7 +2059,7 @@
   },
   {
     "id": "q148",
-    "category": "culture-g",
+    "category": "histoire",
     "theme": "Histoire",
     "question": "Quelle civilisation a construit le Machu Picchu ?",
     "choices": [
@@ -2871,7 +2871,7 @@
   },
   {
     "id": "q206",
-    "category": "culture-g",
+    "category": "arts",
     "theme": "Art",
     "question": "Qui a peint le plafond de la chapelle Sixtine ?",
     "choices": [
@@ -2885,7 +2885,7 @@
   },
   {
     "id": "q207",
-    "category": "culture-g",
+    "category": "histoire",
     "theme": "Histoire",
     "question": "En quelle année a débuté la Première Guerre mondiale ?",
     "choices": [
@@ -2899,7 +2899,7 @@
   },
   {
     "id": "q208",
-    "category": "culture-g",
+    "category": "histoire",
     "theme": "Histoire",
     "question": "En quelle année s'est terminée la Seconde Guerre mondiale ?",
     "choices": [
@@ -2913,7 +2913,7 @@
   },
   {
     "id": "q209",
-    "category": "culture-g",
+    "category": "histoire",
     "theme": "Histoire",
     "question": "Qui fut le premier président de la Ve République française ?",
     "choices": [
@@ -2927,7 +2927,7 @@
   },
   {
     "id": "q210",
-    "category": "culture-g",
+    "category": "sciences",
     "theme": "Sciences",
     "question": "Quel est l'élément chimique le plus abondant dans l'Univers ?",
     "choices": [
@@ -2941,7 +2941,7 @@
   },
   {
     "id": "q211",
-    "category": "culture-g",
+    "category": "sciences",
     "theme": "Sciences",
     "question": "Combien de dents compte une dentition adulte complète ?",
     "choices": [
@@ -2955,7 +2955,7 @@
   },
   {
     "id": "q212",
-    "category": "culture-g",
+    "category": "sciences",
     "theme": "Sciences",
     "question": "Quelle planète est surnommée la « planète rouge » ?",
     "choices": [
@@ -2969,7 +2969,7 @@
   },
   {
     "id": "q213",
-    "category": "culture-g",
+    "category": "sciences",
     "theme": "Sciences",
     "question": "Qui a découvert la pénicilline ?",
     "choices": [
@@ -2983,7 +2983,7 @@
   },
   {
     "id": "q214",
-    "category": "culture-g",
+    "category": "sciences",
     "theme": "Sciences",
     "question": "Quel savant a énoncé la loi de la gravitation universelle ?",
     "choices": [
@@ -2997,7 +2997,7 @@
   },
   {
     "id": "q215",
-    "category": "culture-g",
+    "category": "arts",
     "theme": "Littérature",
     "question": "Qui a écrit Roméo et Juliette ?",
     "choices": [
@@ -3011,7 +3011,7 @@
   },
   {
     "id": "q216",
-    "category": "culture-g",
+    "category": "histoire",
     "theme": "Histoire",
     "question": "Quel philosophe grec fut le précepteur d'Alexandre le Grand ?",
     "choices": [
@@ -3025,7 +3025,7 @@
   },
   {
     "id": "q217",
-    "category": "culture-g",
+    "category": "histoire",
     "theme": "Histoire",
     "question": "En quelle année a commencé la Révolution française ?",
     "choices": [
@@ -3053,7 +3053,7 @@
   },
   {
     "id": "q219",
-    "category": "culture-g",
+    "category": "sciences",
     "theme": "Sciences",
     "question": "Quelle est la plus petite unité du vivant ?",
     "choices": [
@@ -3067,7 +3067,7 @@
   },
   {
     "id": "q220",
-    "category": "culture-g",
+    "category": "sciences",
     "theme": "Sciences",
     "question": "Combien de planètes compte le Système solaire ?",
     "choices": [
@@ -3081,7 +3081,7 @@
   },
   {
     "id": "q221",
-    "category": "culture-g",
+    "category": "sciences",
     "theme": "Sciences",
     "question": "Quel gaz les plantes absorbent-elles pour la photosynthèse ?",
     "choices": [
@@ -3095,7 +3095,7 @@
   },
   {
     "id": "q222",
-    "category": "culture-g",
+    "category": "histoire",
     "theme": "Histoire",
     "question": "Qui a introduit l'imprimerie à caractères mobiles en Europe ?",
     "choices": [
@@ -3109,7 +3109,7 @@
   },
   {
     "id": "q223",
-    "category": "culture-g",
+    "category": "histoire",
     "theme": "Histoire",
     "question": "Quelle reine d'Égypte a séduit Jules César puis Marc Antoine ?",
     "choices": [
@@ -3123,7 +3123,7 @@
   },
   {
     "id": "q224",
-    "category": "culture-g",
+    "category": "histoire",
     "theme": "Histoire",
     "question": "Sur quelle île Napoléon est-il mort en exil ?",
     "choices": [
@@ -3137,7 +3137,7 @@
   },
   {
     "id": "q225",
-    "category": "culture-g",
+    "category": "arts",
     "theme": "Littérature",
     "question": "Qui a écrit Vingt Mille Lieues sous les mers ?",
     "choices": [
@@ -3151,7 +3151,7 @@
   },
   {
     "id": "q226",
-    "category": "culture-g",
+    "category": "sciences",
     "theme": "Sciences",
     "question": "Quel métal est liquide à température ambiante ?",
     "choices": [
@@ -3165,7 +3165,7 @@
   },
   {
     "id": "q227",
-    "category": "culture-g",
+    "category": "sciences",
     "theme": "Sciences",
     "question": "Quelle est la formule chimique de l'eau ?",
     "choices": [
@@ -3179,7 +3179,7 @@
   },
   {
     "id": "q228",
-    "category": "culture-g",
+    "category": "sciences",
     "theme": "Sciences",
     "question": "Combien de cavités compte le cœur humain ?",
     "choices": [
@@ -3193,7 +3193,7 @@
   },
   {
     "id": "q229",
-    "category": "culture-g",
+    "category": "histoire",
     "theme": "Histoire",
     "question": "Qui a réalisé le premier vol en avion motorisé ?",
     "choices": [
@@ -3207,7 +3207,7 @@
   },
   {
     "id": "q230",
-    "category": "culture-g",
+    "category": "sciences",
     "theme": "Sciences",
     "question": "Quelle scientifique a reçu deux prix Nobel ?",
     "choices": [
@@ -3221,7 +3221,7 @@
   },
   {
     "id": "q231",
-    "category": "culture-g",
+    "category": "arts",
     "theme": "Art",
     "question": "Quel peintre a fondé le cubisme avec Georges Braque ?",
     "choices": [
@@ -3235,7 +3235,7 @@
   },
   {
     "id": "q232",
-    "category": "culture-g",
+    "category": "arts",
     "theme": "Art",
     "question": "Qui a sculpté Le Penseur ?",
     "choices": [
@@ -3249,7 +3249,7 @@
   },
   {
     "id": "q233",
-    "category": "culture-g",
+    "category": "arts",
     "theme": "Art",
     "question": "Quel musée abrite la Vénus de Milo ?",
     "choices": [
@@ -3263,7 +3263,7 @@
   },
   {
     "id": "q234",
-    "category": "culture-g",
+    "category": "arts",
     "theme": "Littérature",
     "question": "Qui a écrit L'Étranger ?",
     "choices": [
@@ -3277,7 +3277,7 @@
   },
   {
     "id": "q235",
-    "category": "culture-g",
+    "category": "histoire",
     "theme": "Histoire",
     "question": "Comment s'appelle la guerre civile américaine (1861-1865) ?",
     "choices": [
@@ -3291,7 +3291,7 @@
   },
   {
     "id": "q236",
-    "category": "culture-g",
+    "category": "histoire",
     "theme": "Histoire",
     "question": "En quelle année Christophe Colomb a-t-il atteint l'Amérique ?",
     "choices": [
@@ -3305,7 +3305,7 @@
   },
   {
     "id": "q237",
-    "category": "culture-g",
+    "category": "sciences",
     "theme": "Sciences",
     "question": "Quel est l'os le plus long du corps humain ?",
     "choices": [
@@ -3319,7 +3319,7 @@
   },
   {
     "id": "q238",
-    "category": "culture-g",
+    "category": "sciences",
     "theme": "Sciences",
     "question": "Quelle vitamine notre peau produit-elle grâce au soleil ?",
     "choices": [
@@ -3333,7 +3333,7 @@
   },
   {
     "id": "q239",
-    "category": "culture-g",
+    "category": "sciences",
     "theme": "Sciences",
     "question": "Qui a formulé la théorie de l'évolution par sélection naturelle ?",
     "choices": [
@@ -3347,7 +3347,7 @@
   },
   {
     "id": "q240",
-    "category": "culture-g",
+    "category": "histoire",
     "theme": "Histoire",
     "question": "Quel pharaon est célèbre pour son tombeau découvert intact en 1922 ?",
     "choices": [
@@ -3361,7 +3361,7 @@
   },
   {
     "id": "q241",
-    "category": "culture-g",
+    "category": "histoire",
     "theme": "Histoire",
     "question": "Qui a composé La Marseillaise ?",
     "choices": [
@@ -3375,7 +3375,7 @@
   },
   {
     "id": "q242",
-    "category": "culture-g",
+    "category": "sciences",
     "theme": "Sciences",
     "question": "Combien de côtés possède un hexagone ?",
     "choices": [
@@ -3389,7 +3389,7 @@
   },
   {
     "id": "q243",
-    "category": "culture-g",
+    "category": "sciences",
     "theme": "Sciences",
     "question": "Quelle est la valeur approchée du nombre pi ?",
     "choices": [
@@ -3403,7 +3403,7 @@
   },
   {
     "id": "q244",
-    "category": "culture-g",
+    "category": "sciences",
     "theme": "Sciences",
     "question": "Combien de temps met la lumière du Soleil pour atteindre la Terre ?",
     "choices": [
@@ -3417,7 +3417,7 @@
   },
   {
     "id": "q245",
-    "category": "culture-g",
+    "category": "arts",
     "theme": "Art",
     "question": "Qui a peint La Nuit étoilée ?",
     "choices": [
@@ -3431,7 +3431,7 @@
   },
   {
     "id": "q246",
-    "category": "culture-g",
+    "category": "arts",
     "theme": "Littérature",
     "question": "Quel écrivain a créé Sherlock Holmes ?",
     "choices": [
@@ -3445,7 +3445,7 @@
   },
   {
     "id": "q247",
-    "category": "culture-g",
+    "category": "sciences",
     "theme": "Sciences",
     "question": "Quelle molécule porte l'information génétique ?",
     "choices": [
@@ -3459,7 +3459,7 @@
   },
   {
     "id": "q248",
-    "category": "culture-g",
+    "category": "histoire",
     "theme": "Histoire",
     "question": "En quelle année les pièces et billets en euros sont-ils entrés en circulation ?",
     "choices": [
@@ -5500,5 +5500,6319 @@
     ],
     "answer": 1,
     "explanation": "La saga Yakuza (Like a Dragon) explore Kamurocho depuis 2005."
+  },
+  {
+    "id": "q394",
+    "theme": "Littérature",
+    "question": "Quel auteur a créé le personnage de James Bond ?",
+    "choices": [
+      "Arthur Conan Doyle",
+      "John le Carré",
+      "Graham Greene",
+      "Ian Fleming"
+    ],
+    "answer": 3,
+    "explanation": "Ancien officier du renseignement naval, Fleming publie « Casino Royale » en 1953.",
+    "category": "arts"
+  },
+  {
+    "id": "q395",
+    "theme": "Littérature",
+    "question": "Qui a écrit « La Ferme des animaux » ?",
+    "choices": [
+      "H. G. Wells",
+      "Jack London",
+      "George Orwell",
+      "Aldous Huxley"
+    ],
+    "answer": 2,
+    "explanation": "Publiée en 1945, cette fable vise le régime de Staline ; Orwell écrit « 1984 » quatre ans plus tard.",
+    "category": "arts"
+  },
+  {
+    "id": "q396",
+    "theme": "Littérature",
+    "question": "Quel détective a été créé par Georges Simenon ?",
+    "choices": [
+      "Hercule Poirot",
+      "Rouletabille",
+      "Arsène Lupin",
+      "Le commissaire Maigret"
+    ],
+    "answer": 3,
+    "explanation": "Maigret apparaît dans 75 romans, à partir de 1931.",
+    "category": "arts"
+  },
+  {
+    "id": "q397",
+    "theme": "Littérature",
+    "question": "Qui a écrit « Cyrano de Bergerac » ?",
+    "choices": [
+      "Victor Hugo",
+      "Molière",
+      "Edmond Rostand",
+      "Alfred de Musset"
+    ],
+    "answer": 2,
+    "explanation": "La pièce triomphe dès sa première, en décembre 1897.",
+    "category": "arts"
+  },
+  {
+    "id": "q398",
+    "theme": "Littérature",
+    "question": "Qui a écrit « Orgueil et Préjugés » ?",
+    "choices": [
+      "Emily Brontë",
+      "Charlotte Brontë",
+      "Mary Shelley",
+      "Jane Austen"
+    ],
+    "answer": 3,
+    "explanation": "Le roman paraît en 1813 ; Elizabeth Bennet et M. Darcy en sont les héros.",
+    "category": "arts"
+  },
+  {
+    "id": "q399",
+    "theme": "Littérature",
+    "question": "Comment s'appelle le capitaine obsédé par la baleine blanche dans « Moby Dick » ?",
+    "choices": [
+      "Nemo",
+      "Haddock",
+      "Crochet",
+      "Achab"
+    ],
+    "answer": 3,
+    "explanation": "Herman Melville publie le roman en 1851.",
+    "category": "arts"
+  },
+  {
+    "id": "q400",
+    "theme": "Littérature",
+    "question": "Quel jour de la semaine donne son nom au compagnon de Robinson Crusoé ?",
+    "choices": [
+      "Dimanche",
+      "Lundi",
+      "Vendredi",
+      "Mercredi"
+    ],
+    "answer": 2,
+    "explanation": "Robinson le nomme ainsi d'après le jour où il l'a sauvé.",
+    "category": "arts"
+  },
+  {
+    "id": "q401",
+    "theme": "Littérature",
+    "question": "Quel héros grec rencontre Circé, Calypso et le cyclope Polyphème ?",
+    "choices": [
+      "Achille",
+      "Jason",
+      "Ulysse",
+      "Hercule"
+    ],
+    "answer": 2,
+    "explanation": "Son retour à Ithaque, qui dure dix ans, est raconté dans « L'Odyssée » d'Homère.",
+    "category": "arts"
+  },
+  {
+    "id": "q402",
+    "theme": "Littérature",
+    "question": "Combien de sorcières apparaissent au début de « Macbeth » ?",
+    "choices": [
+      "3",
+      "2",
+      "1",
+      "7"
+    ],
+    "answer": 0,
+    "explanation": "Elles prédisent à Macbeth qu'il deviendra roi d'Écosse.",
+    "category": "arts"
+  },
+  {
+    "id": "q403",
+    "theme": "Littérature",
+    "question": "Quel roman d'Albert Camus commence par « Aujourd'hui, maman est morte » ?",
+    "choices": [
+      "La Chute",
+      "Le Mythe de Sisyphe",
+      "L'Étranger",
+      "La Peste"
+    ],
+    "answer": 2,
+    "explanation": "Publié en 1942, il raconte l'histoire de Meursault.",
+    "category": "arts"
+  },
+  {
+    "id": "q404",
+    "theme": "Littérature",
+    "question": "Qui a écrit « Germinal » ?",
+    "choices": [
+      "Guy de Maupassant",
+      "Honoré de Balzac",
+      "Gustave Flaubert",
+      "Émile Zola"
+    ],
+    "answer": 3,
+    "explanation": "Le roman, paru en 1885, raconte une grève de mineurs dans le nord de la France.",
+    "category": "arts"
+  },
+  {
+    "id": "q405",
+    "theme": "Littérature",
+    "question": "Quelle pièce de Molière met en scène un hypocondriaque ?",
+    "choices": [
+      "Tartuffe",
+      "Le Misanthrope",
+      "L'Avare",
+      "Le Malade imaginaire"
+    ],
+    "answer": 3,
+    "explanation": "Molière s'effondre sur scène pendant la quatrième représentation, en 1673, et meurt quelques heures plus tard.",
+    "category": "arts"
+  },
+  {
+    "id": "q406",
+    "theme": "Littérature",
+    "question": "Quel poète a écrit « Les Fleurs du mal » ?",
+    "choices": [
+      "Stéphane Mallarmé",
+      "Arthur Rimbaud",
+      "Charles Baudelaire",
+      "Paul Verlaine"
+    ],
+    "answer": 2,
+    "explanation": "Le recueil de 1857 vaut à Baudelaire un procès pour outrage à la morale publique.",
+    "category": "arts"
+  },
+  {
+    "id": "q407",
+    "theme": "Littérature",
+    "question": "Quel poète a tiré sur Arthur Rimbaud en 1873, à Bruxelles ?",
+    "choices": [
+      "Guillaume Apollinaire",
+      "Victor Hugo",
+      "Charles Baudelaire",
+      "Paul Verlaine"
+    ],
+    "answer": 3,
+    "explanation": "Verlaine le blesse au poignet et passe deux ans en prison.",
+    "category": "arts"
+  },
+  {
+    "id": "q408",
+    "theme": "Littérature",
+    "question": "Quel premier roman Françoise Sagan publie-t-elle à 18 ans, en 1954 ?",
+    "choices": [
+      "Bonjour tristesse",
+      "Aimez-vous Brahms…",
+      "La Chamade",
+      "Un certain sourire"
+    ],
+    "answer": 0,
+    "explanation": "Le livre devient aussitôt un phénomène de librairie.",
+    "category": "arts"
+  },
+  {
+    "id": "q409",
+    "theme": "Littérature",
+    "question": "Qui a écrit la saga « Les Fourmis » ?",
+    "choices": [
+      "Guillaume Musso",
+      "Bernard Werber",
+      "Marc Levy",
+      "Maxime Chattam"
+    ],
+    "answer": 1,
+    "explanation": "Le premier tome paraît en 1991.",
+    "category": "arts"
+  },
+  {
+    "id": "q410",
+    "theme": "Littérature",
+    "question": "Qui a écrit « Charlie et la chocolaterie » ?",
+    "choices": [
+      "Lewis Carroll",
+      "Enid Blyton",
+      "J. M. Barrie",
+      "Roald Dahl"
+    ],
+    "answer": 3,
+    "explanation": "Roald Dahl a aussi écrit « Matilda » et « Le Bon Gros Géant ».",
+    "category": "arts"
+  },
+  {
+    "id": "q411",
+    "theme": "Littérature",
+    "question": "Quel romancier a écrit « Crime et Châtiment » ?",
+    "choices": [
+      "Léon Tolstoï",
+      "Nicolas Gogol",
+      "Fiodor Dostoïevski",
+      "Anton Tchekhov"
+    ],
+    "answer": 2,
+    "explanation": "Le roman de 1866 suit l'étudiant Raskolnikov après un meurtre.",
+    "category": "arts"
+  },
+  {
+    "id": "q412",
+    "theme": "Littérature",
+    "question": "Quel écrivain envoie trois hommes vers la Lune dans un roman de 1865 ?",
+    "choices": [
+      "Edgar Allan Poe",
+      "Alexandre Dumas",
+      "H. G. Wells",
+      "Jules Verne"
+    ],
+    "answer": 3,
+    "explanation": "« De la Terre à la Lune » imagine un tir au canon géant depuis la Floride.",
+    "category": "arts"
+  },
+  {
+    "id": "q413",
+    "theme": "Littérature",
+    "question": "Qui a écrit et dessiné « Dragon Ball » ?",
+    "choices": [
+      "Akira Toriyama",
+      "Eiichirō Oda",
+      "Masashi Kishimoto",
+      "Osamu Tezuka"
+    ],
+    "answer": 0,
+    "explanation": "Le manga est publié de 1984 à 1995 ; Toriyama a aussi dessiné les personnages de Dragon Quest.",
+    "category": "arts"
+  },
+  {
+    "id": "q414",
+    "theme": "Littérature",
+    "question": "Quel mangaka a créé « One Piece » ?",
+    "choices": [
+      "Eiichirō Oda",
+      "Hajime Isayama",
+      "Tite Kubo",
+      "Akira Toriyama"
+    ],
+    "answer": 0,
+    "explanation": "Lancé en 1997, c'est l'un des mangas les plus vendus de l'histoire.",
+    "category": "arts"
+  },
+  {
+    "id": "q415",
+    "theme": "Littérature",
+    "question": "Quel est le prénom du capitaine Haddock ?",
+    "choices": [
+      "Archibald",
+      "Séraphin",
+      "Nestor",
+      "Tryphon"
+    ],
+    "answer": 0,
+    "explanation": "Il n'est révélé que dans « Tintin et les Picaros », en 1976.",
+    "category": "arts"
+  },
+  {
+    "id": "q416",
+    "theme": "Littérature",
+    "question": "De quel pays imaginaire vient le Marsupilami ?",
+    "choices": [
+      "La Syldavie",
+      "Le Groland",
+      "La Bordurie",
+      "La Palombie"
+    ],
+    "answer": 3,
+    "explanation": "Il est créé par André Franquin en 1952, dans les aventures de Spirou.",
+    "category": "arts"
+  },
+  {
+    "id": "q417",
+    "theme": "Littérature",
+    "question": "Quel est le métier d'Obélix ?",
+    "choices": [
+      "Barde",
+      "Poissonnier",
+      "Livreur de menhirs",
+      "Forgeron"
+    ],
+    "answer": 2,
+    "explanation": "Il les taille et les livre lui-même, avec Idéfix sur les talons.",
+    "category": "arts"
+  },
+  {
+    "id": "q418",
+    "theme": "Peinture",
+    "question": "Quel peintre a peint « Guernica » en 1937 ?",
+    "choices": [
+      "Joan Miró",
+      "Pablo Picasso",
+      "Salvador Dalí",
+      "Francisco Goya"
+    ],
+    "answer": 1,
+    "explanation": "L'œuvre dénonce le bombardement de la ville basque pendant la guerre d'Espagne.",
+    "category": "arts"
+  },
+  {
+    "id": "q419",
+    "theme": "Peinture",
+    "question": "Quel peintre est connu pour les montres molles de « La Persistance de la mémoire » ?",
+    "choices": [
+      "René Magritte",
+      "Giorgio De Chirico",
+      "Salvador Dalí",
+      "Max Ernst"
+    ],
+    "answer": 2,
+    "explanation": "Ce tableau surréaliste de 1931 est conservé au MoMA de New York.",
+    "category": "arts"
+  },
+  {
+    "id": "q420",
+    "theme": "Peinture",
+    "question": "À quel mouvement Claude Monet a-t-il donné son nom ?",
+    "choices": [
+      "Le pointillisme",
+      "Le cubisme",
+      "Le fauvisme",
+      "L'impressionnisme"
+    ],
+    "answer": 3,
+    "explanation": "Son tableau « Impression, soleil levant » (1872) a inspiré le nom, d'abord moqueur, du mouvement.",
+    "category": "arts"
+  },
+  {
+    "id": "q421",
+    "theme": "Peinture",
+    "question": "À quel mouvement appartient Andy Warhol ?",
+    "choices": [
+      "Le street art",
+      "L'art abstrait",
+      "Le pop art",
+      "Le surréalisme"
+    ],
+    "answer": 2,
+    "explanation": "Ses boîtes de soupe Campbell et ses portraits de Marilyn sont devenus des icônes.",
+    "category": "arts"
+  },
+  {
+    "id": "q422",
+    "theme": "Peinture",
+    "question": "Quelle couleur Yves Klein a-t-il fait breveter ?",
+    "choices": [
+      "Un or",
+      "Un rouge",
+      "Un bleu",
+      "Un noir"
+    ],
+    "answer": 2,
+    "explanation": "L'International Klein Blue (IKB) est déposé en 1960.",
+    "category": "arts"
+  },
+  {
+    "id": "q423",
+    "theme": "Peinture",
+    "question": "Quel peintre, ancien employé de l'octroi, est surnommé « le Douanier » ?",
+    "choices": [
+      "Henri Rousseau",
+      "Paul Cézanne",
+      "Edgar Degas",
+      "Georges Seurat"
+    ],
+    "answer": 0,
+    "explanation": "Autodidacte, il est célèbre pour ses jungles imaginaires.",
+    "category": "arts"
+  },
+  {
+    "id": "q424",
+    "theme": "Peinture",
+    "question": "Quel peintre est parti vivre à Tahiti en 1891 ?",
+    "choices": [
+      "Vincent van Gogh",
+      "Paul Gauguin",
+      "Paul Signac",
+      "Henri Matisse"
+    ],
+    "answer": 1,
+    "explanation": "Il y peint ses toiles les plus connues et meurt aux Marquises en 1903.",
+    "category": "arts"
+  },
+  {
+    "id": "q425",
+    "theme": "Peinture",
+    "question": "Qui a peint « La Création d'Adam » ?",
+    "choices": [
+      "Michel-Ange",
+      "Botticelli",
+      "Léonard de Vinci",
+      "Raphaël"
+    ],
+    "answer": 0,
+    "explanation": "Elle fait partie de la fresque du plafond de la chapelle Sixtine, achevée en 1512.",
+    "category": "arts"
+  },
+  {
+    "id": "q426",
+    "theme": "Peinture",
+    "question": "Qui a peint « Le Cri » ?",
+    "choices": [
+      "Edvard Munch",
+      "Gustav Klimt",
+      "Egon Schiele",
+      "Vincent van Gogh"
+    ],
+    "answer": 0,
+    "explanation": "Le peintre norvégien en a réalisé plusieurs versions entre 1893 et 1910.",
+    "category": "arts"
+  },
+  {
+    "id": "q427",
+    "theme": "Peinture",
+    "question": "Qui a peint « La Jeune Fille à la perle » ?",
+    "choices": [
+      "Rembrandt",
+      "Frans Hals",
+      "Johannes Vermeer",
+      "Rubens"
+    ],
+    "answer": 2,
+    "explanation": "Ce tableau vers 1665 est surnommé « la Joconde du Nord ».",
+    "category": "arts"
+  },
+  {
+    "id": "q428",
+    "theme": "Peinture",
+    "question": "Qui a peint « Le Radeau de la Méduse » ?",
+    "choices": [
+      "Eugène Delacroix",
+      "Jacques-Louis David",
+      "Théodore Géricault",
+      "Gustave Courbet"
+    ],
+    "answer": 2,
+    "explanation": "La Méduse était une frégate dont le naufrage, en 1816, a fait scandale.",
+    "category": "arts"
+  },
+  {
+    "id": "q429",
+    "theme": "Peinture",
+    "question": "Qui a peint « La Liberté guidant le peuple » ?",
+    "choices": [
+      "Théodore Géricault",
+      "Jacques-Louis David",
+      "Édouard Manet",
+      "Eugène Delacroix"
+    ],
+    "answer": 3,
+    "explanation": "Le tableau célèbre la révolution de juillet 1830.",
+    "category": "arts"
+  },
+  {
+    "id": "q430",
+    "theme": "Art",
+    "question": "Quel artiste de rue britannique garde son identité secrète ?",
+    "choices": [
+      "Invader",
+      "Banksy",
+      "Shepard Fairey",
+      "Keith Haring"
+    ],
+    "answer": 1,
+    "explanation": "En 2018, une de ses toiles s'est autodétruite juste après sa vente aux enchères.",
+    "category": "arts"
+  },
+  {
+    "id": "q431",
+    "theme": "Art",
+    "question": "Quel couple d'artistes a emballé le Pont-Neuf, puis l'Arc de Triomphe ?",
+    "choices": [
+      "Christo et Jeanne-Claude",
+      "Gilbert et George",
+      "Niki de Saint Phalle et Jean Tinguely",
+      "Les Lalanne"
+    ],
+    "answer": 0,
+    "explanation": "L'Arc de Triomphe a été emballé en 2021, après la mort de Christo.",
+    "category": "arts"
+  },
+  {
+    "id": "q432",
+    "theme": "Art",
+    "question": "Quel monument de Bruxelles représente un cristal de fer agrandi 165 milliards de fois ?",
+    "choices": [
+      "Le Manneken-Pis",
+      "L'Atomium",
+      "Le palais de justice",
+      "La Grand-Place"
+    ],
+    "answer": 1,
+    "explanation": "Il a été construit pour l'Exposition universelle de 1958.",
+    "category": "arts"
+  },
+  {
+    "id": "q433",
+    "theme": "Art",
+    "question": "Quel art japonais consiste à réparer les céramiques avec de l'or ?",
+    "choices": [
+      "Le bonsaï",
+      "L'ikebana",
+      "L'origami",
+      "Le kintsugi"
+    ],
+    "answer": 3,
+    "explanation": "Plutôt que cacher la cassure, on la souligne : elle fait partie de l'histoire de l'objet.",
+    "category": "arts"
+  },
+  {
+    "id": "q434",
+    "theme": "Art",
+    "question": "Dans quel musée parisien sont exposés les « Nymphéas » de Monet ?",
+    "choices": [
+      "Le centre Pompidou",
+      "Le Louvre",
+      "Le musée de l'Orangerie",
+      "Le musée d'Orsay"
+    ],
+    "answer": 2,
+    "explanation": "Deux salles ovales ont été conçues pour accueillir les huit grands panneaux.",
+    "category": "arts"
+  },
+  {
+    "id": "q435",
+    "theme": "Art",
+    "question": "Quel architecte a conçu la pyramide du Louvre ?",
+    "choices": [
+      "Renzo Piano",
+      "Jean Nouvel",
+      "Ieoh Ming Pei",
+      "Le Corbusier"
+    ],
+    "answer": 2,
+    "explanation": "Inaugurée en 1989, elle a d'abord été très critiquée.",
+    "category": "arts"
+  },
+  {
+    "id": "q436",
+    "theme": "Cinéma",
+    "question": "Quel acteur a incarné Iron Man dans les films Marvel ?",
+    "choices": [
+      "Mark Ruffalo",
+      "Chris Evans",
+      "Chris Hemsworth",
+      "Robert Downey Jr."
+    ],
+    "answer": 3,
+    "explanation": "Le premier « Iron Man », en 2008, lance l'univers cinématographique Marvel.",
+    "category": "cinema"
+  },
+  {
+    "id": "q437",
+    "theme": "Cinéma",
+    "question": "Qui a été le premier acteur à jouer James Bond au cinéma ?",
+    "choices": [
+      "Daniel Craig",
+      "Sean Connery",
+      "George Lazenby",
+      "Roger Moore"
+    ],
+    "answer": 1,
+    "explanation": "Il incarne 007 dès « James Bond contre Dr No », en 1962.",
+    "category": "cinema"
+  },
+  {
+    "id": "q438",
+    "theme": "Cinéma",
+    "question": "Dans quel film entend-on « La vie, c'est comme une boîte de chocolats » ?",
+    "choices": [
+      "Rain Man",
+      "Forrest Gump",
+      "Big",
+      "Le Terminal"
+    ],
+    "answer": 1,
+    "explanation": "Tom Hanks remporte l'Oscar du meilleur acteur pour ce rôle en 1995.",
+    "category": "cinema"
+  },
+  {
+    "id": "q439",
+    "theme": "Cinéma",
+    "question": "Dans quel film Dark Vador révèle-t-il « Je suis ton père » ?",
+    "choices": [
+      "Le Retour du Jedi",
+      "L'Empire contre-attaque",
+      "La Revanche des Sith",
+      "Un nouvel espoir"
+    ],
+    "answer": 1,
+    "explanation": "Dans la version originale, il dit en fait « No, I am your father ».",
+    "category": "cinema"
+  },
+  {
+    "id": "q440",
+    "theme": "Cinéma",
+    "question": "Quel réalisateur a signé « Princesse Mononoké » et « Le Voyage de Chihiro » ?",
+    "choices": [
+      "Mamoru Hosoda",
+      "Isao Takahata",
+      "Makoto Shinkai",
+      "Hayao Miyazaki"
+    ],
+    "answer": 3,
+    "explanation": "« Le Voyage de Chihiro » a remporté l'Oscar du meilleur film d'animation en 2003.",
+    "category": "cinema"
+  },
+  {
+    "id": "q441",
+    "theme": "Cinéma",
+    "question": "Qui a réalisé « Pulp Fiction » ?",
+    "choices": [
+      "Martin Scorsese",
+      "David Fincher",
+      "Quentin Tarantino",
+      "Guy Ritchie"
+    ],
+    "answer": 2,
+    "explanation": "Le film remporte la Palme d'or à Cannes en 1994.",
+    "category": "cinema"
+  },
+  {
+    "id": "q442",
+    "theme": "Cinéma",
+    "question": "Quel film de Steven Spielberg met en scène un requin tueur ?",
+    "choices": [
+      "Peur bleue",
+      "Les Dents de la mer",
+      "Abyss",
+      "Piranhas"
+    ],
+    "answer": 1,
+    "explanation": "Sorti en 1975, il est considéré comme le premier « blockbuster » de l'été.",
+    "category": "cinema"
+  },
+  {
+    "id": "q443",
+    "theme": "Cinéma",
+    "question": "Qui a réalisé « Titanic » et « Avatar » ?",
+    "choices": [
+      "Steven Spielberg",
+      "Ridley Scott",
+      "Peter Jackson",
+      "James Cameron"
+    ],
+    "answer": 3,
+    "explanation": "Ces deux films ont chacun été à un moment le plus grand succès de l'histoire du cinéma.",
+    "category": "cinema"
+  },
+  {
+    "id": "q444",
+    "theme": "Cinéma",
+    "question": "Qui a réalisé « Psychose », avec sa célèbre scène de la douche ?",
+    "choices": [
+      "Orson Welles",
+      "Stanley Kubrick",
+      "Roman Polanski",
+      "Alfred Hitchcock"
+    ],
+    "answer": 3,
+    "explanation": "Sorti en 1960, le film est tourné en noir et blanc pour adoucir la violence de la scène.",
+    "category": "cinema"
+  },
+  {
+    "id": "q445",
+    "theme": "Cinéma",
+    "question": "Qui a réalisé « 2001, l'Odyssée de l'espace » ?",
+    "choices": [
+      "Ridley Scott",
+      "Andreï Tarkovski",
+      "George Lucas",
+      "Stanley Kubrick"
+    ],
+    "answer": 3,
+    "explanation": "Sorti en 1968, avant les premiers pas sur la Lune, le film impressionne par son réalisme.",
+    "category": "cinema"
+  },
+  {
+    "id": "q446",
+    "theme": "Cinéma",
+    "question": "Quel film des frères Lumière est souvent cité comme la première projection publique ?",
+    "choices": [
+      "La Sortie de l'usine Lumière à Lyon",
+      "L'Arroseur arrosé",
+      "Le Voyage dans la Lune",
+      "L'Arrivée d'un train en gare"
+    ],
+    "answer": 0,
+    "explanation": "La séance du 28 décembre 1895, au Grand Café à Paris, marque la naissance du cinéma.",
+    "category": "cinema"
+  },
+  {
+    "id": "q447",
+    "theme": "Cinéma",
+    "question": "Quel festival de cinéma, créé en 1932, est le plus ancien du monde ?",
+    "choices": [
+      "La Mostra de Venise",
+      "La Berlinale",
+      "Le festival de Sundance",
+      "Le festival de Cannes"
+    ],
+    "answer": 0,
+    "explanation": "Son prix principal est le Lion d'or.",
+    "category": "cinema"
+  },
+  {
+    "id": "q448",
+    "theme": "Cinéma",
+    "question": "Quel animal récompense le meilleur film au festival de Berlin ?",
+    "choices": [
+      "Un aigle",
+      "Un ours",
+      "Un léopard",
+      "Un lion"
+    ],
+    "answer": 1,
+    "explanation": "L'ours est l'emblème de la ville de Berlin.",
+    "category": "cinema"
+  },
+  {
+    "id": "q449",
+    "theme": "Cinéma",
+    "question": "Quel film de Justine Triet a reçu la Palme d'or en 2023 ?",
+    "choices": [
+      "Anatomie d'une chute",
+      "La Bataille de Solférino",
+      "Titane",
+      "Sibyl"
+    ],
+    "answer": 0,
+    "explanation": "Justine Triet est la troisième femme à recevoir la Palme d'or.",
+    "category": "cinema"
+  },
+  {
+    "id": "q450",
+    "theme": "Cinéma",
+    "question": "Quel film sud-coréen a remporté l'Oscar du meilleur film en 2020 ?",
+    "choices": [
+      "Parasite",
+      "Old Boy",
+      "Burning",
+      "Le Bon, la Brute et le Cinglé"
+    ],
+    "answer": 0,
+    "explanation": "C'est le premier film non anglophone à remporter cet Oscar.",
+    "category": "cinema"
+  },
+  {
+    "id": "q451",
+    "theme": "Cinéma",
+    "question": "Quel acteur incarne OSS 117 dans les films de Michel Hazanavicius ?",
+    "choices": [
+      "Christian Clavier",
+      "Guillaume Canet",
+      "Gilles Lellouche",
+      "Jean Dujardin"
+    ],
+    "answer": 3,
+    "explanation": "Jean Dujardin a aussi remporté l'Oscar du meilleur acteur pour « The Artist » en 2012.",
+    "category": "cinema"
+  },
+  {
+    "id": "q452",
+    "theme": "Cinéma",
+    "question": "Quel est le film français qui a fait le plus d'entrées en France ?",
+    "choices": [
+      "Les Visiteurs",
+      "La Grande Vadrouille",
+      "Intouchables",
+      "Bienvenue chez les Ch'tis"
+    ],
+    "answer": 3,
+    "explanation": "Il a dépassé les 20 millions d'entrées en 2008.",
+    "category": "cinema"
+  },
+  {
+    "id": "q453",
+    "theme": "Cinéma",
+    "question": "Dans « Mission Cléopâtre », qui demande à Otis si scribe est « une bonne situation » ?",
+    "choices": [
+      "Panoramix",
+      "Astérix",
+      "Obélix",
+      "Numérobis"
+    ],
+    "answer": 1,
+    "explanation": "La réponse d'Otis, jouée par Édouard Baer, est en grande partie improvisée.",
+    "category": "cinema"
+  },
+  {
+    "id": "q454",
+    "theme": "Cinéma",
+    "question": "Qui a réalisé « Les Quatre Cents Coups » ?",
+    "choices": [
+      "Jean-Luc Godard",
+      "Claude Chabrol",
+      "Éric Rohmer",
+      "François Truffaut"
+    ],
+    "answer": 3,
+    "explanation": "Sorti en 1959, le film lance la Nouvelle Vague et le personnage d'Antoine Doinel.",
+    "category": "cinema"
+  },
+  {
+    "id": "q455",
+    "theme": "Cinéma",
+    "question": "Dans quel film entend-on « Houston, nous avons un problème » ?",
+    "choices": [
+      "Seul sur Mars",
+      "Interstellar",
+      "Apollo 13",
+      "Gravity"
+    ],
+    "answer": 2,
+    "explanation": "Le film de 1995 raconte la mission lunaire de 1970 qui a failli tourner au drame.",
+    "category": "cinema"
+  },
+  {
+    "id": "q456",
+    "theme": "Cinéma",
+    "question": "Quel film muet de 1927 met en scène une ville futuriste et un robot ?",
+    "choices": [
+      "Nosferatu",
+      "Le Kid",
+      "Metropolis",
+      "Le Cabinet du docteur Caligari"
+    ],
+    "answer": 2,
+    "explanation": "Fritz Lang y imagine une cité divisée entre élites et ouvriers.",
+    "category": "cinema"
+  },
+  {
+    "id": "q457",
+    "theme": "Cinéma",
+    "question": "Quelle saga a été réalisée par les Wachowski ?",
+    "choices": [
+      "Matrix",
+      "Star Wars",
+      "Mad Max",
+      "Terminator"
+    ],
+    "answer": 0,
+    "explanation": "Le premier film, en 1999, popularise l'effet « bullet time ».",
+    "category": "cinema"
+  },
+  {
+    "id": "q458",
+    "theme": "Cinéma",
+    "question": "Dans quel pays a-t-on tourné « Le Seigneur des anneaux » ?",
+    "choices": [
+      "Le Canada",
+      "La Nouvelle-Zélande",
+      "L'Écosse",
+      "L'Irlande"
+    ],
+    "answer": 1,
+    "explanation": "Le village de Hobbiton se visite encore près de Matamata.",
+    "category": "cinema"
+  },
+  {
+    "id": "q459",
+    "theme": "Cinéma",
+    "question": "Quel film met en scène un clown nommé Grippe-Sou (Pennywise) ?",
+    "choices": [
+      "Terrifier",
+      "Joker",
+      "Ça",
+      "Le Clown"
+    ],
+    "answer": 2,
+    "explanation": "Il est adapté du roman de Stephen King paru en 1986.",
+    "category": "cinema"
+  },
+  {
+    "id": "q460",
+    "theme": "Cinéma",
+    "question": "Quel métal recouvre le squelette de Wolverine ?",
+    "choices": [
+      "Le vibranium",
+      "Le titane",
+      "L'adamantium",
+      "Le mithril"
+    ],
+    "answer": 2,
+    "explanation": "Le vibranium est le métal du bouclier de Captain America et du Wakanda.",
+    "category": "cinema"
+  },
+  {
+    "id": "q461",
+    "theme": "Cinéma",
+    "question": "Quel est le nom civil de Captain America ?",
+    "choices": [
+      "Peter Parker",
+      "Tony Stark",
+      "Bruce Banner",
+      "Steve Rogers"
+    ],
+    "answer": 3,
+    "explanation": "Il apparaît dans les comics dès 1941.",
+    "category": "cinema"
+  },
+  {
+    "id": "q462",
+    "theme": "Cinéma",
+    "question": "Comment s'appellent les petits ouvriers de Willy Wonka ?",
+    "choices": [
+      "Les Oompa-Loompas",
+      "Les Gremlins",
+      "Les Minimoys",
+      "Les Minions"
+    ],
+    "answer": 0,
+    "explanation": "Ils chantent une chanson moralisatrice à chaque enfant puni.",
+    "category": "cinema"
+  },
+  {
+    "id": "q463",
+    "theme": "Cinéma",
+    "question": "Quel film d'animation Pixar se déroule dans la tête d'une petite fille ?",
+    "choices": [
+      "Soul",
+      "Vice-Versa",
+      "Coco",
+      "Là-haut"
+    ],
+    "answer": 1,
+    "explanation": "Joie, Tristesse, Colère, Peur et Dégoût pilotent les émotions de Riley.",
+    "category": "cinema"
+  },
+  {
+    "id": "q464",
+    "theme": "Cinéma",
+    "question": "Quel film met en scène Mia et Sebastian à Los Angeles, en chansons ?",
+    "choices": [
+      "Moulin Rouge",
+      "Whiplash",
+      "Grease",
+      "La La Land"
+    ],
+    "answer": 3,
+    "explanation": "Damien Chazelle devient, à 32 ans, le plus jeune lauréat de l'Oscar du meilleur réalisateur.",
+    "category": "cinema"
+  },
+  {
+    "id": "q465",
+    "theme": "Cinéma",
+    "question": "Qui joue Katniss Everdeen dans « Hunger Games » ?",
+    "choices": [
+      "Emma Watson",
+      "Kristen Stewart",
+      "Jennifer Lawrence",
+      "Shailene Woodley"
+    ],
+    "answer": 2,
+    "explanation": "Elle a reçu l'Oscar de la meilleure actrice en 2013 pour « Happiness Therapy ».",
+    "category": "cinema"
+  },
+  {
+    "id": "q466",
+    "theme": "Séries",
+    "question": "Quel acteur joue Walter White dans « Breaking Bad » ?",
+    "choices": [
+      "Bob Odenkirk",
+      "Giancarlo Esposito",
+      "Bryan Cranston",
+      "Aaron Paul"
+    ],
+    "answer": 2,
+    "explanation": "Il était connu avant pour son rôle du père dans « Malcolm ».",
+    "category": "cinema"
+  },
+  {
+    "id": "q467",
+    "theme": "Séries",
+    "question": "Quel artiste figure sur les masques de « La casa de papel » ?",
+    "choices": [
+      "Francisco de Goya",
+      "Salvador Dalí",
+      "Diego Velázquez",
+      "Pablo Picasso"
+    ],
+    "answer": 1,
+    "explanation": "Le masque reprend la moustache retroussée du peintre surréaliste.",
+    "category": "cinema"
+  },
+  {
+    "id": "q468",
+    "theme": "Séries",
+    "question": "Comment s'appelle le meilleur ami de Bart Simpson ?",
+    "choices": [
+      "Martin",
+      "Milhouse",
+      "Nelson",
+      "Ralph"
+    ],
+    "answer": 1,
+    "explanation": "Milhouse Van Houten est aussi amoureux de Lisa.",
+    "category": "cinema"
+  },
+  {
+    "id": "q469",
+    "theme": "Séries",
+    "question": "Dans « Kaamelott », qui demande qu'on arrête « ces conneries de nord et de sud » ?",
+    "choices": [
+      "Arthur",
+      "Léodagan",
+      "Karadoc",
+      "Perceval"
+    ],
+    "answer": 3,
+    "explanation": "Perceval est connu pour son sens de l'orientation… très personnel.",
+    "category": "cinema"
+  },
+  {
+    "id": "q470",
+    "theme": "Séries",
+    "question": "Quel numéro porte l'héroïne jouée par Millie Bobby Brown dans « Stranger Things » ?",
+    "choices": [
+      "8",
+      "7",
+      "13",
+      "11"
+    ],
+    "answer": 3,
+    "explanation": "Elle est surnommée Eleven, ou « Elfe » dans la version française.",
+    "category": "cinema"
+  },
+  {
+    "id": "q471",
+    "theme": "Séries",
+    "question": "Quelle série raconte le règne d'Élisabeth II ?",
+    "choices": [
+      "Victoria",
+      "Downton Abbey",
+      "Bridgerton",
+      "The Crown"
+    ],
+    "answer": 3,
+    "explanation": "Plusieurs actrices se succèdent dans le rôle de la reine au fil des saisons.",
+    "category": "cinema"
+  },
+  {
+    "id": "q472",
+    "theme": "Séries",
+    "question": "Quelle série d'anthologie explore les dérives de la technologie ?",
+    "choices": [
+      "Black Mirror",
+      "Mr. Robot",
+      "Westworld",
+      "Love, Death & Robots"
+    ],
+    "answer": 0,
+    "explanation": "Chaque épisode raconte une histoire indépendante.",
+    "category": "cinema"
+  },
+  {
+    "id": "q473",
+    "theme": "Séries",
+    "question": "Quelle série a été la première grande production originale de Netflix, en 2013 ?",
+    "choices": [
+      "Stranger Things",
+      "House of Cards",
+      "Narcos",
+      "Orange Is the New Black"
+    ],
+    "answer": 1,
+    "explanation": "Kevin Spacey y jouait le politicien Frank Underwood.",
+    "category": "cinema"
+  },
+  {
+    "id": "q474",
+    "theme": "Séries",
+    "question": "Quel acteur joue Sheldon Cooper dans « The Big Bang Theory » ?",
+    "choices": [
+      "Simon Helberg",
+      "Jim Parsons",
+      "Kunal Nayyar",
+      "Johnny Galecki"
+    ],
+    "answer": 1,
+    "explanation": "La série a duré douze saisons, de 2007 à 2019.",
+    "category": "cinema"
+  },
+  {
+    "id": "q475",
+    "theme": "Séries",
+    "question": "Dans quelle série Omar Sy joue-t-il un gentleman cambrioleur ?",
+    "choices": [
+      "Lupin",
+      "Le Bureau des légendes",
+      "Marseille",
+      "Engrenages"
+    ],
+    "answer": 0,
+    "explanation": "La série s'inspire des romans de Maurice Leblanc sur Arsène Lupin.",
+    "category": "cinema"
+  },
+  {
+    "id": "q476",
+    "theme": "Séries",
+    "question": "Quelle série met en scène le cartel de Medellín et Pablo Escobar ?",
+    "choices": [
+      "Narcos",
+      "Breaking Bad",
+      "Ozark",
+      "Sicario"
+    ],
+    "answer": 0,
+    "explanation": "Le Brésilien Wagner Moura y incarne Escobar.",
+    "category": "cinema"
+  },
+  {
+    "id": "q477",
+    "theme": "Séries",
+    "question": "Quelle série de Tim Burton suit la fille de la famille Addams ?",
+    "choices": [
+      "Riverdale",
+      "Les Désastreuses Aventures des orphelins Baudelaire",
+      "Mercredi",
+      "Sabrina"
+    ],
+    "answer": 2,
+    "explanation": "La danse de Mercredi au bal est devenue virale sur les réseaux.",
+    "category": "cinema"
+  },
+  {
+    "id": "q478",
+    "theme": "Séries",
+    "question": "Dans « Code Quantum », qui voyage dans le temps en prenant la place d'autres personnes ?",
+    "choices": [
+      "Rip Hunter",
+      "Marty McFly",
+      "Le Dr Sam Beckett",
+      "Le Docteur"
+    ],
+    "answer": 2,
+    "explanation": "Il est guidé par Al, un hologramme que lui seul peut voir.",
+    "category": "cinema"
+  },
+  {
+    "id": "q479",
+    "theme": "Séries",
+    "question": "Quelle série animée suit des chasseurs de primes à bord du vaisseau Bebop ?",
+    "choices": [
+      "Space Dandy",
+      "Trigun",
+      "Cowboy Bebop",
+      "Albator"
+    ],
+    "answer": 2,
+    "explanation": "Sa bande originale jazz, de Yoko Kanno, est culte.",
+    "category": "cinema"
+  },
+  {
+    "id": "q480",
+    "theme": "Séries",
+    "question": "Dans quel café se retrouvent les héros de « Friends » ?",
+    "choices": [
+      "Le Monk's Café",
+      "Le Central Perk",
+      "Le MacLaren's",
+      "Le Peach Pit"
+    ],
+    "answer": 1,
+    "explanation": "Le Monk's est celui de « Seinfeld », le MacLaren's celui de « How I Met Your Mother ».",
+    "category": "cinema"
+  },
+  {
+    "id": "q481",
+    "theme": "Séries",
+    "question": "Dans « Game of Thrones », quelle est la devise de la maison Stark ?",
+    "choices": [
+      "Nous ne semons pas",
+      "Notre est la fureur",
+      "Le feu et le sang",
+      "L'hiver arrive"
+    ],
+    "answer": 3,
+    "explanation": "En version originale : « Winter is coming ».",
+    "category": "cinema"
+  },
+  {
+    "id": "q482",
+    "theme": "Langue",
+    "question": "Comment s'appelle le signe typographique « & » ?",
+    "choices": [
+      "Le dièse",
+      "Le tilde",
+      "L'esperluette",
+      "L'arobase"
+    ],
+    "answer": 2,
+    "explanation": "C'est une ligature des lettres e et t, le « et » latin.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q483",
+    "theme": "Langue",
+    "question": "Comment appelle-t-on l'étude des drapeaux ?",
+    "choices": [
+      "La numismatique",
+      "La vexillologie",
+      "La philatélie",
+      "L'héraldique"
+    ],
+    "answer": 1,
+    "explanation": "L'héraldique étudie les blasons, la numismatique les monnaies.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q484",
+    "theme": "Langue",
+    "question": "Combien d'années dure un « lustre » ?",
+    "choices": [
+      "20 ans",
+      "5 ans",
+      "15 ans",
+      "10 ans"
+    ],
+    "answer": 1,
+    "explanation": "« Ça fait des lustres » veut donc dire, à l'origine, plusieurs fois cinq ans.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q485",
+    "theme": "Langue",
+    "question": "De quels mots « velcro » est-il la contraction ?",
+    "choices": [
+      "Velours et crocodile",
+      "Velu et croc",
+      "Vélo et crochet",
+      "Velours et crochet"
+    ],
+    "answer": 3,
+    "explanation": "Le Suisse Georges de Mestral l'invente après avoir observé des fleurs de bardane accrochées à son chien.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q486",
+    "theme": "Langue",
+    "question": "Que veut dire le mot espagnol « nevada » ?",
+    "choices": [
+      "Montagneuse",
+      "Ensoleillée",
+      "Enneigée",
+      "Désertique"
+    ],
+    "answer": 2,
+    "explanation": "La Sierra Nevada est donc, littéralement, « la chaîne enneigée ».",
+    "category": "culture-g"
+  },
+  {
+    "id": "q487",
+    "theme": "Langue",
+    "question": "Que signifie le mot allemand « Zeitgeist » ?",
+    "choices": [
+      "L'esprit du temps",
+      "Le mal du pays",
+      "La joie maligne",
+      "La fin du monde"
+    ],
+    "answer": 0,
+    "explanation": "Il désigne l'ambiance intellectuelle et culturelle d'une époque.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q488",
+    "theme": "Langue",
+    "question": "Comment dit-on « chatter » en français du Québec ?",
+    "choices": [
+      "Clavarder",
+      "Placoter",
+      "Magasiner",
+      "Pitonner"
+    ],
+    "answer": 0,
+    "explanation": "Le mot mélange « clavier » et « bavarder » ; « magasiner » veut dire faire les boutiques.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q489",
+    "theme": "Langue",
+    "question": "Au Québec, comment appelle-t-on une petite épicerie ouverte tard ?",
+    "choices": [
+      "Un casse-croûte",
+      "Un dépanneur",
+      "Une tabagie",
+      "Un magasin général"
+    ],
+    "answer": 1,
+    "explanation": "On dit simplement « aller au dépanneur ».",
+    "category": "culture-g"
+  },
+  {
+    "id": "q490",
+    "theme": "Langue",
+    "question": "En Belgique, quel élu est l'équivalent du maire ?",
+    "choices": [
+      "Le bailli",
+      "Le doge",
+      "Le préfet",
+      "Le bourgmestre"
+    ],
+    "answer": 3,
+    "explanation": "Il est entouré d'échevins, l'équivalent des adjoints.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q491",
+    "theme": "Langue",
+    "question": "Lequel de ces mots est féminin ?",
+    "choices": [
+      "Pétale",
+      "Haltère",
+      "Astérisque",
+      "Ébène"
+    ],
+    "answer": 3,
+    "explanation": "On dit « une ébène » mais « un pétale », « un astérisque » et « un haltère ».",
+    "category": "culture-g"
+  },
+  {
+    "id": "q492",
+    "theme": "Langue",
+    "question": "Que signifie l'expression « tomber dans les pommes » ?",
+    "choices": [
+      "Se fâcher",
+      "Tomber amoureux",
+      "S'évanouir",
+      "Faire une erreur"
+    ],
+    "answer": 2,
+    "explanation": "Elle viendrait de l'ancienne expression « être dans les pommes cuites », c'est-à-dire épuisé.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q493",
+    "theme": "Langue",
+    "question": "Que signifie « poser un lapin » ?",
+    "choices": [
+      "Partir sans payer",
+      "Faire une blague",
+      "Dire un secret",
+      "Ne pas venir à un rendez-vous"
+    ],
+    "answer": 3,
+    "explanation": "Au XIXe siècle, le « lapin » désignait un service non payé.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q494",
+    "theme": "Symboles",
+    "question": "Quel est l'emblème des médecins ?",
+    "choices": [
+      "L'ancre",
+      "Le trident",
+      "Le caducée",
+      "La balance"
+    ],
+    "answer": 2,
+    "explanation": "Il représente un serpent enroulé autour du bâton d'Asclépios, dieu grec de la médecine.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q495",
+    "theme": "Symboles",
+    "question": "Quelle est la devise de la République française ?",
+    "choices": [
+      "Travail, Famille, Patrie",
+      "Liberté, Égalité, Fraternité",
+      "Unité, Travail, Progrès",
+      "Honneur et Patrie"
+    ],
+    "answer": 1,
+    "explanation": "Elle est inscrite dans la Constitution de 1958.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q496",
+    "theme": "Symboles",
+    "question": "Quel animal est l'emblème de la ville de Nîmes ?",
+    "choices": [
+      "Le taureau",
+      "Le crocodile",
+      "Le lion",
+      "La chouette"
+    ],
+    "answer": 1,
+    "explanation": "Il rappelle les vétérans romains de la campagne d'Égypte installés à Nîmes.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q497",
+    "theme": "Symboles",
+    "question": "Que caresse-t-on pour faire un vœu sur l'église Notre-Dame de Dijon ?",
+    "choices": [
+      "Une grenouille",
+      "Une chouette",
+      "Un sanglier",
+      "Un lézard"
+    ],
+    "answer": 1,
+    "explanation": "La petite sculpture, sur le flanc de l'église, est usée par des siècles de caresses.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q498",
+    "theme": "Symboles",
+    "question": "Quel est le seul numéro de la roulette à être vert ?",
+    "choices": [
+      "Le 36",
+      "Le 1",
+      "Le 13",
+      "Le zéro"
+    ],
+    "answer": 3,
+    "explanation": "Les numéros de 1 à 36 sont rouges ou noirs.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q499",
+    "theme": "Symboles",
+    "question": "Quel prénom porte le roi de cœur d'un jeu de cartes français ?",
+    "choices": [
+      "Alexandre",
+      "Charles",
+      "David",
+      "César"
+    ],
+    "answer": 1,
+    "explanation": "David est le roi de pique, César celui de carreau et Alexandre celui de trèfle.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q500",
+    "theme": "Symboles",
+    "question": "Quelle main de poker est surnommée « la main de l'homme mort » ?",
+    "choices": [
+      "Une paire de dames",
+      "Un brelan de rois",
+      "Deux paires, as et huit",
+      "Une couleur à cœur"
+    ],
+    "answer": 2,
+    "explanation": "Ce serait la main que tenait Wild Bill Hickok quand il a été abattu, en 1876.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q501",
+    "theme": "Traditions",
+    "question": "Que fête-t-on au Japon le 5 mai ?",
+    "choices": [
+      "Le Nouvel An",
+      "La fête des enfants",
+      "La fête des cerisiers",
+      "La fête des morts"
+    ],
+    "answer": 1,
+    "explanation": "On y accroche des manches à air en forme de carpes, les koinobori.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q502",
+    "theme": "Traditions",
+    "question": "Quel personnage féminin squelettique est l'emblème du jour des Morts mexicain ?",
+    "choices": [
+      "La Malinche",
+      "La Llorona",
+      "Frida",
+      "La Catrina"
+    ],
+    "answer": 3,
+    "explanation": "Elle a été dessinée vers 1910 par le graveur José Guadalupe Posada.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q503",
+    "theme": "Traditions",
+    "question": "Dans quelle ville se tient chaque été le Festival interceltique ?",
+    "choices": [
+      "Quimper",
+      "Rennes",
+      "Lorient",
+      "Brest"
+    ],
+    "answer": 2,
+    "explanation": "Créé en 1971, il accueille chaque année une nation celte à l'honneur.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q504",
+    "theme": "Traditions",
+    "question": "Comment s'appellent les fêtes traditionnelles bretonnes où l'on danse ?",
+    "choices": [
+      "Les kermesses",
+      "Les férias",
+      "Les fest-noz",
+      "Les ducasses"
+    ],
+    "answer": 2,
+    "explanation": "« Fest-noz » signifie « fête de nuit » en breton.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q505",
+    "theme": "Traditions",
+    "question": "Qu'offre-t-on traditionnellement le 1er mai en France ?",
+    "choices": [
+      "Du muguet",
+      "Des jonquilles",
+      "Des œufs",
+      "Des roses"
+    ],
+    "answer": 0,
+    "explanation": "La tradition remonterait à Charles IX, qui en aurait offert en 1561.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q506",
+    "theme": "Inventions",
+    "question": "Qui a cofondé Android, avant son rachat par Google ?",
+    "choices": [
+      "Steve Wozniak",
+      "Andy Rubin",
+      "Larry Page",
+      "Sergey Brin"
+    ],
+    "answer": 1,
+    "explanation": "Google la rachète en 2005 ; le premier téléphone Android sort en 2008.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q507",
+    "theme": "Inventions",
+    "question": "En quelle année les premières briques LEGO en plastique ont-elles été commercialisées ?",
+    "choices": [
+      "1932",
+      "1958",
+      "1972",
+      "1949"
+    ],
+    "answer": 3,
+    "explanation": "L'entreprise, fondée en 1932, fabriquait d'abord des jouets en bois ; la brique à tenons actuelle date de 1958.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q508",
+    "theme": "Inventions",
+    "question": "Quel est le premier jeu d'arcade à avoir connu un grand succès commercial ?",
+    "choices": [
+      "Space Invaders",
+      "Tetris",
+      "Pac-Man",
+      "Pong"
+    ],
+    "answer": 3,
+    "explanation": "Il est sorti en 1972 chez Atari.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q509",
+    "theme": "Inventions",
+    "question": "Comment s'appelle la société mère de Google ?",
+    "choices": [
+      "Meta",
+      "Calico",
+      "Alphabet",
+      "Verily"
+    ],
+    "answer": 2,
+    "explanation": "Elle est créée en 2015 pour chapeauter Google et ses autres activités.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q510",
+    "theme": "Inventions",
+    "question": "Quel logiciel de traitement de texte Microsoft a-t-il lancé en 1983 ?",
+    "choices": [
+      "Outlook",
+      "Word",
+      "Excel",
+      "PowerPoint"
+    ],
+    "answer": 1,
+    "explanation": "Il s'appelait à l'origine Multi-Tool Word.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q511",
+    "theme": "Inventions",
+    "question": "Qui a inventé le World Wide Web ?",
+    "choices": [
+      "Bill Gates",
+      "Steve Jobs",
+      "Tim Berners-Lee",
+      "Vint Cerf"
+    ],
+    "answer": 2,
+    "explanation": "Il le met au point en 1989 au CERN, près de Genève.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q512",
+    "theme": "Divers",
+    "question": "Quel youtubeur français a gravi l'Everest pour son documentaire « Kaizen » ?",
+    "choices": [
+      "Tibo InShape",
+      "Michou",
+      "Squeezie",
+      "Inoxtag"
+    ],
+    "answer": 3,
+    "explanation": "Le film, sorti en 2024, a été diffusé dans de nombreux cinémas.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q513",
+    "theme": "Divers",
+    "question": "Combien de présidents sont sculptés sur le mont Rushmore ?",
+    "choices": [
+      "6",
+      "5",
+      "4",
+      "3"
+    ],
+    "answer": 2,
+    "explanation": "Washington, Jefferson, Theodore Roosevelt et Lincoln.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q514",
+    "theme": "Divers",
+    "question": "Dans quel État américain se trouve le mont Rushmore ?",
+    "choices": [
+      "Le Wyoming",
+      "Le Dakota du Sud",
+      "Le Colorado",
+      "Le Montana"
+    ],
+    "answer": 1,
+    "explanation": "Les visages, hauts de 18 mètres, ont été sculptés de 1927 à 1941.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q515",
+    "theme": "Divers",
+    "question": "Quelle est la plus haute structure de France ?",
+    "choices": [
+      "L'émetteur de Rosnay",
+      "La tour First",
+      "La tour Eiffel",
+      "Le viaduc de Millau"
+    ],
+    "answer": 0,
+    "explanation": "Cette antenne militaire de l'Indre culmine à 357 m ; le viaduc de Millau culmine à 343 m.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q516",
+    "theme": "Divers",
+    "question": "Quelle ville abrite la plus haute cathédrale de France ?",
+    "choices": [
+      "Strasbourg",
+      "Rouen",
+      "Reims",
+      "Chartres"
+    ],
+    "answer": 1,
+    "explanation": "Sa flèche culmine à 151 m.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q517",
+    "theme": "Divers",
+    "question": "Où se trouve la fontaine de Trevi ?",
+    "choices": [
+      "À Venise",
+      "À Milan",
+      "À Rome",
+      "À Florence"
+    ],
+    "answer": 2,
+    "explanation": "Selon la tradition, y lancer une pièce garantit de revenir à Rome.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q518",
+    "theme": "Divers",
+    "question": "Dans quel département se trouvent les falaises d'Étretat ?",
+    "choices": [
+      "Dans le Calvados",
+      "Dans le Finistère",
+      "En Seine-Maritime",
+      "Dans le Pas-de-Calais"
+    ],
+    "answer": 2,
+    "explanation": "L'Aiguille et la Porte d'Aval ont inspiré Monet et Maurice Leblanc.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q519",
+    "theme": "Divers",
+    "question": "Quelle université, fondée en 1636, est la plus ancienne des États-Unis ?",
+    "choices": [
+      "Princeton",
+      "Columbia",
+      "Harvard",
+      "Yale"
+    ],
+    "answer": 2,
+    "explanation": "Elle doit son nom au pasteur John Harvard, son premier grand donateur.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q520",
+    "theme": "Divers",
+    "question": "Quelle chaîne de fontaines publiques vertes a été offerte à Paris en 1872 ?",
+    "choices": [
+      "Les fontaines Haussmann",
+      "Les fontaines Wallace",
+      "Les fontaines Médicis",
+      "Les fontaines Morris"
+    ],
+    "answer": 1,
+    "explanation": "Le philanthrope Richard Wallace voulait offrir de l'eau potable gratuite aux Parisiens.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q521",
+    "theme": "Divers",
+    "question": "Quel jour a lieu la fête de la Musique ?",
+    "choices": [
+      "Le 1er mai",
+      "Le premier dimanche de juin",
+      "Le 21 juin",
+      "Le 14 juillet"
+    ],
+    "answer": 2,
+    "explanation": "Elle est lancée en 1982 par Jack Lang, le jour du solstice d'été.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q522",
+    "theme": "Divers",
+    "question": "Comment s'appelle le petit du hérisson ?",
+    "choices": [
+      "Le piquillon",
+      "Le hérissonneau",
+      "Le picot",
+      "Le hérisseau"
+    ],
+    "answer": 1,
+    "explanation": "On entend aussi « choupisson », un mot-valise affectueux mais non officiel.",
+    "category": "culture-g"
+  },
+  {
+    "id": "q523",
+    "theme": "Nintendo",
+    "question": "Dans quel jeu apparaît Waluigi pour la première fois ?",
+    "choices": [
+      "Super Smash Bros. Melee",
+      "Mario Party 2",
+      "Mario Kart 64",
+      "Mario Tennis"
+    ],
+    "answer": 3,
+    "explanation": "Il fait ses débuts sur Nintendo 64 en 2000, comme partenaire de double de Wario.",
+    "category": "jeux-video"
+  },
+  {
+    "id": "q524",
+    "theme": "Nintendo",
+    "question": "Quel nom portait Peach dans les premiers jeux Mario sortis en Occident ?",
+    "choices": [
+      "Princesse Toadstool",
+      "Princesse Daisy",
+      "Princesse Harmonie",
+      "Princesse Pauline"
+    ],
+    "answer": 0,
+    "explanation": "Au Japon, elle s'est toujours appelée Peach.",
+    "category": "jeux-video"
+  },
+  {
+    "id": "q525",
+    "theme": "Nintendo",
+    "question": "Qui a créé Mario, Donkey Kong et Zelda ?",
+    "choices": [
+      "Gunpei Yokoi",
+      "Satoru Iwata",
+      "Hideo Kojima",
+      "Shigeru Miyamoto"
+    ],
+    "answer": 3,
+    "explanation": "Gunpei Yokoi, lui, est le père de la Game Boy.",
+    "category": "jeux-video"
+  },
+  {
+    "id": "q526",
+    "theme": "Nintendo",
+    "question": "Quel jeu était vendu avec la Game Boy lors de sa sortie en Occident ?",
+    "choices": [
+      "Tetris",
+      "The Legend of Zelda",
+      "Pokémon Rouge",
+      "Super Mario Land"
+    ],
+    "answer": 0,
+    "explanation": "Ce choix a fait de Tetris l'un des jeux les plus vendus de l'histoire.",
+    "category": "jeux-video"
+  },
+  {
+    "id": "q527",
+    "theme": "Nintendo",
+    "question": "Quel Zelda est sorti le même jour que la Nintendo Switch, en 2017 ?",
+    "choices": [
+      "Twilight Princess",
+      "Tears of the Kingdom",
+      "Skyward Sword",
+      "Breath of the Wild"
+    ],
+    "answer": 3,
+    "explanation": "Il est aussi sorti sur Wii U, la console précédente.",
+    "category": "jeux-video"
+  },
+  {
+    "id": "q528",
+    "theme": "Nintendo",
+    "question": "Dans « Animal Crossing », quel raton laveur vous vend votre maison ?",
+    "choices": [
+      "Tom Nook",
+      "Marie",
+      "Robin",
+      "Kéké Laglisse"
+    ],
+    "answer": 0,
+    "explanation": "Il vous laisse rembourser votre prêt sans intérêts, mais sans fin.",
+    "category": "jeux-video"
+  },
+  {
+    "id": "q529",
+    "theme": "Nintendo",
+    "question": "Dans quel jeu Nintendo des calamars humanoïdes s'affrontent-ils à coups d'encre ?",
+    "choices": [
+      "Super Mario Sunshine",
+      "Splatoon",
+      "Kirby",
+      "Pikmin"
+    ],
+    "answer": 1,
+    "explanation": "L'équipe qui a recouvert le plus de terrain de son encre l'emporte.",
+    "category": "jeux-video"
+  },
+  {
+    "id": "q530",
+    "theme": "Sony",
+    "question": "Quel est le nom du héros des jeux « Uncharted » ?",
+    "choices": [
+      "Joel Miller",
+      "Nathan Drake",
+      "Kratos",
+      "Aloy"
+    ],
+    "answer": 1,
+    "explanation": "Joel est le héros de « The Last of Us », Aloy celle d'« Horizon ».",
+    "category": "jeux-video"
+  },
+  {
+    "id": "q531",
+    "theme": "Sony",
+    "question": "Quel studio a développé « The Last of Us » ?",
+    "choices": [
+      "Guerrilla Games",
+      "Insomniac Games",
+      "Naughty Dog",
+      "Santa Monica Studio"
+    ],
+    "answer": 2,
+    "explanation": "Naughty Dog avait aussi créé Crash Bandicoot et Uncharted.",
+    "category": "jeux-video"
+  },
+  {
+    "id": "q532",
+    "theme": "Sony",
+    "question": "Dans quel jeu incarne-t-on Kratos, aux côtés de son fils Atreus ?",
+    "choices": [
+      "Ghost of Tsushima",
+      "Bloodborne",
+      "Horizon Zero Dawn",
+      "God of War (2018)"
+    ],
+    "answer": 3,
+    "explanation": "La saga quitte la Grèce antique pour la mythologie nordique.",
+    "category": "jeux-video"
+  },
+  {
+    "id": "q533",
+    "theme": "Microsoft",
+    "question": "Quel studio a créé la saga « Halo » ?",
+    "choices": [
+      "id Software",
+      "Bungie",
+      "343 Industries",
+      "Valve"
+    ],
+    "answer": 1,
+    "explanation": "Bungie l'a développée jusqu'à Halo: Reach, avant que 343 Industries prenne le relais.",
+    "category": "jeux-video"
+  },
+  {
+    "id": "q534",
+    "theme": "Classiques",
+    "question": "Dans quel jeu entend-on « War. War never changes. » ?",
+    "choices": [
+      "Fallout",
+      "Metro",
+      "Wolfenstein",
+      "BioShock"
+    ],
+    "answer": 0,
+    "explanation": "Cette phrase ouvre presque chaque épisode de la série.",
+    "category": "jeux-video"
+  },
+  {
+    "id": "q535",
+    "theme": "Classiques",
+    "question": "Quel message apparaît à l'écran quand on meurt dans « Dark Souls » ?",
+    "choices": [
+      "Try Again",
+      "Game Over",
+      "Wasted",
+      "You Died"
+    ],
+    "answer": 3,
+    "explanation": "« Wasted » est le message de GTA.",
+    "category": "jeux-video"
+  },
+  {
+    "id": "q536",
+    "theme": "Classiques",
+    "question": "Combien de personnages étaient jouables dans le premier « Street Fighter II » ?",
+    "choices": [
+      "8",
+      "6",
+      "12",
+      "10"
+    ],
+    "answer": 0,
+    "explanation": "Les quatre boss ne sont devenus jouables que dans la version suivante.",
+    "category": "jeux-video"
+  },
+  {
+    "id": "q537",
+    "theme": "Classiques",
+    "question": "Comment s'appelle le héros de « Metal Gear Solid » ?",
+    "choices": [
+      "Solid Snake",
+      "Revolver Ocelot",
+      "Big Boss",
+      "Raiden"
+    ],
+    "answer": 0,
+    "explanation": "La saga est née sur MSX en 1987, sous la direction d'Hideo Kojima.",
+    "category": "jeux-video"
+  },
+  {
+    "id": "q538",
+    "theme": "Classiques",
+    "question": "Qui a composé la plupart des musiques de « Final Fantasy » ?",
+    "choices": [
+      "Yoko Shimomura",
+      "Joe Hisaishi",
+      "Nobuo Uematsu",
+      "Koji Kondo"
+    ],
+    "answer": 2,
+    "explanation": "Koji Kondo est le compositeur de Mario et Zelda.",
+    "category": "jeux-video"
+  },
+  {
+    "id": "q539",
+    "theme": "Classiques",
+    "question": "Quel est le nom du héros de « Final Fantasy VII » ?",
+    "choices": [
+      "Squall Leonhart",
+      "Cloud Strife",
+      "Tidus",
+      "Zidane Tribal"
+    ],
+    "answer": 1,
+    "explanation": "Squall est le héros de FF VIII, Zidane celui de FF IX, Tidus celui de FF X.",
+    "category": "jeux-video"
+  },
+  {
+    "id": "q540",
+    "theme": "Classiques",
+    "question": "Quel est le métier de Phoenix Wright ?",
+    "choices": [
+      "Juge",
+      "Avocat",
+      "Détective",
+      "Procureur"
+    ],
+    "answer": 1,
+    "explanation": "Sa réplique « Objection ! » est devenue culte.",
+    "category": "jeux-video"
+  },
+  {
+    "id": "q541",
+    "theme": "Classiques",
+    "question": "Dans quel jeu de Valve le testeur utilise-t-il un pistolet à portails bleu et orange ?",
+    "choices": [
+      "Team Fortress 2",
+      "Portal",
+      "Half-Life 2",
+      "Left 4 Dead"
+    ],
+    "answer": 1,
+    "explanation": "GLaDOS, l'intelligence artificielle du jeu, promet un gâteau qui n'existe pas.",
+    "category": "jeux-video"
+  },
+  {
+    "id": "q542",
+    "theme": "Classiques",
+    "question": "Quel jeu de stratégie est associé au nom de Sid Meier ?",
+    "choices": [
+      "Civilization",
+      "Age of Empires",
+      "StarCraft",
+      "Command & Conquer"
+    ],
+    "answer": 0,
+    "explanation": "Le premier épisode sort en 1991.",
+    "category": "jeux-video"
+  },
+  {
+    "id": "q543",
+    "theme": "Classiques",
+    "question": "Comment s'appelle le principal ennemi de « Spyro the Dragon » (1998) ?",
+    "choices": [
+      "Gnasty Gnorc",
+      "Ripto",
+      "Neo Cortex",
+      "Ganon"
+    ],
+    "answer": 0,
+    "explanation": "Neo Cortex est l'ennemi de Crash Bandicoot.",
+    "category": "jeux-video"
+  },
+  {
+    "id": "q544",
+    "theme": "Classiques",
+    "question": "À bord de quel vaisseau se déroule le premier « Dead Space » ?",
+    "choices": [
+      "L'USG Ishimura",
+      "L'UNSC Pillar of Autumn",
+      "Le Nostromo",
+      "Le Normandy"
+    ],
+    "answer": 0,
+    "explanation": "Le Normandy est le vaisseau de « Mass Effect ».",
+    "category": "jeux-video"
+  },
+  {
+    "id": "q545",
+    "theme": "Classiques",
+    "question": "Dans GTA V, combien de personnages principaux peut-on incarner ?",
+    "choices": [
+      "4",
+      "3",
+      "2",
+      "1"
+    ],
+    "answer": 1,
+    "explanation": "Michael, Franklin et Trevor.",
+    "category": "jeux-video"
+  },
+  {
+    "id": "q546",
+    "theme": "Indé",
+    "question": "Quel jeu indépendant raconte l'ascension d'une montagne par une jeune femme nommée Madeline ?",
+    "choices": [
+      "Celeste",
+      "Gris",
+      "Hollow Knight",
+      "Ori and the Blind Forest"
+    ],
+    "answer": 0,
+    "explanation": "Le jeu de 2018 aborde aussi l'anxiété et la dépression.",
+    "category": "jeux-video"
+  },
+  {
+    "id": "q547",
+    "theme": "Indé",
+    "question": "Quel jeu de poker roguelike, créé par un seul développeur, était en lice pour le jeu de l'année aux Game Awards 2024 ?",
+    "choices": [
+      "Hades",
+      "Slay the Spire",
+      "Inscryption",
+      "Balatro"
+    ],
+    "answer": 3,
+    "explanation": "Il s'incline face à Astro Bot, mais remporte notamment le prix du meilleur jeu indépendant.",
+    "category": "jeux-video"
+  },
+  {
+    "id": "q548",
+    "theme": "Indé",
+    "question": "Quel jeu de 2020 fait affronter les dieux de l'Olympe à Zagreus, fils d'Hadès ?",
+    "choices": [
+      "Bastion",
+      "Returnal",
+      "Hades",
+      "Dead Cells"
+    ],
+    "answer": 2,
+    "explanation": "Il a été développé par le studio Supergiant Games.",
+    "category": "jeux-video"
+  },
+  {
+    "id": "q549",
+    "theme": "Indé",
+    "question": "Dans « Among Us », comment s'appelle le traître caché parmi l'équipage ?",
+    "choices": [
+      "Le saboteur",
+      "Le loup-garou",
+      "L'espion",
+      "L'imposteur"
+    ],
+    "answer": 3,
+    "explanation": "Le jeu, sorti en 2018, explose en 2020 pendant le confinement.",
+    "category": "jeux-video"
+  },
+  {
+    "id": "q550",
+    "theme": "Genshin",
+    "question": "Dans « Genshin Impact », quelle petite créature accompagne le Voyageur ?",
+    "choices": [
+      "Amber",
+      "Paimon",
+      "Klee",
+      "Venti"
+    ],
+    "answer": 1,
+    "explanation": "Elle sert de guide… et d'« en-cas de secours », selon les joueurs.",
+    "category": "jeux-video"
+  },
+  {
+    "id": "q551",
+    "theme": "Genshin",
+    "question": "Dans quelle cité commence l'aventure de « Genshin Impact » ?",
+    "choices": [
+      "Inazuma",
+      "Mondstadt",
+      "Liyue",
+      "Sumeru"
+    ],
+    "answer": 1,
+    "explanation": "C'est la cité de la liberté, protégée par l'archon Anémo.",
+    "category": "jeux-video"
+  },
+  {
+    "id": "q552",
+    "theme": "Rock",
+    "question": "Quel groupe a composé la bande originale du film « Flash Gordon » ?",
+    "choices": [
+      "Queen",
+      "Led Zeppelin",
+      "Pink Floyd",
+      "Yes"
+    ],
+    "answer": 0,
+    "explanation": "Le thème « Flash! Ah-ah! » est sorti en 1980.",
+    "category": "musique"
+  },
+  {
+    "id": "q553",
+    "theme": "Rock",
+    "question": "Quel groupe britannique a sorti « Viva la Vida » ?",
+    "choices": [
+      "Keane",
+      "Radiohead",
+      "Coldplay",
+      "Muse"
+    ],
+    "answer": 2,
+    "explanation": "Le titre est sorti en 2008.",
+    "category": "musique"
+  },
+  {
+    "id": "q554",
+    "theme": "Rock",
+    "question": "Quel groupe chante « Roxanne » ?",
+    "choices": [
+      "INXS",
+      "Dire Straits",
+      "The Clash",
+      "The Police"
+    ],
+    "answer": 3,
+    "explanation": "Sting en était le chanteur et le bassiste.",
+    "category": "musique"
+  },
+  {
+    "id": "q555",
+    "theme": "Rock",
+    "question": "Quel est le vrai nom de Freddie Mercury ?",
+    "choices": [
+      "Farrokh Bulsara",
+      "Fred Bulmer",
+      "Faruk Bashir",
+      "Frederick Mercer"
+    ],
+    "answer": 0,
+    "explanation": "Il est né à Zanzibar en 1946.",
+    "category": "musique"
+  },
+  {
+    "id": "q556",
+    "theme": "Rock",
+    "question": "De quel groupe Jim Morrison était-il le chanteur ?",
+    "choices": [
+      "The Who",
+      "The Byrds",
+      "Deep Purple",
+      "The Doors"
+    ],
+    "answer": 3,
+    "explanation": "Il meurt à Paris en 1971 et repose au cimetière du Père-Lachaise.",
+    "category": "musique"
+  },
+  {
+    "id": "q557",
+    "theme": "Rock",
+    "question": "Quel groupe Dave Grohl a-t-il fondé après Nirvana ?",
+    "choices": [
+      "Pearl Jam",
+      "Soundgarden",
+      "Queens of the Stone Age",
+      "Foo Fighters"
+    ],
+    "answer": 3,
+    "explanation": "Il a enregistré seul tous les instruments du premier album.",
+    "category": "musique"
+  },
+  {
+    "id": "q558",
+    "theme": "Rock",
+    "question": "Quel groupe de metal finlandais a remporté l'Eurovision 2006 ?",
+    "choices": [
+      "Lordi",
+      "Nightwish",
+      "Children of Bodom",
+      "Apocalyptica"
+    ],
+    "answer": 0,
+    "explanation": "Ils sont montés sur scène déguisés en monstres avec « Hard Rock Hallelujah ».",
+    "category": "musique"
+  },
+  {
+    "id": "q559",
+    "theme": "Rock",
+    "question": "Qui est le chanteur du groupe U2 ?",
+    "choices": [
+      "Bono",
+      "Sting",
+      "The Edge",
+      "Adam Clayton"
+    ],
+    "answer": 0,
+    "explanation": "The Edge en est le guitariste, Adam Clayton le bassiste.",
+    "category": "musique"
+  },
+  {
+    "id": "q560",
+    "theme": "Rock",
+    "question": "Quel groupe a écrit « Heavy Is the Crown » pour la série « Arcane » ?",
+    "choices": [
+      "Woodkid",
+      "Imagine Dragons",
+      "Linkin Park",
+      "Twenty One Pilots"
+    ],
+    "answer": 2,
+    "explanation": "Imagine Dragons avait signé « Enemy » pour la première saison.",
+    "category": "musique"
+  },
+  {
+    "id": "q561",
+    "theme": "Pop",
+    "question": "Quelle chanson a fait gagner l'Eurovision à ABBA en 1974 ?",
+    "choices": [
+      "Mamma Mia",
+      "Waterloo",
+      "Dancing Queen",
+      "SOS"
+    ],
+    "answer": 1,
+    "explanation": "La victoire a lancé la carrière internationale du groupe suédois.",
+    "category": "musique"
+  },
+  {
+    "id": "q562",
+    "theme": "Pop",
+    "question": "Quel chanteur a sorti « Purple Rain » ?",
+    "choices": [
+      "Prince",
+      "Michael Jackson",
+      "David Bowie",
+      "Stevie Wonder"
+    ],
+    "answer": 0,
+    "explanation": "C'est aussi le titre du film dans lequel il joue, en 1984.",
+    "category": "musique"
+  },
+  {
+    "id": "q563",
+    "theme": "Pop",
+    "question": "Quelle chanteuse est surnommée la « reine de la pop » ?",
+    "choices": [
+      "Madonna",
+      "Britney Spears",
+      "Kylie Minogue",
+      "Lady Gaga"
+    ],
+    "answer": 0,
+    "explanation": "Elle est la chanteuse ayant vendu le plus de disques de l'histoire.",
+    "category": "musique"
+  },
+  {
+    "id": "q564",
+    "theme": "Pop",
+    "question": "Quel est le chiffre porte-bonheur de Taylor Swift ?",
+    "choices": [
+      "3",
+      "7",
+      "22",
+      "13"
+    ],
+    "answer": 3,
+    "explanation": "Elle est née un 13 décembre et le dessinait sur sa main en concert.",
+    "category": "musique"
+  },
+  {
+    "id": "q565",
+    "theme": "Pop",
+    "question": "Quel groupe sud-coréen est devenu le premier groupe de K-pop numéro un aux États-Unis ?",
+    "choices": [
+      "BTS",
+      "EXO",
+      "Stray Kids",
+      "Blackpink"
+    ],
+    "answer": 0,
+    "explanation": "« Dynamite » prend la tête du Billboard Hot 100 en 2020.",
+    "category": "musique"
+  },
+  {
+    "id": "q566",
+    "theme": "Chanson française",
+    "question": "Qui chante « Joe le taxi » en 1987 ?",
+    "choices": [
+      "Lio",
+      "Vanessa Paradis",
+      "Elsa",
+      "Mylène Farmer"
+    ],
+    "answer": 1,
+    "explanation": "Elle n'avait que 14 ans.",
+    "category": "musique"
+  },
+  {
+    "id": "q567",
+    "theme": "Chanson française",
+    "question": "Qui a écrit « Comme un boomerang », repris par Étienne Daho et Dani ?",
+    "choices": [
+      "Alain Souchon",
+      "Jean-Jacques Goldman",
+      "Serge Gainsbourg",
+      "Michel Berger"
+    ],
+    "answer": 2,
+    "explanation": "Écrite pour l'Eurovision 1975, elle avait été refusée à l'époque.",
+    "category": "musique"
+  },
+  {
+    "id": "q568",
+    "theme": "Chanson française",
+    "question": "Quel chanteur est la voix du groupe Kyo ?",
+    "choices": [
+      "Nicola Sirkis",
+      "Benoît Poher",
+      "Bertrand Cantat",
+      "Mickaël Furnon"
+    ],
+    "answer": 1,
+    "explanation": "Kyo a explosé en 2003 avec l'album « Le Chemin ».",
+    "category": "musique"
+  },
+  {
+    "id": "q569",
+    "theme": "Chanson française",
+    "question": "Quel groupe de rock français a sorti l'album « L'Aventurier » ?",
+    "choices": [
+      "Noir Désir",
+      "Trust",
+      "Indochine",
+      "Téléphone"
+    ],
+    "answer": 2,
+    "explanation": "Le titre est sorti en 1982.",
+    "category": "musique"
+  },
+  {
+    "id": "q570",
+    "theme": "Chanson française",
+    "question": "Quelle chanteuse est arrivée deuxième à l'Eurovision 2021 avec « Voilà » ?",
+    "choices": [
+      "Barbara Pravi",
+      "Zaho de Sagazan",
+      "Amir",
+      "Louane"
+    ],
+    "answer": 0,
+    "explanation": "C'est le meilleur résultat de la France depuis 1991.",
+    "category": "musique"
+  },
+  {
+    "id": "q571",
+    "theme": "Chanson française",
+    "question": "Quel duo électro français a sorti « Katchi » avec Nick Waterhouse ?",
+    "choices": [
+      "Daft Punk",
+      "Justice",
+      "Ofenbach",
+      "Cassius"
+    ],
+    "answer": 2,
+    "explanation": "Le remix, sorti en 2017, a été un tube dans toute l'Europe.",
+    "category": "musique"
+  },
+  {
+    "id": "q572",
+    "theme": "Classique",
+    "question": "Quel compositeur a écrit les « Gymnopédies » ?",
+    "choices": [
+      "Maurice Ravel",
+      "Erik Satie",
+      "Claude Debussy",
+      "Gabriel Fauré"
+    ],
+    "answer": 1,
+    "explanation": "Ces trois pièces pour piano datent de 1888.",
+    "category": "musique"
+  },
+  {
+    "id": "q573",
+    "theme": "Classique",
+    "question": "Quel compositeur a écrit « Le Lac des cygnes » ?",
+    "choices": [
+      "Igor Stravinsky",
+      "Piotr Ilitch Tchaïkovski",
+      "Sergueï Prokofiev",
+      "Nikolaï Rimski-Korsakov"
+    ],
+    "answer": 1,
+    "explanation": "Le ballet a été créé au Bolchoï en 1877.",
+    "category": "musique"
+  },
+  {
+    "id": "q574",
+    "theme": "Classique",
+    "question": "Quel instrument joue le violoncelliste Yo-Yo Ma ?",
+    "choices": [
+      "Le violoncelle",
+      "La contrebasse",
+      "Le violon",
+      "Le piano"
+    ],
+    "answer": 0,
+    "explanation": "Il a joué pour l'investiture de Barack Obama en 2009.",
+    "category": "musique"
+  },
+  {
+    "id": "q575",
+    "theme": "Classique",
+    "question": "Quel compositeur allemand, mort à Vienne, est souvent vu comme l'héritier de Beethoven ?",
+    "choices": [
+      "Robert Schumann",
+      "Johannes Brahms",
+      "Felix Mendelssohn",
+      "Franz Liszt"
+    ],
+    "answer": 1,
+    "explanation": "Sa première symphonie a même été surnommée « la dixième de Beethoven ».",
+    "category": "musique"
+  },
+  {
+    "id": "q576",
+    "theme": "Classique",
+    "question": "Quel compositeur a écrit « Carmina Burana » ?",
+    "choices": [
+      "Gustav Mahler",
+      "Richard Wagner",
+      "Carl Orff",
+      "Edward Elgar"
+    ],
+    "answer": 2,
+    "explanation": "Son « Ô Fortuna » d'ouverture est l'un des morceaux les plus utilisés au cinéma.",
+    "category": "musique"
+  },
+  {
+    "id": "q577",
+    "theme": "Monde",
+    "question": "Dans quel pays est né le fado ?",
+    "choices": [
+      "Le Brésil",
+      "Le Portugal",
+      "L'Espagne",
+      "Le Cap-Vert"
+    ],
+    "answer": 1,
+    "explanation": "Ce chant mélancolique est inscrit au patrimoine immatériel de l'Unesco.",
+    "category": "musique"
+  },
+  {
+    "id": "q578",
+    "theme": "Monde",
+    "question": "Qu'est-ce que le maloya ?",
+    "choices": [
+      "Un genre musical de La Réunion",
+      "Un instrument africain",
+      "Une danse brésilienne",
+      "Un chant corse"
+    ],
+    "answer": 0,
+    "explanation": "Hérité des esclaves, il a longtemps été interdit avant d'être inscrit à l'Unesco en 2009.",
+    "category": "musique"
+  },
+  {
+    "id": "q579",
+    "theme": "Monde",
+    "question": "Quel instrument utilisent les charmeurs de serpents en Inde ?",
+    "choices": [
+      "Le tabla",
+      "Le pungi",
+      "Le didgeridoo",
+      "Le sitar"
+    ],
+    "answer": 1,
+    "explanation": "Le serpent ne l'entend presque pas : il suit surtout les mouvements de l'instrument.",
+    "category": "musique"
+  },
+  {
+    "id": "q580",
+    "theme": "Rap",
+    "question": "Quel est le vrai nom de Snoop Dogg ?",
+    "choices": [
+      "Curtis Jackson",
+      "Shawn Carter",
+      "Andre Young",
+      "Calvin Broadus"
+    ],
+    "answer": 3,
+    "explanation": "Andre Young est Dr. Dre, Curtis Jackson 50 Cent, Shawn Carter Jay-Z.",
+    "category": "musique"
+  },
+  {
+    "id": "q581",
+    "theme": "Rap",
+    "question": "Quel rappeur a coproduit les débuts de Snoop Dogg, sur l'album « The Chronic » ?",
+    "choices": [
+      "Kanye West",
+      "Ice Cube",
+      "Eazy-E",
+      "Dr. Dre"
+    ],
+    "answer": 3,
+    "explanation": "« The Chronic », en 1992, a imposé le son G-funk de la côte Ouest.",
+    "category": "musique"
+  },
+  {
+    "id": "q582",
+    "theme": "Solfège",
+    "question": "Combien de noires vaut une ronde ?",
+    "choices": [
+      "3",
+      "4",
+      "8",
+      "2"
+    ],
+    "answer": 1,
+    "explanation": "Une blanche vaut deux noires, une noire deux croches.",
+    "category": "musique"
+  },
+  {
+    "id": "q583",
+    "theme": "Solfège",
+    "question": "Quel symbole abaisse une note d'un demi-ton ?",
+    "choices": [
+      "La clé de fa",
+      "Le bécarre",
+      "Le dièse",
+      "Le bémol"
+    ],
+    "answer": 3,
+    "explanation": "Le dièse l'élève, le bécarre annule l'un ou l'autre.",
+    "category": "musique"
+  },
+  {
+    "id": "q584",
+    "theme": "Mammifères",
+    "question": "Comment s'appelle le croisement d'un cheval et d'une ânesse ?",
+    "choices": [
+      "Le poney",
+      "Le mulet",
+      "Le bardot",
+      "Le zébrule"
+    ],
+    "answer": 2,
+    "explanation": "Le mulet, plus courant, naît d'un âne et d'une jument.",
+    "category": "animaux"
+  },
+  {
+    "id": "q585",
+    "theme": "Mammifères",
+    "question": "Quel canidé africain n'a que quatre doigts aux pattes avant ?",
+    "choices": [
+      "Le lycaon",
+      "Le loup d'Abyssinie",
+      "Le chacal",
+      "Le fennec"
+    ],
+    "answer": 0,
+    "explanation": "Tous les autres canidés en ont cinq, ergot compris.",
+    "category": "animaux"
+  },
+  {
+    "id": "q586",
+    "theme": "Mammifères",
+    "question": "Quel zèbre porte le nom d'un président de la République française ?",
+    "choices": [
+      "Le zèbre de Grévy",
+      "Le zèbre de Faure",
+      "Le zèbre de Carnot",
+      "Le zèbre de Thiers"
+    ],
+    "answer": 0,
+    "explanation": "Le roi Ménélik II d'Abyssinie en a offert un à Jules Grévy en 1882.",
+    "category": "animaux"
+  },
+  {
+    "id": "q587",
+    "theme": "Mammifères",
+    "question": "Comment s'appelle la marche du chat, qui pose seulement les doigts au sol ?",
+    "choices": [
+      "Onguligrade",
+      "Bipède",
+      "Plantigrade",
+      "Digitigrade"
+    ],
+    "answer": 3,
+    "explanation": "L'ours et l'humain sont plantigrades, le cheval onguligrade.",
+    "category": "animaux"
+  },
+  {
+    "id": "q588",
+    "theme": "Mammifères",
+    "question": "Quelle longueur peut atteindre la langue d'un fourmilier géant ?",
+    "choices": [
+      "Environ 1,5 m",
+      "Environ 25 cm",
+      "Environ 10 cm",
+      "Environ 60 cm"
+    ],
+    "answer": 3,
+    "explanation": "Il peut la sortir jusqu'à 150 fois par minute.",
+    "category": "animaux"
+  },
+  {
+    "id": "q589",
+    "theme": "Oiseaux",
+    "question": "Quel oiseau australien est célèbre pour son cri qui ressemble à un rire ?",
+    "choices": [
+      "L'émeu",
+      "Le kiwi",
+      "Le cacatoès",
+      "Le kookaburra"
+    ],
+    "answer": 3,
+    "explanation": "Son cri est utilisé dans de nombreux films pour évoquer la jungle.",
+    "category": "animaux"
+  },
+  {
+    "id": "q590",
+    "theme": "Oiseaux",
+    "question": "Chez quel animal l'œil est-il plus gros que le cerveau ?",
+    "choices": [
+      "Le hibou",
+      "L'aigle",
+      "Le caméléon",
+      "L'autruche"
+    ],
+    "answer": 3,
+    "explanation": "Chaque œil mesure environ 5 cm de diamètre.",
+    "category": "animaux"
+  },
+  {
+    "id": "q591",
+    "theme": "Oiseaux",
+    "question": "Quel oiseau est l'emblème de la Ligue pour la protection des oiseaux (LPO) ?",
+    "choices": [
+      "Le gypaète barbu",
+      "Le héron cendré",
+      "Le rouge-gorge",
+      "Le macareux moine"
+    ],
+    "answer": 3,
+    "explanation": "La LPO est née en 1912 pour protéger les macareux massacrés en Bretagne.",
+    "category": "animaux"
+  },
+  {
+    "id": "q592",
+    "theme": "Oiseaux",
+    "question": "Comment s'appelle le petit du paon ?",
+    "choices": [
+      "Le pavillon",
+      "Le poussin bleu",
+      "Le paonneau",
+      "Le paonnet"
+    ],
+    "answer": 2,
+    "explanation": "Le mâle ne porte sa grande traîne qu'à partir de trois ans environ.",
+    "category": "animaux"
+  },
+  {
+    "id": "q593",
+    "theme": "Oiseaux",
+    "question": "Comment appelle-t-on le mâle de l'oie ?",
+    "choices": [
+      "Le gars",
+      "Le jarre",
+      "Le canard",
+      "Le jars"
+    ],
+    "answer": 3,
+    "explanation": "Le petit de l'oie s'appelle l'oison.",
+    "category": "animaux"
+  },
+  {
+    "id": "q594",
+    "theme": "Oiseaux",
+    "question": "Quel oiseau aquatique construit un nid flottant ?",
+    "choices": [
+      "Le grèbe huppé",
+      "La mouette",
+      "Le cormoran",
+      "Le martin-pêcheur"
+    ],
+    "answer": 0,
+    "explanation": "Il est célèbre pour sa parade nuptiale en miroir avec son partenaire.",
+    "category": "animaux"
+  },
+  {
+    "id": "q595",
+    "theme": "Océans",
+    "question": "Quelle est la plus grande tortue marine ?",
+    "choices": [
+      "La tortue verte",
+      "La tortue imbriquée",
+      "La tortue luth",
+      "La tortue caouanne"
+    ],
+    "answer": 2,
+    "explanation": "Elle peut dépasser 2 m et 600 kg, et plonger à plus de 1 000 m.",
+    "category": "animaux"
+  },
+  {
+    "id": "q596",
+    "theme": "Océans",
+    "question": "Quelle baleine vient chaque année se reproduire au large de La Réunion, de juillet à octobre ?",
+    "choices": [
+      "La baleine bleue",
+      "La baleine à bosse",
+      "Le cachalot",
+      "Le rorqual commun"
+    ],
+    "answer": 1,
+    "explanation": "Les mâles y chantent pendant des heures pour séduire les femelles.",
+    "category": "animaux"
+  },
+  {
+    "id": "q597",
+    "theme": "Montagne",
+    "question": "Quel rapace des Alpes se nourrit surtout d'os ?",
+    "choices": [
+      "Le faucon pèlerin",
+      "Le vautour fauve",
+      "L'aigle royal",
+      "Le gypaète barbu"
+    ],
+    "answer": 3,
+    "explanation": "Il lâche les gros os sur les rochers pour les briser et avaler les morceaux.",
+    "category": "animaux"
+  },
+  {
+    "id": "q598",
+    "theme": "Montagne",
+    "question": "Quel animal des Alpes devient tout blanc en hiver ?",
+    "choices": [
+      "Le chamois",
+      "Le lièvre variable",
+      "La marmotte",
+      "Le bouquetin"
+    ],
+    "answer": 1,
+    "explanation": "Le lagopède alpin, un oiseau, change aussi de plumage selon la saison.",
+    "category": "animaux"
+  },
+  {
+    "id": "q599",
+    "theme": "Montagne",
+    "question": "Combien de temps la marmotte hiberne-t-elle environ ?",
+    "choices": [
+      "1 mois",
+      "10 mois",
+      "3 semaines",
+      "6 mois"
+    ],
+    "answer": 3,
+    "explanation": "Son cœur passe alors d'environ 130 à moins de 10 battements par minute.",
+    "category": "animaux"
+  },
+  {
+    "id": "q600",
+    "theme": "France",
+    "question": "Dans quel fleuve se jette le Tarn ?",
+    "choices": [
+      "L'Aude",
+      "La Dordogne",
+      "Le Lot",
+      "La Garonne"
+    ],
+    "answer": 3,
+    "explanation": "Il la rejoint en aval de Moissac.",
+    "category": "geographie"
+  },
+  {
+    "id": "q601",
+    "theme": "France",
+    "question": "Dans quelle rivière se jette le Drac, à Grenoble ?",
+    "choices": [
+      "La Durance",
+      "La Romanche",
+      "Le Rhône",
+      "L'Isère"
+    ],
+    "answer": 3,
+    "explanation": "L'Isère se jette ensuite dans le Rhône.",
+    "category": "geographie"
+  },
+  {
+    "id": "q602",
+    "theme": "France",
+    "question": "Quel fleuve côtier se jette devant le Mont-Saint-Michel ?",
+    "choices": [
+      "Le Couesnon",
+      "La Rance",
+      "La Vire",
+      "La Sélune"
+    ],
+    "answer": 0,
+    "explanation": "Le dicton dit que « le Couesnon en sa folie a mis le Mont en Normandie ».",
+    "category": "geographie"
+  },
+  {
+    "id": "q603",
+    "theme": "France",
+    "question": "Où se trouvent les plus grandes marées d'Europe continentale ?",
+    "choices": [
+      "À Calais",
+      "À Biarritz",
+      "Dans la baie du Mont-Saint-Michel",
+      "À Brest"
+    ],
+    "answer": 2,
+    "explanation": "Le marnage peut y dépasser 14 m.",
+    "category": "geographie"
+  },
+  {
+    "id": "q604",
+    "theme": "France",
+    "question": "Dans quel département se trouve Fort Boyard ?",
+    "choices": [
+      "Le Finistère",
+      "La Gironde",
+      "La Vendée",
+      "La Charente-Maritime"
+    ],
+    "answer": 3,
+    "explanation": "Il se dresse entre l'île d'Aix et l'île d'Oléron.",
+    "category": "geographie"
+  },
+  {
+    "id": "q605",
+    "theme": "France",
+    "question": "Quel est le point culminant de l'île de La Réunion ?",
+    "choices": [
+      "Le Maïdo",
+      "Le Grand Bénare",
+      "Le piton de la Fournaise",
+      "Le piton des Neiges"
+    ],
+    "answer": 3,
+    "explanation": "Il culmine à 3 070 m ; le piton de la Fournaise est le volcan actif de l'île.",
+    "category": "geographie"
+  },
+  {
+    "id": "q606",
+    "theme": "France",
+    "question": "Quel ancien nom portait l'île de La Réunion jusqu'en 1793 ?",
+    "choices": [
+      "L'île de France",
+      "L'île Bourbon",
+      "L'île Bonaparte",
+      "L'île Dauphine"
+    ],
+    "answer": 1,
+    "explanation": "Elle s'est aussi appelée île Bonaparte de 1806 à 1810 ; l'île de France est l'ancien nom de Maurice.",
+    "category": "geographie"
+  },
+  {
+    "id": "q607",
+    "theme": "France",
+    "question": "Quelle ville est surnommée la capitale de la batellerie ?",
+    "choices": [
+      "Strasbourg",
+      "Rouen",
+      "Conflans-Sainte-Honorine",
+      "Chalon-sur-Saône"
+    ],
+    "answer": 2,
+    "explanation": "Elle est au confluent de la Seine et de l'Oise.",
+    "category": "geographie"
+  },
+  {
+    "id": "q608",
+    "theme": "Europe",
+    "question": "Quelle langue parle-t-on dans les îles Åland, qui appartiennent à la Finlande ?",
+    "choices": [
+      "Le suédois",
+      "Le danois",
+      "Le finnois",
+      "Le norvégien"
+    ],
+    "answer": 0,
+    "explanation": "L'archipel est démilitarisé et autonome depuis 1921.",
+    "category": "geographie"
+  },
+  {
+    "id": "q609",
+    "theme": "Europe",
+    "question": "Quelle ville polonaise est célèbre pour ses centaines de statuettes de nains ?",
+    "choices": [
+      "Varsovie",
+      "Wrocław",
+      "Cracovie",
+      "Gdańsk"
+    ],
+    "answer": 1,
+    "explanation": "Ils rappellent un mouvement d'opposition au régime communiste des années 1980.",
+    "category": "geographie"
+  },
+  {
+    "id": "q610",
+    "theme": "Europe",
+    "question": "Dans quelle ville se trouve le seul métro de Suisse ?",
+    "choices": [
+      "Berne",
+      "Genève",
+      "Zurich",
+      "Lausanne"
+    ],
+    "answer": 3,
+    "explanation": "Sa ligne M2 est l'un des métros les plus pentus du monde.",
+    "category": "geographie"
+  },
+  {
+    "id": "q611",
+    "theme": "Europe",
+    "question": "Combien de cantons compte la Suisse ?",
+    "choices": [
+      "26",
+      "16",
+      "23",
+      "20"
+    ],
+    "answer": 0,
+    "explanation": "Dont six demi-cantons historiques, qui comptent chacun pour un.",
+    "category": "geographie"
+  },
+  {
+    "id": "q612",
+    "theme": "Europe",
+    "question": "Combien de Länder compte l'Allemagne ?",
+    "choices": [
+      "21",
+      "10",
+      "16",
+      "12"
+    ],
+    "answer": 2,
+    "explanation": "Trois d'entre eux sont des villes-États : Berlin, Hambourg et Brême.",
+    "category": "geographie"
+  },
+  {
+    "id": "q613",
+    "theme": "Europe",
+    "question": "Quel parc national croate est célèbre pour ses seize lacs en cascade ?",
+    "choices": [
+      "Paklenica",
+      "Krka",
+      "Plitvice",
+      "Mljet"
+    ],
+    "answer": 2,
+    "explanation": "Il est inscrit au patrimoine mondial de l'Unesco depuis 1979.",
+    "category": "geographie"
+  },
+  {
+    "id": "q614",
+    "theme": "Europe",
+    "question": "Quelle ville abrite le parc de Sanssouci, le « Versailles prussien » ?",
+    "choices": [
+      "Potsdam",
+      "Dresde",
+      "Munich",
+      "Berlin"
+    ],
+    "answer": 0,
+    "explanation": "Frédéric le Grand y fait construire son palais d'été au XVIIIe siècle.",
+    "category": "geographie"
+  },
+  {
+    "id": "q615",
+    "theme": "Europe",
+    "question": "Quel est le plus long cours d'eau des îles Britanniques ?",
+    "choices": [
+      "Le Shannon",
+      "La Trent",
+      "La Tamise",
+      "La Severn"
+    ],
+    "answer": 0,
+    "explanation": "Le Shannon coule en Irlande ; la Severn est le plus long de Grande-Bretagne.",
+    "category": "geographie"
+  },
+  {
+    "id": "q616",
+    "theme": "Monde",
+    "question": "Quel est le lieu habité en permanence le plus au nord du monde ?",
+    "choices": [
+      "Longyearbyen, en Norvège",
+      "Barrow, en Alaska",
+      "Qaanaaq, au Groenland",
+      "Alert, au Canada"
+    ],
+    "answer": 3,
+    "explanation": "Cette station militaire se trouve à 817 km du pôle Nord.",
+    "category": "geographie"
+  },
+  {
+    "id": "q617",
+    "theme": "Monde",
+    "question": "Quel pays d'Afrique est traversé d'est en ouest par le fleuve Ogooué ?",
+    "choices": [
+      "Le Congo",
+      "Le Cameroun",
+      "La Côte d'Ivoire",
+      "Le Gabon"
+    ],
+    "answer": 3,
+    "explanation": "C'est le principal fleuve du Gabon, en Afrique centrale.",
+    "category": "geographie"
+  },
+  {
+    "id": "q618",
+    "theme": "Monde",
+    "question": "Quel pays a le drapeau dont le recto et le verso sont différents ?",
+    "choices": [
+      "Le Pérou",
+      "Le Paraguay",
+      "L'Inde",
+      "Le Liechtenstein"
+    ],
+    "answer": 1,
+    "explanation": "Une face porte les armoiries nationales, l'autre le sceau du Trésor.",
+    "category": "geographie"
+  },
+  {
+    "id": "q619",
+    "theme": "Monde",
+    "question": "Quel pays possède le plus de fuseaux horaires, en comptant ses territoires d'outre-mer ?",
+    "choices": [
+      "La France",
+      "La Russie",
+      "Les États-Unis",
+      "Le Royaume-Uni"
+    ],
+    "answer": 0,
+    "explanation": "Elle en compte douze, grâce à ses territoires répartis sur tous les océans.",
+    "category": "geographie"
+  },
+  {
+    "id": "q620",
+    "theme": "Monde",
+    "question": "Quelle île des Caraïbes est partagée entre Haïti et la République dominicaine ?",
+    "choices": [
+      "Cuba",
+      "Porto Rico",
+      "Hispaniola",
+      "La Jamaïque"
+    ],
+    "answer": 2,
+    "explanation": "Christophe Colomb y fonde en 1492 le premier établissement européen des Amériques.",
+    "category": "geographie"
+  },
+  {
+    "id": "q621",
+    "theme": "Monde",
+    "question": "Entre quels Grands Lacs se trouvent les chutes du Niagara ?",
+    "choices": [
+      "Les lacs Huron et Érié",
+      "Les lacs Michigan et Huron",
+      "Les lacs Érié et Ontario",
+      "Les lacs Supérieur et Huron"
+    ],
+    "answer": 2,
+    "explanation": "La rivière Niagara relie le lac Érié au lac Ontario.",
+    "category": "geographie"
+  },
+  {
+    "id": "q622",
+    "theme": "Monde",
+    "question": "Lequel des Grands Lacs est entièrement situé aux États-Unis ?",
+    "choices": [
+      "Le lac Michigan",
+      "Le lac Érié",
+      "Le lac Ontario",
+      "Le lac Supérieur"
+    ],
+    "answer": 0,
+    "explanation": "Les quatre autres sont partagés avec le Canada.",
+    "category": "geographie"
+  },
+  {
+    "id": "q623",
+    "theme": "Monde",
+    "question": "Quel est le point culminant du Canada ?",
+    "choices": [
+      "Le mont Logan",
+      "Le Denali",
+      "Le mont Robson",
+      "Le mont Saint-Élie"
+    ],
+    "answer": 0,
+    "explanation": "Il culmine à 5 959 m dans le Yukon ; le Denali, lui, est en Alaska.",
+    "category": "geographie"
+  },
+  {
+    "id": "q624",
+    "theme": "Monde",
+    "question": "Quel est le troisième plus haut sommet du monde ?",
+    "choices": [
+      "Le Kangchenjunga",
+      "Le K2",
+      "Le Lhotse",
+      "Le Makalu"
+    ],
+    "answer": 0,
+    "explanation": "Il culmine à 8 586 m, à la frontière du Népal et de l'Inde.",
+    "category": "geographie"
+  },
+  {
+    "id": "q625",
+    "theme": "Monde",
+    "question": "Quel détroit relie le golfe Persique à la mer d'Oman ?",
+    "choices": [
+      "Le détroit d'Ormuz",
+      "Le détroit de Bab-el-Mandeb",
+      "Le détroit de Malacca",
+      "Le détroit du Bosphore"
+    ],
+    "answer": 0,
+    "explanation": "Une grande partie du pétrole mondial y transite.",
+    "category": "geographie"
+  },
+  {
+    "id": "q626",
+    "theme": "Monde",
+    "question": "Quel golfe sépare la péninsule Arabique de la Corne de l'Afrique ?",
+    "choices": [
+      "Le golfe d'Aden",
+      "Le golfe de Guinée",
+      "Le golfe Persique",
+      "Le golfe d'Oman"
+    ],
+    "answer": 0,
+    "explanation": "Il relie la mer Rouge à la mer d'Arabie.",
+    "category": "geographie"
+  },
+  {
+    "id": "q627",
+    "theme": "Monde",
+    "question": "Dans quel pays se trouve la plaine des Jarres ?",
+    "choices": [
+      "Au Vietnam",
+      "En Thaïlande",
+      "Au Laos",
+      "Au Cambodge"
+    ],
+    "answer": 2,
+    "explanation": "Des milliers de jarres de pierre géantes y ont été taillées il y a plus de 2 000 ans.",
+    "category": "geographie"
+  },
+  {
+    "id": "q628",
+    "theme": "Monde",
+    "question": "Comment s'appelle un lac qui n'a aucun écoulement vers la mer ?",
+    "choices": [
+      "Un lac glaciaire",
+      "Un lac salé",
+      "Un lac endoréique",
+      "Un lac de cratère"
+    ],
+    "answer": 2,
+    "explanation": "La mer Caspienne et la mer Morte en sont des exemples.",
+    "category": "geographie"
+  },
+  {
+    "id": "q629",
+    "theme": "Monde",
+    "question": "Quel est le gentilé des habitants du Caire ?",
+    "choices": [
+      "Les Cairiens",
+      "Les Cairins",
+      "Les Cairotes",
+      "Les Cairois"
+    ],
+    "answer": 2,
+    "explanation": "On dit aussi « Cairote » pour l'adjectif.",
+    "category": "geographie"
+  },
+  {
+    "id": "q630",
+    "theme": "Monde",
+    "question": "Quelle était l'ancienne appellation de l'Australie par les Européens ?",
+    "choices": [
+      "La Nouvelle-Hollande",
+      "La Nouvelle-Zélande",
+      "La Nouvelle-Galles",
+      "La Terre de Van Diemen"
+    ],
+    "answer": 0,
+    "explanation": "La Terre de Van Diemen était l'ancien nom de la Tasmanie.",
+    "category": "geographie"
+  },
+  {
+    "id": "q631",
+    "theme": "Monde",
+    "question": "Quel pays est surnommé le pays du Soleil-Levant ?",
+    "choices": [
+      "La Chine",
+      "La Corée du Sud",
+      "Les Philippines",
+      "Le Japon"
+    ],
+    "answer": 3,
+    "explanation": "Le nom japonais du pays, Nihon, signifie « origine du soleil ».",
+    "category": "geographie"
+  },
+  {
+    "id": "q632",
+    "theme": "Monde",
+    "question": "Quelle ville était appelée Philadelphia à l'époque romaine ?",
+    "choices": [
+      "Beyrouth",
+      "Amman",
+      "Jérusalem",
+      "Damas"
+    ],
+    "answer": 1,
+    "explanation": "Elle a été rebaptisée par Ptolémée II au IIIe siècle av. J.-C.",
+    "category": "geographie"
+  },
+  {
+    "id": "q633",
+    "theme": "Antiquité",
+    "question": "Quel empire avait pour capitale Tenochtitlan, sur le site de l'actuelle Mexico ?",
+    "choices": [
+      "Les Mayas",
+      "Les Olmèques",
+      "Les Aztèques",
+      "Les Incas"
+    ],
+    "answer": 2,
+    "explanation": "Tenochtitlan, fondée vers 1325 sur une île du lac Texcoco, a été prise par Cortés en 1521.",
+    "category": "histoire"
+  },
+  {
+    "id": "q634",
+    "theme": "Antiquité",
+    "question": "Quelle merveille du monde antique représentait Hélios, le dieu du Soleil ?",
+    "choices": [
+      "Le phare d'Alexandrie",
+      "La statue de Zeus à Olympie",
+      "Le colosse de Rhodes",
+      "Le mausolée d'Halicarnasse"
+    ],
+    "answer": 2,
+    "explanation": "Haute d'une trentaine de mètres, la statue s'est effondrée lors d'un séisme vers 226 av. J.-C.",
+    "category": "histoire"
+  },
+  {
+    "id": "q635",
+    "theme": "Antiquité",
+    "question": "Quel roi babylonien a fait graver l'un des plus anciens codes de lois connus ?",
+    "choices": [
+      "Nabuchodonosor",
+      "Hammurabi",
+      "Gilgamesh",
+      "Sargon"
+    ],
+    "answer": 1,
+    "explanation": "Le code d'Hammurabi, vers 1750 av. J.-C., est gravé sur une stèle de basalte conservée au Louvre.",
+    "category": "histoire"
+  },
+  {
+    "id": "q636",
+    "theme": "Antiquité",
+    "question": "Quelle coiffe rayée portaient les pharaons d'Égypte ?",
+    "choices": [
+      "Le pschent",
+      "L'uræus",
+      "Le némès",
+      "Le khépresh"
+    ],
+    "answer": 2,
+    "explanation": "Le némès est la coiffe de tissu rayé que l'on voit sur le masque de Toutânkhamon.",
+    "category": "histoire"
+  },
+  {
+    "id": "q637",
+    "theme": "Antiquité",
+    "question": "Qui fut le premier empereur romain ?",
+    "choices": [
+      "Auguste",
+      "Caligula",
+      "Jules César",
+      "Néron"
+    ],
+    "answer": 0,
+    "explanation": "Octave reçoit le titre d'Auguste en 27 av. J.-C. ; César, lui, n'a jamais été empereur.",
+    "category": "histoire"
+  },
+  {
+    "id": "q638",
+    "theme": "Antiquité",
+    "question": "Quel général carthaginois a traversé les Alpes avec des éléphants ?",
+    "choices": [
+      "Scipion",
+      "Hannibal",
+      "Hamilcar",
+      "Vercingétorix"
+    ],
+    "answer": 1,
+    "explanation": "En 218 av. J.-C., Hannibal franchit les Alpes pour attaquer Rome pendant la deuxième guerre punique.",
+    "category": "histoire"
+  },
+  {
+    "id": "q639",
+    "theme": "Antiquité",
+    "question": "Quel chef gaulois s'est rendu à César après le siège d'Alésia ?",
+    "choices": [
+      "Astérix",
+      "Brennus",
+      "Ambiorix",
+      "Vercingétorix"
+    ],
+    "answer": 3,
+    "explanation": "En 52 av. J.-C., Vercingétorix dépose les armes aux pieds de César après le siège d'Alésia.",
+    "category": "histoire"
+  },
+  {
+    "id": "q640",
+    "theme": "Antiquité",
+    "question": "Dans quelle cité grecque sont nés les premiers Jeux olympiques antiques ?",
+    "choices": [
+      "Sparte",
+      "Athènes",
+      "Delphes",
+      "Olympie"
+    ],
+    "answer": 3,
+    "explanation": "Les Jeux se tenaient à Olympie, en l'honneur de Zeus, à partir de 776 av. J.-C.",
+    "category": "histoire"
+  },
+  {
+    "id": "q641",
+    "theme": "Antiquité",
+    "question": "Comment appelle-t-on l'Empire romain d'Orient, qui a survécu jusqu'en 1453 ?",
+    "choices": [
+      "Le Saint-Empire",
+      "L'Empire ottoman",
+      "L'Empire byzantin",
+      "L'Empire carolingien"
+    ],
+    "answer": 2,
+    "explanation": "Sa capitale, Constantinople, tombe aux mains des Ottomans en 1453.",
+    "category": "histoire"
+  },
+  {
+    "id": "q642",
+    "theme": "Moyen Âge",
+    "question": "Quel roi des Francs a été baptisé à Reims vers 496 ?",
+    "choices": [
+      "Pépin le Bref",
+      "Dagobert",
+      "Clovis",
+      "Charlemagne"
+    ],
+    "answer": 2,
+    "explanation": "Le baptême de Clovis par saint Remi fait de Reims la ville du sacre des rois de France.",
+    "category": "histoire"
+  },
+  {
+    "id": "q643",
+    "theme": "Moyen Âge",
+    "question": "En quelle année Charlemagne est-il couronné empereur à Rome ?",
+    "choices": [
+      "732",
+      "843",
+      "987",
+      "800"
+    ],
+    "answer": 3,
+    "explanation": "Le pape Léon III le couronne le jour de Noël de l'an 800.",
+    "category": "histoire"
+  },
+  {
+    "id": "q644",
+    "theme": "Moyen Âge",
+    "question": "Quelle bataille de 1066 a permis à Guillaume le Conquérant de prendre l'Angleterre ?",
+    "choices": [
+      "Azincourt",
+      "Hastings",
+      "Crécy",
+      "Bouvines"
+    ],
+    "answer": 1,
+    "explanation": "La victoire d'Hastings est racontée sur la célèbre tapisserie de Bayeux.",
+    "category": "histoire"
+  },
+  {
+    "id": "q645",
+    "theme": "Moyen Âge",
+    "question": "Combien de temps a duré la guerre de Cent Ans ?",
+    "choices": [
+      "116 ans",
+      "99 ans",
+      "100 ans",
+      "130 ans"
+    ],
+    "answer": 0,
+    "explanation": "Elle oppose la France et l'Angleterre de 1337 à 1453, avec de longues trêves.",
+    "category": "histoire"
+  },
+  {
+    "id": "q646",
+    "theme": "Moyen Âge",
+    "question": "Dans quelle ville Jeanne d'Arc a-t-elle été brûlée en 1431 ?",
+    "choices": [
+      "Rouen",
+      "Orléans",
+      "Paris",
+      "Reims"
+    ],
+    "answer": 0,
+    "explanation": "Condamnée pour hérésie, elle meurt sur le bûcher place du Vieux-Marché, à Rouen.",
+    "category": "histoire"
+  },
+  {
+    "id": "q647",
+    "theme": "Moyen Âge",
+    "question": "Quelle épidémie a tué environ un tiers des Européens au XIVe siècle ?",
+    "choices": [
+      "Le choléra",
+      "La peste noire",
+      "La grippe espagnole",
+      "La variole"
+    ],
+    "answer": 1,
+    "explanation": "La peste noire frappe l'Europe à partir de 1347, apportée par les routes commerciales.",
+    "category": "histoire"
+  },
+  {
+    "id": "q648",
+    "theme": "Moyen Âge",
+    "question": "Quel conquérant mongol a fondé le plus grand empire terrestre d'un seul tenant ?",
+    "choices": [
+      "Attila",
+      "Tamerlan",
+      "Kubilaï Khan",
+      "Gengis Khan"
+    ],
+    "answer": 3,
+    "explanation": "Fondé en 1206 par Gengis Khan, l'Empire mongol s'étendait de la Corée à l'Europe de l'Est.",
+    "category": "histoire"
+  },
+  {
+    "id": "q649",
+    "theme": "Moyen Âge",
+    "question": "Quel marchand vénitien a raconté son voyage jusqu'en Chine dans « Le Devisement du monde » ?",
+    "choices": [
+      "Christophe Colomb",
+      "Marco Polo",
+      "Vasco de Gama",
+      "Ibn Battuta"
+    ],
+    "answer": 1,
+    "explanation": "Marco Polo séjourne à la cour de Kubilaï Khan à la fin du XIIIe siècle.",
+    "category": "histoire"
+  },
+  {
+    "id": "q650",
+    "theme": "Moyen Âge",
+    "question": "Quel roi de France est surnommé « Saint Louis » ?",
+    "choices": [
+      "Louis XIII",
+      "Louis XI",
+      "Louis IX",
+      "Louis VI"
+    ],
+    "answer": 2,
+    "explanation": "Louis IX, canonisé en 1297, est mort lors de la huitième croisade à Tunis en 1270.",
+    "category": "histoire"
+  },
+  {
+    "id": "q651",
+    "theme": "Renaissance",
+    "question": "Quelle bataille de 1515 est restée la date la plus célèbre de l'histoire de France ?",
+    "choices": [
+      "Pavie",
+      "Azincourt",
+      "Rocroi",
+      "Marignan"
+    ],
+    "answer": 3,
+    "explanation": "François Ier y bat les Suisses alliés du duc de Milan.",
+    "category": "histoire"
+  },
+  {
+    "id": "q652",
+    "theme": "Renaissance",
+    "question": "Quel traité de 1494 a partagé le Nouveau Monde entre l'Espagne et le Portugal ?",
+    "choices": [
+      "Le traité de Tordesillas",
+      "Le traité d'Utrecht",
+      "Le traité de Verdun",
+      "Le traité de Westphalie"
+    ],
+    "answer": 0,
+    "explanation": "La ligne de partage explique notamment pourquoi on parle portugais au Brésil.",
+    "category": "histoire"
+  },
+  {
+    "id": "q653",
+    "theme": "Renaissance",
+    "question": "Quel conquistador a fait tomber l'Empire inca ?",
+    "choices": [
+      "Hernán Cortés",
+      "Pedro Álvares Cabral",
+      "Francisco Pizarro",
+      "Vasco Núñez de Balboa"
+    ],
+    "answer": 2,
+    "explanation": "Pizarro capture l'empereur Atahualpa en 1532 à Cajamarca.",
+    "category": "histoire"
+  },
+  {
+    "id": "q654",
+    "theme": "Renaissance",
+    "question": "Quelle expédition a réalisé le premier tour du monde ?",
+    "choices": [
+      "Celle de Magellan",
+      "Celle de Vasco de Gama",
+      "Celle de James Cook",
+      "Celle de Christophe Colomb"
+    ],
+    "answer": 0,
+    "explanation": "Partie en 1519, elle revient en 1522 ; Magellan, lui, meurt aux Philippines en route.",
+    "category": "histoire"
+  },
+  {
+    "id": "q655",
+    "theme": "Renaissance",
+    "question": "Quel édit signé par Henri IV en 1598 accorde la liberté de culte aux protestants ?",
+    "choices": [
+      "L'édit de Fontainebleau",
+      "L'édit de Villers-Cotterêts",
+      "L'édit de Nantes",
+      "L'édit de Paris"
+    ],
+    "answer": 2,
+    "explanation": "Il met fin aux guerres de Religion ; Louis XIV le révoque en 1685.",
+    "category": "histoire"
+  },
+  {
+    "id": "q656",
+    "theme": "Renaissance",
+    "question": "Quel massacre de protestants a eu lieu à Paris en août 1572 ?",
+    "choices": [
+      "Les Vêpres siciliennes",
+      "La Saint-Barthélemy",
+      "La Toussaint rouge",
+      "La Saint-Valentin"
+    ],
+    "answer": 1,
+    "explanation": "Le massacre commence dans la nuit du 23 au 24 août 1572, jour de la Saint-Barthélemy.",
+    "category": "histoire"
+  },
+  {
+    "id": "q657",
+    "theme": "Temps modernes",
+    "question": "Quel roi de France a fait construire le château de Versailles tel qu'on le connaît ?",
+    "choices": [
+      "Louis XIII",
+      "Louis XV",
+      "Louis XIV",
+      "Henri IV"
+    ],
+    "answer": 2,
+    "explanation": "Louis XIV transforme le pavillon de chasse de son père et y installe la cour en 1682.",
+    "category": "histoire"
+  },
+  {
+    "id": "q658",
+    "theme": "Temps modernes",
+    "question": "Quelle était la mère de Louis XIV, régente pendant son enfance ?",
+    "choices": [
+      "Marie de Médicis",
+      "Anne d'Autriche",
+      "Blanche de Castille",
+      "Catherine de Médicis"
+    ],
+    "answer": 1,
+    "explanation": "Anne d'Autriche gouverne avec Mazarin jusqu'à la majorité du roi.",
+    "category": "histoire"
+  },
+  {
+    "id": "q659",
+    "theme": "Temps modernes",
+    "question": "Quel ancien nom portait New York avant d'être prise par les Anglais en 1664 ?",
+    "choices": [
+      "La Nouvelle-Orléans",
+      "Fort-Orange",
+      "La Nouvelle-York",
+      "La Nouvelle-Amsterdam"
+    ],
+    "answer": 3,
+    "explanation": "Les Néerlandais l'avaient fondée sur l'île de Manhattan.",
+    "category": "histoire"
+  },
+  {
+    "id": "q660",
+    "theme": "Temps modernes",
+    "question": "En quelle année les États-Unis ont-ils déclaré leur indépendance ?",
+    "choices": [
+      "1776",
+      "1789",
+      "1783",
+      "1763"
+    ],
+    "answer": 0,
+    "explanation": "La Déclaration d'indépendance est adoptée le 4 juillet 1776, aujourd'hui fête nationale.",
+    "category": "histoire"
+  },
+  {
+    "id": "q661",
+    "theme": "Révolution",
+    "question": "Quel événement du 14 juillet 1789 est devenu le symbole de la Révolution ?",
+    "choices": [
+      "La fête de la Fédération",
+      "Le serment du Jeu de paume",
+      "La prise de la Bastille",
+      "L'abolition des privilèges"
+    ],
+    "answer": 2,
+    "explanation": "La fête nationale du 14 juillet commémore à la fois la prise de la Bastille et la fête de la Fédération de 1790.",
+    "category": "histoire"
+  },
+  {
+    "id": "q662",
+    "theme": "Révolution",
+    "question": "En quelle année Louis XVI a-t-il été guillotiné ?",
+    "choices": [
+      "1793",
+      "1789",
+      "1799",
+      "1791"
+    ],
+    "answer": 0,
+    "explanation": "Il est exécuté le 21 janvier 1793, place de la Révolution (aujourd'hui place de la Concorde).",
+    "category": "histoire"
+  },
+  {
+    "id": "q663",
+    "theme": "Révolution",
+    "question": "Comment appelle-t-on la période de la Révolution marquée par les exécutions de masse, en 1793-1794 ?",
+    "choices": [
+      "La Terreur",
+      "Le Directoire",
+      "Le Consulat",
+      "La Restauration"
+    ],
+    "answer": 0,
+    "explanation": "Elle prend fin avec la chute de Robespierre, le 9 thermidor an II.",
+    "category": "histoire"
+  },
+  {
+    "id": "q664",
+    "theme": "Napoléon",
+    "question": "Quelle victoire de 1805 est surnommée « la bataille des Trois Empereurs » ?",
+    "choices": [
+      "Iéna",
+      "Wagram",
+      "Austerlitz",
+      "Marengo"
+    ],
+    "answer": 2,
+    "explanation": "Napoléon y bat les empereurs d'Autriche et de Russie, le 2 décembre 1805.",
+    "category": "histoire"
+  },
+  {
+    "id": "q665",
+    "theme": "Napoléon",
+    "question": "Sur quelle île Napoléon est-il d'abord exilé en 1814 ?",
+    "choices": [
+      "L'île d'Elbe",
+      "Sainte-Hélène",
+      "La Corse",
+      "Malte"
+    ],
+    "answer": 0,
+    "explanation": "Il s'en échappe en 1815 pour les Cent-Jours, avant Waterloo et l'exil définitif à Sainte-Hélène.",
+    "category": "histoire"
+  },
+  {
+    "id": "q666",
+    "theme": "Napoléon",
+    "question": "Quel code de lois promulgué en 1804 reste la base du droit civil français ?",
+    "choices": [
+      "Le Code noir",
+      "Le Code Justinien",
+      "Le Code civil",
+      "Le Code pénal"
+    ],
+    "answer": 2,
+    "explanation": "Surnommé « Code Napoléon », il a inspiré le droit de nombreux pays.",
+    "category": "histoire"
+  },
+  {
+    "id": "q667",
+    "theme": "XIXe siècle",
+    "question": "En quelle année l'esclavage est-il définitivement aboli dans les colonies françaises ?",
+    "choices": [
+      "1870",
+      "1848",
+      "1815",
+      "1794"
+    ],
+    "answer": 1,
+    "explanation": "Le décret du 27 avril 1848 est porté par Victor Schœlcher ; une première abolition de 1794 avait été annulée par Napoléon en 1802.",
+    "category": "histoire"
+  },
+  {
+    "id": "q668",
+    "theme": "XIXe siècle",
+    "question": "Quel président américain a aboli l'esclavage et a été assassiné en 1865 ?",
+    "choices": [
+      "George Washington",
+      "Abraham Lincoln",
+      "Ulysses Grant",
+      "Thomas Jefferson"
+    ],
+    "answer": 1,
+    "explanation": "Lincoln est assassiné dans un théâtre de Washington, quelques jours après la fin de la guerre de Sécession.",
+    "category": "histoire"
+  },
+  {
+    "id": "q669",
+    "theme": "XIXe siècle",
+    "question": "Dans quelle ville a circulé le premier métro du monde, en 1863 ?",
+    "choices": [
+      "Londres",
+      "New York",
+      "Budapest",
+      "Paris"
+    ],
+    "answer": 0,
+    "explanation": "Le Metropolitan Railway de Londres roulait alors avec des locomotives à vapeur.",
+    "category": "histoire"
+  },
+  {
+    "id": "q670",
+    "theme": "XIXe siècle",
+    "question": "Quel événement parisien de 1871 a duré 72 jours ?",
+    "choices": [
+      "Le coup d'État de Napoléon III",
+      "La révolution de Juillet",
+      "La Commune",
+      "Les Trois Glorieuses"
+    ],
+    "answer": 2,
+    "explanation": "La Commune de Paris, de mars à mai 1871, finit écrasée pendant la « Semaine sanglante ».",
+    "category": "histoire"
+  },
+  {
+    "id": "q671",
+    "theme": "XIXe siècle",
+    "question": "Qui a fondé la Croix-Rouge en 1863 ?",
+    "choices": [
+      "Louis Pasteur",
+      "Florence Nightingale",
+      "Henri Dunant",
+      "Clara Barton"
+    ],
+    "answer": 2,
+    "explanation": "Choqué par la bataille de Solférino, le Genevois Henri Dunant reçoit le premier prix Nobel de la paix en 1901.",
+    "category": "histoire"
+  },
+  {
+    "id": "q672",
+    "theme": "XXe siècle",
+    "question": "Quel assassinat déclenche la Première Guerre mondiale ?",
+    "choices": [
+      "Celui de l'archiduc François-Ferdinand",
+      "Celui du kaiser Guillaume II",
+      "Celui du tsar Nicolas II",
+      "Celui de Jean Jaurès"
+    ],
+    "answer": 0,
+    "explanation": "L'héritier de l'Autriche-Hongrie est tué à Sarajevo le 28 juin 1914.",
+    "category": "histoire"
+  },
+  {
+    "id": "q673",
+    "theme": "XXe siècle",
+    "question": "Quelle bataille de 1916 est devenue le symbole de la Grande Guerre pour les Français ?",
+    "choices": [
+      "La Marne",
+      "Verdun",
+      "Gallipoli",
+      "Le Chemin des Dames"
+    ],
+    "answer": 1,
+    "explanation": "Elle dure dix mois et fait plus de 300 000 morts dans les deux camps.",
+    "category": "histoire"
+  },
+  {
+    "id": "q674",
+    "theme": "XXe siècle",
+    "question": "Quel traité met fin à la Première Guerre mondiale avec l'Allemagne ?",
+    "choices": [
+      "Le traité de Versailles",
+      "Le traité de Brest-Litovsk",
+      "Le traité de Francfort",
+      "Le traité de Trianon"
+    ],
+    "answer": 0,
+    "explanation": "Il est signé le 28 juin 1919 dans la galerie des Glaces.",
+    "category": "histoire"
+  },
+  {
+    "id": "q675",
+    "theme": "XXe siècle",
+    "question": "Quelle pandémie a tué des dizaines de millions de personnes en 1918-1919 ?",
+    "choices": [
+      "La grippe espagnole",
+      "Le choléra",
+      "La peste",
+      "La tuberculose"
+    ],
+    "answer": 0,
+    "explanation": "Malgré son nom, elle ne vient pas d'Espagne : le pays, neutre, était simplement le seul à en parler librement.",
+    "category": "histoire"
+  },
+  {
+    "id": "q676",
+    "theme": "XXe siècle",
+    "question": "En quelle année les Françaises votent-elles pour la première fois ?",
+    "choices": [
+      "1936",
+      "1958",
+      "1918",
+      "1945"
+    ],
+    "answer": 3,
+    "explanation": "Le droit de vote est accordé en 1944 ; elles votent pour la première fois aux municipales d'avril 1945.",
+    "category": "histoire"
+  },
+  {
+    "id": "q677",
+    "theme": "XXe siècle",
+    "question": "Quel jour a eu lieu le débarquement allié en Normandie ?",
+    "choices": [
+      "Le 6 juin 1944",
+      "Le 18 juin 1940",
+      "Le 8 mai 1945",
+      "Le 11 novembre 1918"
+    ],
+    "answer": 0,
+    "explanation": "Le « D-Day » mobilise près de 7 000 navires sur cinq plages normandes.",
+    "category": "histoire"
+  },
+  {
+    "id": "q678",
+    "theme": "XXe siècle",
+    "question": "Dans quelle ville ont été jugés les principaux dirigeants nazis ?",
+    "choices": [
+      "Munich",
+      "La Haye",
+      "Berlin",
+      "Nuremberg"
+    ],
+    "answer": 3,
+    "explanation": "Le procès de Nuremberg s'ouvre en novembre 1945 devant un tribunal militaire international.",
+    "category": "histoire"
+  },
+  {
+    "id": "q679",
+    "theme": "XXe siècle",
+    "question": "Comment s'appelait l'alliance militaire des pays communistes pendant la guerre froide ?",
+    "choices": [
+      "Le Comecon",
+      "Le pacte de Varsovie",
+      "L'OTAN",
+      "Le Kominform"
+    ],
+    "answer": 1,
+    "explanation": "Créé en 1955 en réponse à l'OTAN, il est dissous en 1991.",
+    "category": "histoire"
+  },
+  {
+    "id": "q680",
+    "theme": "XXe siècle",
+    "question": "Quel dirigeant soviétique a lancé la perestroïka ?",
+    "choices": [
+      "Mikhaïl Gorbatchev",
+      "Boris Eltsine",
+      "Leonid Brejnev",
+      "Nikita Khrouchtchev"
+    ],
+    "answer": 0,
+    "explanation": "Arrivé au pouvoir en 1985, il reçoit le prix Nobel de la paix en 1990.",
+    "category": "histoire"
+  },
+  {
+    "id": "q681",
+    "theme": "XXe siècle",
+    "question": "Quel satellite, lancé en 1957, a ouvert la conquête spatiale ?",
+    "choices": [
+      "Spoutnik 1",
+      "Explorer 1",
+      "Vostok 1",
+      "Apollo 1"
+    ],
+    "answer": 0,
+    "explanation": "Le lancement de Spoutnik par l'URSS, le 4 octobre 1957, provoque un choc aux États-Unis.",
+    "category": "histoire"
+  },
+  {
+    "id": "q682",
+    "theme": "XXe siècle",
+    "question": "Qui a été le premier homme à voyager dans l'espace ?",
+    "choices": [
+      "Alan Shepard",
+      "Neil Armstrong",
+      "John Glenn",
+      "Youri Gagarine"
+    ],
+    "answer": 3,
+    "explanation": "Le 12 avril 1961, il fait un tour de la Terre en 108 minutes à bord de Vostok 1.",
+    "category": "histoire"
+  },
+  {
+    "id": "q683",
+    "theme": "XXe siècle",
+    "question": "Quel astronaute d'Apollo 11 est resté en orbite sans marcher sur la Lune ?",
+    "choices": [
+      "Michael Collins",
+      "Neil Armstrong",
+      "Jim Lovell",
+      "Buzz Aldrin"
+    ],
+    "answer": 0,
+    "explanation": "Pendant qu'Armstrong et Aldrin marchaient sur la Lune, il pilotait le module de commande Columbia.",
+    "category": "histoire"
+  },
+  {
+    "id": "q684",
+    "theme": "XXe siècle",
+    "question": "Quel leader sud-africain a passé 27 ans en prison avant de devenir président ?",
+    "choices": [
+      "Desmond Tutu",
+      "Steve Biko",
+      "Nelson Mandela",
+      "Thabo Mbeki"
+    ],
+    "answer": 2,
+    "explanation": "Libéré en 1990, il est élu président en 1994, aux premières élections multiraciales du pays.",
+    "category": "histoire"
+  },
+  {
+    "id": "q685",
+    "theme": "XXe siècle",
+    "question": "Quel mouvement de contestation a secoué la France au printemps 1968 ?",
+    "choices": [
+      "Les Trente Glorieuses",
+      "Mai 68",
+      "La Fronde",
+      "Le Front populaire"
+    ],
+    "answer": 1,
+    "explanation": "Parti des universités, il débouche sur la plus grande grève générale de l'histoire du pays.",
+    "category": "histoire"
+  },
+  {
+    "id": "q686",
+    "theme": "XXe siècle",
+    "question": "En quelle année l'URSS a-t-elle été dissoute ?",
+    "choices": [
+      "1989",
+      "1991",
+      "1993",
+      "1985"
+    ],
+    "answer": 1,
+    "explanation": "Elle disparaît officiellement le 26 décembre 1991, au lendemain de la démission de Gorbatchev.",
+    "category": "histoire"
+  },
+  {
+    "id": "q687",
+    "theme": "XXe siècle",
+    "question": "Quelle île française de Méditerranée a été le premier département libéré en 1943 ?",
+    "choices": [
+      "La Sardaigne",
+      "Les îles d'Hyères",
+      "La Corse",
+      "Les îles de Lérins"
+    ],
+    "answer": 2,
+    "explanation": "La Corse est libérée en octobre 1943, avant le débarquement de Normandie.",
+    "category": "histoire"
+  },
+  {
+    "id": "q688",
+    "theme": "Explorateurs",
+    "question": "Quelle Française est la première femme à avoir fait le tour du monde, déguisée en homme ?",
+    "choices": [
+      "Olympe de Gouges",
+      "Louise Michel",
+      "Alexandra David-Néel",
+      "Jeanne Barret"
+    ],
+    "answer": 3,
+    "explanation": "Botaniste, elle embarque avec Bougainville en 1766 en se faisant passer pour un valet.",
+    "category": "histoire"
+  },
+  {
+    "id": "q689",
+    "theme": "Explorateurs",
+    "question": "Quel navigateur norvégien a atteint le premier le pôle Sud, en 1911 ?",
+    "choices": [
+      "Roald Amundsen",
+      "Ernest Shackleton",
+      "Fridtjof Nansen",
+      "Robert Scott"
+    ],
+    "answer": 0,
+    "explanation": "Il devance de cinq semaines l'expédition britannique de Scott, qui meurt sur le chemin du retour.",
+    "category": "histoire"
+  },
+  {
+    "id": "q690",
+    "theme": "Explorateurs",
+    "question": "Qui ont été les premiers à atteindre le sommet de l'Everest, en 1953 ?",
+    "choices": [
+      "Edmund Hillary et Tenzing Norgay",
+      "Maurice Herzog et Louis Lachenal",
+      "George Mallory et Andrew Irvine",
+      "Reinhold Messner et Peter Habeler"
+    ],
+    "answer": 0,
+    "explanation": "Le Néo-Zélandais et le sherpa népalais atteignent le sommet le 29 mai 1953.",
+    "category": "histoire"
+  },
+  {
+    "id": "q691",
+    "theme": "Explorateurs",
+    "question": "Quelle équipe a gravi le premier sommet de plus de 8 000 m, l'Annapurna, en 1950 ?",
+    "choices": [
+      "Une expédition suisse",
+      "Une expédition britannique",
+      "Une expédition française",
+      "Une expédition italienne"
+    ],
+    "answer": 2,
+    "explanation": "Maurice Herzog et Louis Lachenal atteignent le sommet le 3 juin 1950.",
+    "category": "histoire"
+  },
+  {
+    "id": "q692",
+    "theme": "Explorateurs",
+    "question": "Qui a réalisé la première ascension du mont Blanc, en 1786 ?",
+    "choices": [
+      "Edward Whymper",
+      "Jacques Balmat et Michel Paccard",
+      "Henriette d'Angeville",
+      "Horace-Bénédict de Saussure"
+    ],
+    "answer": 1,
+    "explanation": "Ce premier sommet marque la naissance de l'alpinisme ; Saussure monte l'année suivante.",
+    "category": "histoire"
+  },
+  {
+    "id": "q693",
+    "theme": "Astronomie",
+    "question": "Quelle est l'étoile la plus proche du Système solaire ?",
+    "choices": [
+      "Véga",
+      "Bételgeuse",
+      "Proxima du Centaure",
+      "Sirius"
+    ],
+    "answer": 2,
+    "explanation": "Elle se trouve à environ 4,2 années-lumière ; sa lumière met donc plus de quatre ans à nous parvenir.",
+    "category": "sciences"
+  },
+  {
+    "id": "q694",
+    "theme": "Astronomie",
+    "question": "Quelle planète est surnommée « l'étoile du Berger » ?",
+    "choices": [
+      "Vénus",
+      "Jupiter",
+      "Mars",
+      "Mercure"
+    ],
+    "answer": 0,
+    "explanation": "C'est l'astre le plus brillant du ciel après le Soleil et la Lune, visible à l'aube ou au crépuscule.",
+    "category": "sciences"
+  },
+  {
+    "id": "q695",
+    "theme": "Astronomie",
+    "question": "Sur quelle planète une journée dure-t-elle plus longtemps qu'une année ?",
+    "choices": [
+      "Neptune",
+      "Mars",
+      "Mercure",
+      "Vénus"
+    ],
+    "answer": 3,
+    "explanation": "Vénus met 243 jours terrestres à tourner sur elle-même, contre 225 pour faire le tour du Soleil.",
+    "category": "sciences"
+  },
+  {
+    "id": "q696",
+    "theme": "Astronomie",
+    "question": "Quelle est la plus grande lune du Système solaire ?",
+    "choices": [
+      "La Lune",
+      "Titan",
+      "Ganymède",
+      "Europe"
+    ],
+    "answer": 2,
+    "explanation": "Satellite de Jupiter, Ganymède est même plus grande que la planète Mercure.",
+    "category": "sciences"
+  },
+  {
+    "id": "q697",
+    "theme": "Astronomie",
+    "question": "Combien de satellites naturels possède Mars ?",
+    "choices": [
+      "2",
+      "1",
+      "0",
+      "4"
+    ],
+    "answer": 0,
+    "explanation": "Phobos et Deimos, deux petits rochers qui seraient des astéroïdes capturés.",
+    "category": "sciences"
+  },
+  {
+    "id": "q698",
+    "theme": "Astronomie",
+    "question": "Quelle planète a été découverte par le calcul avant d'être observée ?",
+    "choices": [
+      "Neptune",
+      "Pluton",
+      "Uranus",
+      "Saturne"
+    ],
+    "answer": 0,
+    "explanation": "Urbain Le Verrier en calcule la position en 1846 à partir des perturbations de l'orbite d'Uranus.",
+    "category": "sciences"
+  },
+  {
+    "id": "q699",
+    "theme": "Astronomie",
+    "question": "À quelle distance moyenne la Lune se trouve-t-elle de la Terre ?",
+    "choices": [
+      "Environ 150 000 km",
+      "Environ 384 000 km",
+      "Environ 3,8 millions de km",
+      "Environ 38 000 km"
+    ],
+    "answer": 1,
+    "explanation": "Elle s'éloigne d'environ 3,8 cm par an.",
+    "category": "sciences"
+  },
+  {
+    "id": "q700",
+    "theme": "Astronomie",
+    "question": "Quelle planète possède les anneaux les plus spectaculaires ?",
+    "choices": [
+      "Uranus",
+      "Jupiter",
+      "Saturne",
+      "Neptune"
+    ],
+    "answer": 2,
+    "explanation": "Les quatre géantes ont des anneaux, mais ceux de Saturne, faits de glace, sont de loin les plus visibles.",
+    "category": "sciences"
+  },
+  {
+    "id": "q701",
+    "theme": "Astronomie",
+    "question": "Dans quelle galaxie se trouve le Système solaire ?",
+    "choices": [
+      "La galaxie du Triangle",
+      "Le Grand Nuage de Magellan",
+      "Andromède",
+      "La Voie lactée"
+    ],
+    "answer": 3,
+    "explanation": "Le Soleil est l'une des quelque 100 à 400 milliards d'étoiles de la Voie lactée.",
+    "category": "sciences"
+  },
+  {
+    "id": "q702",
+    "theme": "Astronomie",
+    "question": "Pourquoi y a-t-il des saisons sur Terre ?",
+    "choices": [
+      "À cause de la Lune",
+      "À cause de l'inclinaison de son axe",
+      "À cause de sa distance au Soleil qui varie",
+      "À cause des courants marins"
+    ],
+    "answer": 1,
+    "explanation": "L'axe est incliné d'environ 23,4° ; la Terre est même au plus près du Soleil début janvier.",
+    "category": "sciences"
+  },
+  {
+    "id": "q703",
+    "theme": "Astronomie",
+    "question": "Quel objet céleste est si dense que même la lumière ne peut s'en échapper ?",
+    "choices": [
+      "Une naine blanche",
+      "Un pulsar",
+      "Un trou noir",
+      "Une nébuleuse"
+    ],
+    "answer": 2,
+    "explanation": "La première image d'un trou noir, celui de la galaxie M87, a été publiée en 2019.",
+    "category": "sciences"
+  },
+  {
+    "id": "q704",
+    "theme": "Corps humain",
+    "question": "Combien de paires de chromosomes possède l'être humain ?",
+    "choices": [
+      "24",
+      "22",
+      "23",
+      "46"
+    ],
+    "answer": 2,
+    "explanation": "Soit 46 chromosomes en tout, dont une paire de chromosomes sexuels.",
+    "category": "sciences"
+  },
+  {
+    "id": "q705",
+    "theme": "Corps humain",
+    "question": "Quel est le plus petit os du corps humain ?",
+    "choices": [
+      "Le coccyx",
+      "Le marteau",
+      "La phalange du petit orteil",
+      "L'étrier"
+    ],
+    "answer": 3,
+    "explanation": "Situé dans l'oreille moyenne, il mesure environ 3 mm.",
+    "category": "sciences"
+  },
+  {
+    "id": "q706",
+    "theme": "Corps humain",
+    "question": "Quel est l'autre nom de l'omoplate ?",
+    "choices": [
+      "La clavicule",
+      "Le sternum",
+      "La rotule",
+      "La scapula"
+    ],
+    "answer": 3,
+    "explanation": "Le terme scapula est aujourd'hui le nom officiel en anatomie.",
+    "category": "sciences"
+  },
+  {
+    "id": "q707",
+    "theme": "Corps humain",
+    "question": "Quel est l'organe le plus lourd du corps humain ?",
+    "choices": [
+      "Le foie",
+      "La peau",
+      "Le cerveau",
+      "Les poumons"
+    ],
+    "answer": 1,
+    "explanation": "La peau d'un adulte pèse 3 à 4 kg (sans la graisse sous-cutanée) ; le foie, plus lourd organe interne, environ 1,5 kg.",
+    "category": "sciences"
+  },
+  {
+    "id": "q708",
+    "theme": "Corps humain",
+    "question": "Comment appelle-t-on scientifiquement un bleu ?",
+    "choices": [
+      "Un eczéma",
+      "Un œdème",
+      "Un érythème",
+      "Une ecchymose"
+    ],
+    "answer": 3,
+    "explanation": "Le sang qui s'échappe des petits vaisseaux colore la peau, puis change de teinte en se résorbant.",
+    "category": "sciences"
+  },
+  {
+    "id": "q709",
+    "theme": "Corps humain",
+    "question": "Quelle partie du corps désigne le mot « hallux » ?",
+    "choices": [
+      "Le gros orteil",
+      "Le pouce",
+      "Le talon",
+      "Le lobe de l'oreille"
+    ],
+    "answer": 0,
+    "explanation": "L'hallux valgus, ou « oignon », est une déformation de ce gros orteil.",
+    "category": "sciences"
+  },
+  {
+    "id": "q710",
+    "theme": "Corps humain",
+    "question": "Quelle hormone est sécrétée en cas de stress ou de danger ?",
+    "choices": [
+      "L'ocytocine",
+      "La mélatonine",
+      "L'insuline",
+      "L'adrénaline"
+    ],
+    "answer": 3,
+    "explanation": "Produite par les glandes surrénales, elle accélère le cœur et la respiration.",
+    "category": "sciences"
+  },
+  {
+    "id": "q711",
+    "theme": "Corps humain",
+    "question": "Quelle hormone règle notre horloge du sommeil ?",
+    "choices": [
+      "La mélatonine",
+      "L'adrénaline",
+      "La dopamine",
+      "La thyroxine"
+    ],
+    "answer": 0,
+    "explanation": "Elle est sécrétée quand la lumière baisse, d'où l'effet des écrans le soir.",
+    "category": "sciences"
+  },
+  {
+    "id": "q712",
+    "theme": "Corps humain",
+    "question": "Dans quelle phase du sommeil fait-on les rêves les plus vifs ?",
+    "choices": [
+      "Le sommeil léger",
+      "L'endormissement",
+      "Le sommeil profond",
+      "Le sommeil paradoxal"
+    ],
+    "answer": 3,
+    "explanation": "On l'appelle paradoxal car le cerveau y est très actif alors que les muscles sont paralysés.",
+    "category": "sciences"
+  },
+  {
+    "id": "q713",
+    "theme": "Corps humain",
+    "question": "Quel est le nom des globules rouges ?",
+    "choices": [
+      "Les érythrocytes",
+      "Les lymphocytes",
+      "Les thrombocytes",
+      "Les leucocytes"
+    ],
+    "answer": 0,
+    "explanation": "Ils transportent l'oxygène grâce à l'hémoglobine et vivent environ 120 jours.",
+    "category": "sciences"
+  },
+  {
+    "id": "q714",
+    "theme": "Corps humain",
+    "question": "Quel organe filtre le sang pour produire l'urine ?",
+    "choices": [
+      "Le pancréas",
+      "Les reins",
+      "La rate",
+      "Le foie"
+    ],
+    "answer": 1,
+    "explanation": "Les deux reins filtrent environ 180 litres de sang par jour.",
+    "category": "sciences"
+  },
+  {
+    "id": "q715",
+    "theme": "Corps humain",
+    "question": "Combien de paires de côtes possède un être humain ?",
+    "choices": [
+      "10",
+      "14",
+      "12",
+      "24"
+    ],
+    "answer": 2,
+    "explanation": "Les deux dernières paires, qui ne rejoignent pas le sternum, sont appelées côtes flottantes.",
+    "category": "sciences"
+  },
+  {
+    "id": "q716",
+    "theme": "Corps humain",
+    "question": "Quel muscle est le plus long du corps humain ?",
+    "choices": [
+      "Le grand dorsal",
+      "Le biceps",
+      "Le sartorius (couturier)",
+      "Le quadriceps"
+    ],
+    "answer": 2,
+    "explanation": "Il traverse la cuisse en diagonale, de la hanche jusqu'au genou.",
+    "category": "sciences"
+  },
+  {
+    "id": "q717",
+    "theme": "Chimie",
+    "question": "Quelle est la formule chimique du sel de table ?",
+    "choices": [
+      "CaCO₃",
+      "KCl",
+      "NaOH",
+      "NaCl"
+    ],
+    "answer": 3,
+    "explanation": "Le chlorure de sodium associe un atome de sodium et un atome de chlore.",
+    "category": "sciences"
+  },
+  {
+    "id": "q718",
+    "theme": "Chimie",
+    "question": "Quel gaz compose environ 78 % de l'air ?",
+    "choices": [
+      "L'argon",
+      "Le dioxyde de carbone",
+      "L'oxygène",
+      "L'azote"
+    ],
+    "answer": 3,
+    "explanation": "L'oxygène ne représente qu'environ 21 % de l'air.",
+    "category": "sciences"
+  },
+  {
+    "id": "q719",
+    "theme": "Chimie",
+    "question": "Quel est le symbole chimique du fer ?",
+    "choices": [
+      "F",
+      "Fe",
+      "Fr",
+      "Ir"
+    ],
+    "answer": 1,
+    "explanation": "Il vient du latin ferrum.",
+    "category": "sciences"
+  },
+  {
+    "id": "q720",
+    "theme": "Chimie",
+    "question": "Quel est le symbole chimique du potassium ?",
+    "choices": [
+      "K",
+      "Pt",
+      "Po",
+      "P"
+    ],
+    "answer": 0,
+    "explanation": "Il vient du latin kalium ; P désigne le phosphore.",
+    "category": "sciences"
+  },
+  {
+    "id": "q721",
+    "theme": "Chimie",
+    "question": "Quel savant a dit « Rien ne se perd, rien ne se crée, tout se transforme » ?",
+    "choices": [
+      "Louis Pasteur",
+      "Marie Curie",
+      "Antoine Lavoisier",
+      "Isaac Newton"
+    ],
+    "answer": 2,
+    "explanation": "Cette idée de conservation de la masse fait de Lavoisier l'un des pères de la chimie moderne.",
+    "category": "sciences"
+  },
+  {
+    "id": "q722",
+    "theme": "Chimie",
+    "question": "Comment appelle-t-on le passage direct de l'état solide à l'état gazeux ?",
+    "choices": [
+      "La condensation",
+      "La fusion",
+      "La vaporisation",
+      "La sublimation"
+    ],
+    "answer": 3,
+    "explanation": "C'est ce qui arrive à la glace carbonique, qui « fume » sans fondre.",
+    "category": "sciences"
+  },
+  {
+    "id": "q723",
+    "theme": "Chimie",
+    "question": "Comment appelle-t-on une réaction qui dégage de la chaleur ?",
+    "choices": [
+      "Isotherme",
+      "Exothermique",
+      "Adiabatique",
+      "Endothermique"
+    ],
+    "answer": 1,
+    "explanation": "Une combustion est exothermique ; une réaction qui absorbe de la chaleur est dite endothermique.",
+    "category": "sciences"
+  },
+  {
+    "id": "q724",
+    "theme": "Chimie",
+    "question": "Quel scientifique a inventé la dynamite ?",
+    "choices": [
+      "Alfred Nobel",
+      "Nikola Tesla",
+      "Humphry Davy",
+      "Thomas Edison"
+    ],
+    "answer": 0,
+    "explanation": "Sa fortune finance depuis 1901 les prix qui portent son nom.",
+    "category": "sciences"
+  },
+  {
+    "id": "q725",
+    "theme": "Chimie",
+    "question": "Qui a créé le tableau périodique des éléments ?",
+    "choices": [
+      "Niels Bohr",
+      "Dmitri Mendeleïev",
+      "Antoine Lavoisier",
+      "John Dalton"
+    ],
+    "answer": 1,
+    "explanation": "En 1869, il laisse des cases vides pour des éléments encore inconnus… qui seront découverts ensuite.",
+    "category": "sciences"
+  },
+  {
+    "id": "q726",
+    "theme": "Chimie",
+    "question": "Quelle molécule donne sa couleur rouge à la tomate ?",
+    "choices": [
+      "Le carotène",
+      "Le lycopène",
+      "La chlorophylle",
+      "L'anthocyane"
+    ],
+    "answer": 1,
+    "explanation": "Le lycopène est aussi responsable de la couleur de la pastèque.",
+    "category": "sciences"
+  },
+  {
+    "id": "q727",
+    "theme": "Chimie",
+    "question": "Quelle molécule rend le piment brûlant ?",
+    "choices": [
+      "Le menthol",
+      "La pipérine",
+      "La caféine",
+      "La capsaïcine"
+    ],
+    "answer": 3,
+    "explanation": "L'échelle de Scoville mesure justement la concentration en capsaïcine.",
+    "category": "sciences"
+  },
+  {
+    "id": "q728",
+    "theme": "Physique",
+    "question": "Qui a énoncé les trois lois du mouvement en 1687 ?",
+    "choices": [
+      "Isaac Newton",
+      "Galilée",
+      "Johannes Kepler",
+      "Albert Einstein"
+    ],
+    "answer": 0,
+    "explanation": "Elles figurent dans ses « Principia », avec la loi de la gravitation universelle.",
+    "category": "sciences"
+  },
+  {
+    "id": "q729",
+    "theme": "Physique",
+    "question": "Quel phénomène produit un arc-en-ciel ?",
+    "choices": [
+      "La réfraction de la lumière dans les gouttes d'eau",
+      "La diffraction par la poussière",
+      "La réflexion sur les nuages",
+      "L'absorption par l'ozone"
+    ],
+    "answer": 0,
+    "explanation": "Chaque couleur est déviée selon un angle différent, ce qui décompose la lumière blanche.",
+    "category": "sciences"
+  },
+  {
+    "id": "q730",
+    "theme": "Physique",
+    "question": "Combien pèserait sur la Lune un objet de 60 kg sur Terre ?",
+    "choices": [
+      "Environ 10 kg",
+      "Environ 45 kg",
+      "Environ 60 kg",
+      "Environ 30 kg"
+    ],
+    "answer": 0,
+    "explanation": "La gravité lunaire vaut environ un sixième de celle de la Terre ; la masse, elle, ne change pas.",
+    "category": "sciences"
+  },
+  {
+    "id": "q731",
+    "theme": "Physique",
+    "question": "À combien de degrés correspond une pente de 100 % ?",
+    "choices": [
+      "100°",
+      "90°",
+      "60°",
+      "45°"
+    ],
+    "answer": 3,
+    "explanation": "Une pente de 100 % fait monter d'un mètre pour un mètre parcouru à l'horizontale.",
+    "category": "sciences"
+  },
+  {
+    "id": "q732",
+    "theme": "Physique",
+    "question": "Quelle unité mesure la puissance électrique ?",
+    "choices": [
+      "Le watt",
+      "Le volt",
+      "L'ohm",
+      "L'ampère"
+    ],
+    "answer": 0,
+    "explanation": "Elle doit son nom à James Watt, l'ingénieur de la machine à vapeur.",
+    "category": "sciences"
+  },
+  {
+    "id": "q733",
+    "theme": "Physique",
+    "question": "À quelle température l'eau bout-elle au sommet de l'Everest ?",
+    "choices": [
+      "Environ 85 °C",
+      "100 °C",
+      "Environ 70 °C",
+      "Environ 120 °C"
+    ],
+    "answer": 2,
+    "explanation": "La pression de l'air y est trois fois plus faible : l'eau bout plus tôt, et les pâtes cuisent mal.",
+    "category": "sciences"
+  },
+  {
+    "id": "q734",
+    "theme": "Physique",
+    "question": "Qui a découvert la radioactivité en 1896 ?",
+    "choices": [
+      "Marie Curie",
+      "Ernest Rutherford",
+      "Henri Becquerel",
+      "Wilhelm Röntgen"
+    ],
+    "answer": 2,
+    "explanation": "Il partage le prix Nobel de physique 1903 avec Pierre et Marie Curie.",
+    "category": "sciences"
+  },
+  {
+    "id": "q735",
+    "theme": "Physique",
+    "question": "Qu'a découvert Wilhelm Röntgen en 1895 ?",
+    "choices": [
+      "L'électron",
+      "Les rayons X",
+      "La radioactivité",
+      "Les ondes radio"
+    ],
+    "answer": 1,
+    "explanation": "La première radio de l'histoire montre la main de sa femme, avec sa bague.",
+    "category": "sciences"
+  },
+  {
+    "id": "q736",
+    "theme": "Physique",
+    "question": "Le son se propage-t-il dans le vide ?",
+    "choices": [
+      "Oui, plus vite que dans l'air",
+      "Seulement les sons aigus",
+      "Non, jamais",
+      "Oui, mais plus lentement"
+    ],
+    "answer": 2,
+    "explanation": "Le son a besoin de matière pour se propager : dans l'espace, une explosion serait silencieuse.",
+    "category": "sciences"
+  },
+  {
+    "id": "q737",
+    "theme": "Terre",
+    "question": "Comment appelle-t-on une coulée de boue d'origine volcanique ?",
+    "choices": [
+      "Un maar",
+      "Un lahar",
+      "Un geyser",
+      "Une caldeira"
+    ],
+    "answer": 1,
+    "explanation": "Un lahar peut dévaler les pentes à plus de 60 km/h.",
+    "category": "sciences"
+  },
+  {
+    "id": "q738",
+    "theme": "Terre",
+    "question": "Comment appelle-t-on la couche de l'atmosphère la plus proche du sol ?",
+    "choices": [
+      "La stratosphère",
+      "La thermosphère",
+      "La mésosphère",
+      "La troposphère"
+    ],
+    "answer": 3,
+    "explanation": "C'est là que se forment presque tous les phénomènes météo.",
+    "category": "sciences"
+  },
+  {
+    "id": "q739",
+    "theme": "Terre",
+    "question": "Quelle couche de l'atmosphère contient la couche d'ozone ?",
+    "choices": [
+      "L'exosphère",
+      "La stratosphère",
+      "La troposphère",
+      "La mésosphère"
+    ],
+    "answer": 1,
+    "explanation": "L'ozone y filtre une grande partie des rayons ultraviolets du Soleil.",
+    "category": "sciences"
+  },
+  {
+    "id": "q740",
+    "theme": "Terre",
+    "question": "Quelle échelle mesure aujourd'hui la puissance des séismes chez les sismologues ?",
+    "choices": [
+      "L'échelle de Mercalli",
+      "La magnitude de moment",
+      "L'échelle de Mohs",
+      "L'échelle de Beaufort"
+    ],
+    "answer": 1,
+    "explanation": "L'échelle de Richter, d'origine, sature pour les très gros séismes ; l'échelle de Beaufort mesure le vent.",
+    "category": "sciences"
+  },
+  {
+    "id": "q741",
+    "theme": "Terre",
+    "question": "Quel minéral est le plus dur sur l'échelle de Mohs ?",
+    "choices": [
+      "La topaze",
+      "Le corindon",
+      "Le quartz",
+      "Le diamant"
+    ],
+    "answer": 3,
+    "explanation": "Il est noté 10, le maximum ; le talc, le plus tendre, est noté 1.",
+    "category": "sciences"
+  },
+  {
+    "id": "q742",
+    "theme": "Terre",
+    "question": "Comment appelle-t-on le versant d'une montagne exposé au soleil ?",
+    "choices": [
+      "L'ubac",
+      "Le col",
+      "L'adret",
+      "Le piémont"
+    ],
+    "answer": 2,
+    "explanation": "L'ubac est le versant à l'ombre ; dans les Alpes, les villages sont souvent bâtis sur l'adret.",
+    "category": "sciences"
+  },
+  {
+    "id": "q743",
+    "theme": "Terre",
+    "question": "Quelle ère géologique a vu vivre les dinosaures ?",
+    "choices": [
+      "Le Mésozoïque",
+      "Le Précambrien",
+      "Le Cénozoïque",
+      "Le Paléozoïque"
+    ],
+    "answer": 0,
+    "explanation": "Le Mésozoïque regroupe le Trias, le Jurassique et le Crétacé.",
+    "category": "sciences"
+  },
+  {
+    "id": "q744",
+    "theme": "Terre",
+    "question": "Que signifie le mot « dinosaure » ?",
+    "choices": [
+      "Reptile géant",
+      "Grand ancêtre",
+      "Lézard terrible",
+      "Bête préhistorique"
+    ],
+    "answer": 2,
+    "explanation": "Le mot est forgé en 1842 par Richard Owen à partir du grec deinos (terrible) et sauros (lézard).",
+    "category": "sciences"
+  },
+  {
+    "id": "q745",
+    "theme": "Maths",
+    "question": "Combien de mètres carrés y a-t-il dans un kilomètre carré ?",
+    "choices": [
+      "1 000 000",
+      "10 000",
+      "1 000",
+      "100 000"
+    ],
+    "answer": 0,
+    "explanation": "Un carré de 1 000 m sur 1 000 m.",
+    "category": "sciences"
+  },
+  {
+    "id": "q746",
+    "theme": "Maths",
+    "question": "Comment appelle-t-on la droite qui coupe un angle en deux angles égaux ?",
+    "choices": [
+      "La médiatrice",
+      "La hauteur",
+      "La médiane",
+      "La bissectrice"
+    ],
+    "answer": 3,
+    "explanation": "La médiatrice, elle, coupe un segment en son milieu à angle droit.",
+    "category": "sciences"
+  },
+  {
+    "id": "q747",
+    "theme": "Maths",
+    "question": "Combien de zéros compte un milliard ?",
+    "choices": [
+      "12",
+      "10",
+      "9",
+      "6"
+    ],
+    "answer": 2,
+    "explanation": "1 000 000 000 ; un billion, lui, en compte 12.",
+    "category": "sciences"
+  },
+  {
+    "id": "q748",
+    "theme": "Maths",
+    "question": "Quel nombre est le seul nombre premier pair ?",
+    "choices": [
+      "1",
+      "0",
+      "2",
+      "4"
+    ],
+    "answer": 2,
+    "explanation": "Tous les autres nombres pairs sont divisibles par 2 ; 1, lui, n'est pas considéré comme premier.",
+    "category": "sciences"
+  },
+  {
+    "id": "q749",
+    "theme": "Maths",
+    "question": "Combien de faces possède un dé à jouer classique ?",
+    "choices": [
+      "8",
+      "12",
+      "4",
+      "6"
+    ],
+    "answer": 3,
+    "explanation": "Sur un dé classique, la somme des faces opposées fait toujours 7.",
+    "category": "sciences"
+  },
+  {
+    "id": "q750",
+    "theme": "Maths",
+    "question": "Comment s'appelle un polygone à huit côtés ?",
+    "choices": [
+      "Un octogone",
+      "Un décagone",
+      "Un hexagone",
+      "Un heptagone"
+    ],
+    "answer": 0,
+    "explanation": "Les panneaux « Stop » sont des octogones.",
+    "category": "sciences"
+  },
+  {
+    "id": "q751",
+    "theme": "Inventions",
+    "question": "Qui a inventé le premier vaccin, contre la variole ?",
+    "choices": [
+      "Edward Jenner",
+      "Louis Pasteur",
+      "Robert Koch",
+      "Alexander Fleming"
+    ],
+    "answer": 0,
+    "explanation": "En 1796, il utilise la vaccine des vaches, d'où le mot « vaccin ».",
+    "category": "sciences"
+  },
+  {
+    "id": "q752",
+    "theme": "Inventions",
+    "question": "Quel Français a mis au point un alphabet en relief pour les aveugles ?",
+    "choices": [
+      "Valentin Haüy",
+      "Louis Lumière",
+      "Charles Barbier",
+      "Louis Braille"
+    ],
+    "answer": 3,
+    "explanation": "Aveugle depuis l'âge de 3 ans, il invente son système à 15 ans, vers 1824.",
+    "category": "sciences"
+  },
+  {
+    "id": "q753",
+    "theme": "Inventions",
+    "question": "Qui a inventé la pile électrique en 1800 ?",
+    "choices": [
+      "André-Marie Ampère",
+      "Benjamin Franklin",
+      "Alessandro Volta",
+      "Michael Faraday"
+    ],
+    "answer": 2,
+    "explanation": "Le volt, unité de tension électrique, est nommé en son honneur.",
+    "category": "sciences"
+  },
+  {
+    "id": "q754",
+    "theme": "Inventions",
+    "question": "Qui est considéré comme le père de la théorie de l'information ?",
+    "choices": [
+      "Ada Lovelace",
+      "Claude Shannon",
+      "John von Neumann",
+      "Alan Turing"
+    ],
+    "answer": 1,
+    "explanation": "Son article de 1948 pose les bases de toutes les communications numériques.",
+    "category": "sciences"
+  },
+  {
+    "id": "q755",
+    "theme": "Inventions",
+    "question": "Que signifie le sigle HTML ?",
+    "choices": [
+      "HyperText Markup Language",
+      "High Tech Modern Language",
+      "HyperTransfer Machine Language",
+      "Home Tool Markup Language"
+    ],
+    "answer": 0,
+    "explanation": "Inventé par Tim Berners-Lee au CERN, c'est le langage qui décrit les pages web.",
+    "category": "sciences"
+  },
+  {
+    "id": "q756",
+    "theme": "Inventions",
+    "question": "Quelle est la plus petite unité d'information en informatique ?",
+    "choices": [
+      "L'octet",
+      "Le pixel",
+      "Le bit",
+      "Le kilo-octet"
+    ],
+    "answer": 2,
+    "explanation": "Un bit vaut 0 ou 1 ; un octet en regroupe huit.",
+    "category": "sciences"
+  },
+  {
+    "id": "q757",
+    "theme": "Football",
+    "question": "Quel joueur détient le record de buts en phase finale de Coupe du monde ?",
+    "choices": [
+      "Kylian Mbappé",
+      "Ronaldo",
+      "Just Fontaine",
+      "Miroslav Klose"
+    ],
+    "answer": 3,
+    "explanation": "L'Allemand a marqué 16 buts entre 2002 et 2014.",
+    "category": "sport"
+  },
+  {
+    "id": "q758",
+    "theme": "Football",
+    "question": "Quel joueur français a marqué 13 buts lors de la seule Coupe du monde 1958 ?",
+    "choices": [
+      "Raymond Kopa",
+      "Michel Platini",
+      "Just Fontaine",
+      "Thierry Henry"
+    ],
+    "answer": 2,
+    "explanation": "Ce record sur un seul tournoi n'a jamais été battu.",
+    "category": "sport"
+  },
+  {
+    "id": "q759",
+    "theme": "Football",
+    "question": "Dans quel pays s'est déroulée la première Coupe du monde de football, en 1930 ?",
+    "choices": [
+      "L'Argentine",
+      "L'Uruguay",
+      "L'Italie",
+      "Le Brésil"
+    ],
+    "answer": 1,
+    "explanation": "L'Uruguay, pays hôte, remporte aussi le tournoi.",
+    "category": "sport"
+  },
+  {
+    "id": "q760",
+    "theme": "Football",
+    "question": "Quel club est surnommé « la Maison blanche » ou « los Merengues » ?",
+    "choices": [
+      "Le Real Madrid",
+      "L'Atlético Madrid",
+      "Le FC Barcelone",
+      "Valence"
+    ],
+    "answer": 0,
+    "explanation": "Le club joue en blanc depuis sa fondation en 1902.",
+    "category": "sport"
+  },
+  {
+    "id": "q761",
+    "theme": "Football",
+    "question": "Quel joueur a remporté le plus de Ballons d'or ?",
+    "choices": [
+      "Cristiano Ronaldo",
+      "Lionel Messi",
+      "Michel Platini",
+      "Johan Cruyff"
+    ],
+    "answer": 1,
+    "explanation": "Messi en compte huit, le dernier en 2023.",
+    "category": "sport"
+  },
+  {
+    "id": "q762",
+    "theme": "Football",
+    "question": "Quel premier club français a disputé une finale de Coupe des clubs champions européens ?",
+    "choices": [
+      "L'Olympique de Marseille",
+      "Le Stade de Reims",
+      "L'AS Saint-Étienne",
+      "Le FC Nantes"
+    ],
+    "answer": 1,
+    "explanation": "Reims perd la toute première finale contre le Real Madrid en 1956.",
+    "category": "sport"
+  },
+  {
+    "id": "q763",
+    "theme": "Football",
+    "question": "Quel a été le premier club français à remporter la Ligue des champions ?",
+    "choices": [
+      "L'Olympique de Marseille",
+      "Le Paris Saint-Germain",
+      "L'AS Monaco",
+      "L'Olympique lyonnais"
+    ],
+    "answer": 0,
+    "explanation": "Marseille bat l'AC Milan 1-0 à Munich en 1993 ; le PSG l'a imité en 2025.",
+    "category": "sport"
+  },
+  {
+    "id": "q764",
+    "theme": "Football",
+    "question": "Combien de joueurs compte une équipe de football sur le terrain ?",
+    "choices": [
+      "9",
+      "10",
+      "11",
+      "12"
+    ],
+    "answer": 2,
+    "explanation": "Gardien compris ; une équipe réduite à moins de 7 joueurs ne peut pas continuer le match.",
+    "category": "sport"
+  },
+  {
+    "id": "q765",
+    "theme": "Rugby",
+    "question": "Quel pays a remporté le plus de Coupes du monde de rugby ?",
+    "choices": [
+      "L'Afrique du Sud",
+      "L'Australie",
+      "L'Angleterre",
+      "La Nouvelle-Zélande"
+    ],
+    "answer": 0,
+    "explanation": "Les Springboks ont gagné quatre fois : 1995, 2007, 2019 et 2023.",
+    "category": "sport"
+  },
+  {
+    "id": "q766",
+    "theme": "Rugby",
+    "question": "Quel pays a remporté la première Coupe du monde de rugby, en 1987 ?",
+    "choices": [
+      "L'Australie",
+      "La Nouvelle-Zélande",
+      "L'Afrique du Sud",
+      "La France"
+    ],
+    "answer": 1,
+    "explanation": "Les All Blacks battent la France en finale à Auckland.",
+    "category": "sport"
+  },
+  {
+    "id": "q767",
+    "theme": "Rugby",
+    "question": "Combien dure une mi-temps au rugby à XV ?",
+    "choices": [
+      "40 minutes",
+      "35 minutes",
+      "30 minutes",
+      "45 minutes"
+    ],
+    "answer": 0,
+    "explanation": "Un match dure donc 80 minutes, hors arrêts de jeu.",
+    "category": "sport"
+  },
+  {
+    "id": "q768",
+    "theme": "Rugby",
+    "question": "Quel surnom porte l'équipe d'Afrique du Sud de rugby ?",
+    "choices": [
+      "Les Brave Blossoms",
+      "Les Pumas",
+      "Les Wallabies",
+      "Les Springboks"
+    ],
+    "answer": 3,
+    "explanation": "Le springbok est une antilope d'Afrique australe ; les Wallabies sont les Australiens.",
+    "category": "sport"
+  },
+  {
+    "id": "q769",
+    "theme": "Rugby",
+    "question": "Quel numéro porte l'ailier gauche au rugby à XV ?",
+    "choices": [
+      "10",
+      "15",
+      "11",
+      "9"
+    ],
+    "answer": 2,
+    "explanation": "Le 9 est le demi de mêlée, le 10 l'ouvreur et le 15 l'arrière.",
+    "category": "sport"
+  },
+  {
+    "id": "q770",
+    "theme": "Tennis",
+    "question": "Quel tournoi du Grand Chelem se joue sur gazon ?",
+    "choices": [
+      "Roland-Garros",
+      "L'Open d'Australie",
+      "L'US Open",
+      "Wimbledon"
+    ],
+    "answer": 3,
+    "explanation": "Roland-Garros se joue sur terre battue ; les deux autres sur dur.",
+    "category": "sport"
+  },
+  {
+    "id": "q771",
+    "theme": "Tennis",
+    "question": "Quel joueur a remporté Roland-Garros 14 fois ?",
+    "choices": [
+      "Roger Federer",
+      "Novak Djokovic",
+      "Björn Borg",
+      "Rafael Nadal"
+    ],
+    "answer": 3,
+    "explanation": "Sa statue a été installée dans l'enceinte du stade en 2021.",
+    "category": "sport"
+  },
+  {
+    "id": "q772",
+    "theme": "Tennis",
+    "question": "Quelle est la plus haute distinction du tennis par équipes nationales ?",
+    "choices": [
+      "La Hopman Cup",
+      "La coupe Stanley",
+      "La coupe Davis",
+      "La Ryder Cup"
+    ],
+    "answer": 2,
+    "explanation": "La Ryder Cup est en golf, la coupe Stanley en hockey sur glace.",
+    "category": "sport"
+  },
+  {
+    "id": "q773",
+    "theme": "Cyclisme",
+    "question": "Quel coureur a remporté cinq Tours de France d'affilée, de 1991 à 1995 ?",
+    "choices": [
+      "Bernard Hinault",
+      "Jacques Anquetil",
+      "Eddy Merckx",
+      "Miguel Indurain"
+    ],
+    "answer": 3,
+    "explanation": "L'Espagnol est le seul à avoir gagné cinq Tours consécutifs.",
+    "category": "sport"
+  },
+  {
+    "id": "q774",
+    "theme": "Cyclisme",
+    "question": "Quel coureur néerlandais est le petit-fils de Raymond Poulidor ?",
+    "choices": [
+      "Tom Dumoulin",
+      "Dylan Groenewegen",
+      "Mathieu van der Poel",
+      "Wout van Aert"
+    ],
+    "answer": 2,
+    "explanation": "Son père, Adri van der Poel, était lui aussi coureur cycliste.",
+    "category": "sport"
+  },
+  {
+    "id": "q775",
+    "theme": "Cyclisme",
+    "question": "Quelle couleur de maillot porte le leader du classement de la montagne du Tour de France ?",
+    "choices": [
+      "Blanc",
+      "Blanc à pois rouges",
+      "Jaune",
+      "Vert"
+    ],
+    "answer": 1,
+    "explanation": "Le maillot vert récompense le classement par points, le blanc le meilleur jeune.",
+    "category": "sport"
+  },
+  {
+    "id": "q776",
+    "theme": "Cyclisme",
+    "question": "Quel col mythique des Alpes est célèbre pour ses 21 virages ?",
+    "choices": [
+      "Le Galibier",
+      "Le col du Tourmalet",
+      "L'Alpe d'Huez",
+      "Le col de la Madeleine"
+    ],
+    "answer": 2,
+    "explanation": "Chaque virage porte le nom d'un vainqueur d'étape ; le Tourmalet, lui, est dans les Pyrénées.",
+    "category": "sport"
+  },
+  {
+    "id": "q777",
+    "theme": "Cyclisme",
+    "question": "Comment s'appelle le mécanisme qui fait changer de vitesse sur un vélo ?",
+    "choices": [
+      "Le pédalier",
+      "La potence",
+      "Le dérailleur",
+      "Le moyeu"
+    ],
+    "answer": 2,
+    "explanation": "Il fait passer la chaîne d'un pignon à l'autre.",
+    "category": "sport"
+  },
+  {
+    "id": "q778",
+    "theme": "JO",
+    "question": "Quelle ville française a accueilli les premiers Jeux olympiques d'hiver, en 1924 ?",
+    "choices": [
+      "Grenoble",
+      "Albertville",
+      "Megève",
+      "Chamonix"
+    ],
+    "answer": 3,
+    "explanation": "La France a aussi organisé ceux de Grenoble (1968) et d'Albertville (1992).",
+    "category": "sport"
+  },
+  {
+    "id": "q779",
+    "theme": "JO",
+    "question": "Combien d'anneaux compte le drapeau olympique ?",
+    "choices": [
+      "7",
+      "4",
+      "5",
+      "6"
+    ],
+    "answer": 2,
+    "explanation": "Ils symbolisent l'union des continents ; avec le fond blanc, leurs six couleurs permettaient de reproduire tous les drapeaux de l'époque.",
+    "category": "sport"
+  },
+  {
+    "id": "q780",
+    "theme": "JO",
+    "question": "Où se sont déroulés les Jeux olympiques d'été de 2000 ?",
+    "choices": [
+      "Atlanta",
+      "Athènes",
+      "Pékin",
+      "Sydney"
+    ],
+    "answer": 3,
+    "explanation": "Ce sont les deuxièmes Jeux d'été organisés en Australie, après Melbourne en 1956.",
+    "category": "sport"
+  },
+  {
+    "id": "q781",
+    "theme": "JO",
+    "question": "Quel nageur détient le record de médailles d'or olympiques ?",
+    "choices": [
+      "Léon Marchand",
+      "Mark Spitz",
+      "Ian Thorpe",
+      "Michael Phelps"
+    ],
+    "answer": 3,
+    "explanation": "L'Américain en a remporté 23, dont 8 aux seuls Jeux de Pékin en 2008.",
+    "category": "sport"
+  },
+  {
+    "id": "q782",
+    "theme": "JO",
+    "question": "Quel athlète est surnommé « Lightning Bolt » ?",
+    "choices": [
+      "Carl Lewis",
+      "Asafa Powell",
+      "Yohan Blake",
+      "Usain Bolt"
+    ],
+    "answer": 3,
+    "explanation": "Il détient depuis 2009 les records du monde du 100 m (9 s 58) et du 200 m (19 s 19).",
+    "category": "sport"
+  },
+  {
+    "id": "q783",
+    "theme": "JO",
+    "question": "Dans quel sport la Slovène Janja Garnbret est-elle championne olympique ?",
+    "choices": [
+      "L'escalade",
+      "Le judo",
+      "Le ski alpin",
+      "Le tir à l'arc"
+    ],
+    "answer": 0,
+    "explanation": "Elle a remporté l'or à Tokyo en 2021 puis à Paris en 2024.",
+    "category": "sport"
+  },
+  {
+    "id": "q784",
+    "theme": "Sports",
+    "question": "Dans quel sport utilise-t-on le terme « ippon » ?",
+    "choices": [
+      "L'escrime",
+      "Le taekwondo",
+      "Le sumo",
+      "Le judo"
+    ],
+    "answer": 3,
+    "explanation": "Un ippon met fin immédiatement au combat.",
+    "category": "sport"
+  },
+  {
+    "id": "q785",
+    "theme": "Sports",
+    "question": "Dans quel sport réussit-on un « birdie » ?",
+    "choices": [
+      "Le badminton",
+      "Le tennis",
+      "Le cricket",
+      "Le golf"
+    ],
+    "answer": 3,
+    "explanation": "Un birdie, c'est un trou réussi en un coup de moins que le par.",
+    "category": "sport"
+  },
+  {
+    "id": "q786",
+    "theme": "Sports",
+    "question": "Quel sport collectif se joue avec un frisbee ?",
+    "choices": [
+      "Le kin-ball",
+      "L'ultimate",
+      "Le tchoukball",
+      "La crosse"
+    ],
+    "answer": 1,
+    "explanation": "Il se joue sans arbitre : les joueurs règlent eux-mêmes les fautes.",
+    "category": "sport"
+  },
+  {
+    "id": "q787",
+    "theme": "Sports",
+    "question": "Combien de joueurs une équipe de basket a-t-elle sur le terrain ?",
+    "choices": [
+      "4",
+      "7",
+      "6",
+      "5"
+    ],
+    "answer": 3,
+    "explanation": "Le basket a été inventé en 1891 par James Naismith, un professeur canadien.",
+    "category": "sport"
+  },
+  {
+    "id": "q788",
+    "theme": "Sports",
+    "question": "Combien de joueurs une équipe de hockey sur glace a-t-elle sur la glace ?",
+    "choices": [
+      "5",
+      "6",
+      "7",
+      "11"
+    ],
+    "answer": 1,
+    "explanation": "Cinq joueurs de champ et un gardien.",
+    "category": "sport"
+  },
+  {
+    "id": "q789",
+    "theme": "Sports",
+    "question": "Dans quel sport frappe-t-on un volant ?",
+    "choices": [
+      "Le badminton",
+      "Le squash",
+      "Le padel",
+      "Le tennis de table"
+    ],
+    "answer": 0,
+    "explanation": "Le volant peut dépasser 400 km/h lors d'un smash.",
+    "category": "sport"
+  },
+  {
+    "id": "q790",
+    "theme": "Sports",
+    "question": "Quel boxeur se surnommait lui-même « The Greatest » ?",
+    "choices": [
+      "Joe Frazier",
+      "Mike Tyson",
+      "George Foreman",
+      "Mohamed Ali"
+    ],
+    "answer": 3,
+    "explanation": "Il annonçait souvent le round de son KO à l'avance.",
+    "category": "sport"
+  },
+  {
+    "id": "q791",
+    "theme": "Sports",
+    "question": "Dans quel pays est né le sumo ?",
+    "choices": [
+      "La Corée du Sud",
+      "La Mongolie",
+      "Le Japon",
+      "La Chine"
+    ],
+    "answer": 2,
+    "explanation": "Rituel shinto à l'origine, il reste le sport national du Japon.",
+    "category": "sport"
+  },
+  {
+    "id": "q792",
+    "theme": "Sports",
+    "question": "Quelle course à la voile en solitaire fait le tour du monde sans escale ni assistance ?",
+    "choices": [
+      "Le Vendée Globe",
+      "La Route du Rhum",
+      "La Solitaire du Figaro",
+      "La Transat Jacques Vabre"
+    ],
+    "answer": 0,
+    "explanation": "Elle part des Sables-d'Olonne tous les quatre ans.",
+    "category": "sport"
+  },
+  {
+    "id": "q793",
+    "theme": "Sports",
+    "question": "Quel surnom porte la Transat Jacques Vabre ?",
+    "choices": [
+      "La Route du café",
+      "La Route du rhum",
+      "La Route des épices",
+      "La Route du thé"
+    ],
+    "answer": 0,
+    "explanation": "Elle relie la France au Brésil, pays du café, en hommage à son sponsor.",
+    "category": "sport"
+  },
+  {
+    "id": "q794",
+    "theme": "Sports",
+    "question": "Dans quel pays se trouve le circuit de Formule 1 de Spa-Francorchamps ?",
+    "choices": [
+      "La Belgique",
+      "Les Pays-Bas",
+      "L'Allemagne",
+      "Le Luxembourg"
+    ],
+    "answer": 0,
+    "explanation": "Son enchaînement Eau Rouge – Raidillon est l'un des plus célèbres du championnat.",
+    "category": "sport"
+  },
+  {
+    "id": "q795",
+    "theme": "Sports",
+    "question": "Quel pilote de Formule 1 détient le record de titres mondiaux, à égalité avec Michael Schumacher ?",
+    "choices": [
+      "Ayrton Senna",
+      "Max Verstappen",
+      "Sebastian Vettel",
+      "Lewis Hamilton"
+    ],
+    "answer": 3,
+    "explanation": "Les deux pilotes comptent sept titres de champion du monde.",
+    "category": "sport"
+  },
+  {
+    "id": "q796",
+    "theme": "Sports",
+    "question": "Quelle danse vient d'Argentine et d'Uruguay ?",
+    "choices": [
+      "Le tango",
+      "La samba",
+      "Le flamenco",
+      "La salsa"
+    ],
+    "answer": 0,
+    "explanation": "Le tango est né à la fin du XIXe siècle dans les quartiers populaires de Buenos Aires et de Montevideo.",
+    "category": "sport"
+  },
+  {
+    "id": "q797",
+    "theme": "Sports",
+    "question": "Quel sport de glisse se pratique sur une grande vague avec une planche ?",
+    "choices": [
+      "Le surf",
+      "Le kitesurf",
+      "Le wakeboard",
+      "Le skate"
+    ],
+    "answer": 0,
+    "explanation": "Né à Hawaï, il est olympique depuis Tokyo 2020.",
+    "category": "sport"
+  },
+  {
+    "id": "q798",
+    "theme": "Montagne",
+    "question": "Comment s'appelle la technique qui consiste à remonter une pente à skis avec des peaux sous les semelles ?",
+    "choices": [
+      "Le ski de randonnée",
+      "Le télémark",
+      "Le ski de fond",
+      "Le freeride"
+    ],
+    "answer": 0,
+    "explanation": "Les peaux de phoque (aujourd'hui synthétiques) empêchent le ski de reculer.",
+    "category": "sport"
+  },
+  {
+    "id": "q799",
+    "theme": "Montagne",
+    "question": "Quel alpiniste italien a été le premier à gravir les quatorze sommets de plus de 8 000 m ?",
+    "choices": [
+      "Simone Moro",
+      "Kurt Diemberger",
+      "Walter Bonatti",
+      "Reinhold Messner"
+    ],
+    "answer": 3,
+    "explanation": "Il boucle la série en 1986, en grande partie sans oxygène.",
+    "category": "sport"
+  },
+  {
+    "id": "q800",
+    "theme": "Montagne",
+    "question": "Quel nœud s'utilise le plus souvent pour s'encorder en escalade ?",
+    "choices": [
+      "Le nœud de huit",
+      "Le nœud de chaise",
+      "Le nœud de cabestan",
+      "Le nœud plat"
+    ],
+    "answer": 0,
+    "explanation": "Facile à vérifier d'un coup d'œil, il ne se défait pas sous la charge.",
+    "category": "sport"
+  },
+  {
+    "id": "q801",
+    "theme": "Montagne",
+    "question": "Comment s'appelle en escalade le fait de réussir une voie du premier coup, sans l'avoir jamais vue ?",
+    "choices": [
+      "Un top",
+      "Un flash",
+      "Un à vue",
+      "Une moulinette"
+    ],
+    "answer": 2,
+    "explanation": "Le flash, c'est la réussir du premier coup après avoir eu des informations sur la voie.",
+    "category": "sport"
+  },
+  {
+    "id": "q802",
+    "theme": "France",
+    "question": "De quelle région le kouglof est-il une spécialité ?",
+    "choices": [
+      "La Lorraine",
+      "La Bourgogne",
+      "La Franche-Comté",
+      "L'Alsace"
+    ],
+    "answer": 3,
+    "explanation": "Cette brioche aux raisins secs se cuit dans un moule en terre cuite à cheminée.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q803",
+    "theme": "France",
+    "question": "De quelle région l'aligot est-il une spécialité ?",
+    "choices": [
+      "La Savoie",
+      "La Bretagne",
+      "Le Pays basque",
+      "L'Aubrac"
+    ],
+    "answer": 3,
+    "explanation": "Cette purée filante mélange pommes de terre, ail et tome fraîche.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q804",
+    "theme": "France",
+    "question": "Quel fromage entre dans la recette de l'aligot ?",
+    "choices": [
+      "Le cantal",
+      "Le beaufort",
+      "La tome fraîche",
+      "Le comté"
+    ],
+    "answer": 2,
+    "explanation": "C'est elle qui rend la purée si élastique.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q805",
+    "theme": "France",
+    "question": "Quel ingrédient n'entre pas dans un gratin dauphinois traditionnel ?",
+    "choices": [
+      "La crème",
+      "Le fromage",
+      "Le lait",
+      "L'ail"
+    ],
+    "answer": 1,
+    "explanation": "Le vrai gratin dauphinois ne contient ni fromage ni œuf.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q806",
+    "theme": "France",
+    "question": "Quel plat français se mijote avec du bœuf, des lardons et du vin rouge ?",
+    "choices": [
+      "Le bœuf bourguignon",
+      "La blanquette",
+      "Le pot-au-feu",
+      "Le hachis parmentier"
+    ],
+    "answer": 0,
+    "explanation": "Il se cuisine traditionnellement avec du vin de Bourgogne.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q807",
+    "theme": "France",
+    "question": "Quelle ville est célèbre pour ses madeleines ?",
+    "choices": [
+      "Montélimar",
+      "Aix-en-Provence",
+      "Cambrai",
+      "Commercy"
+    ],
+    "answer": 3,
+    "explanation": "Cambrai est réputée pour ses bêtises, Aix pour ses calissons, Montélimar pour son nougat.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q808",
+    "theme": "France",
+    "question": "Quel gâteau breton est fait de beaucoup de beurre et de sucre ?",
+    "choices": [
+      "Le far breton",
+      "Le canelé",
+      "Le kouign-amann",
+      "Le gâteau basque"
+    ],
+    "answer": 2,
+    "explanation": "Son nom signifie « gâteau au beurre » en breton.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q809",
+    "theme": "France",
+    "question": "Quelle ville est la capitale du canelé ?",
+    "choices": [
+      "Bordeaux",
+      "Nantes",
+      "Lyon",
+      "Toulouse"
+    ],
+    "answer": 0,
+    "explanation": "Ce petit gâteau caramélisé est parfumé au rhum et à la vanille.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q810",
+    "theme": "France",
+    "question": "Quelle pâtisserie lyonnaise est de couleur rose ?",
+    "choices": [
+      "La galette des rois",
+      "Le saint-honoré",
+      "La tarte aux pralines",
+      "Le Paris-Brest"
+    ],
+    "answer": 2,
+    "explanation": "Les pralines roses sont des amandes enrobées de sucre coloré.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q811",
+    "theme": "France",
+    "question": "Quel gâteau doit son nom à une course cycliste ?",
+    "choices": [
+      "Le fraisier",
+      "Le mille-feuille",
+      "Le Paris-Brest",
+      "L'opéra"
+    ],
+    "answer": 2,
+    "explanation": "Il a été créé en 1910 par un pâtissier de Maisons-Laffitte, en forme de roue de vélo.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q812",
+    "theme": "France",
+    "question": "Quel dessert doit son nom à une opérette d'Offenbach ?",
+    "choices": [
+      "Les crêpes Suzette",
+      "La poire Belle-Hélène",
+      "La tarte Tatin",
+      "La pêche Melba"
+    ],
+    "answer": 1,
+    "explanation": "« La Belle Hélène » est créée en 1864 ; la pêche Melba, elle, rend hommage à une cantatrice.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q813",
+    "theme": "France",
+    "question": "Quelle région a donné le kig ha farz, un pot-au-feu au sarrasin ?",
+    "choices": [
+      "La Normandie",
+      "Le Nord",
+      "La Bretagne",
+      "L'Auvergne"
+    ],
+    "answer": 2,
+    "explanation": "Son nom signifie « viande et farce » en breton.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q814",
+    "theme": "France",
+    "question": "Quel plat traditionnel de Savoie se prépare avec du reblochon ?",
+    "choices": [
+      "La tartiflette",
+      "La fondue",
+      "La croziflette",
+      "La raclette"
+    ],
+    "answer": 0,
+    "explanation": "La tartiflette moderne a été popularisée dans les années 1980 pour vendre du reblochon.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q815",
+    "theme": "France",
+    "question": "Quel fromage est indispensable à une fondue savoyarde classique ?",
+    "choices": [
+      "Le camembert",
+      "Le beaufort",
+      "Le reblochon",
+      "Le roquefort"
+    ],
+    "answer": 1,
+    "explanation": "On y mêle souvent beaufort, comté et emmental de Savoie.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q816",
+    "theme": "France",
+    "question": "Dans quelle ville française l'Académie universelle du cassoulet a-t-elle son siège ?",
+    "choices": [
+      "Carcassonne",
+      "Albi",
+      "Castelnaudary",
+      "Toulouse"
+    ],
+    "answer": 2,
+    "explanation": "Castelnaudary se proclame « capitale mondiale du cassoulet ».",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q817",
+    "theme": "France",
+    "question": "Quel fromage est fabriqué dans les caves de Roquefort-sur-Soulzon ?",
+    "choices": [
+      "Le bleu d'Auvergne",
+      "Le cantal",
+      "La fourme d'Ambert",
+      "Le roquefort"
+    ],
+    "answer": 3,
+    "explanation": "Il est fait de lait de brebis et affiné dans les grottes du Combalou.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q818",
+    "theme": "France",
+    "question": "Comment appelle-t-on les beignets soufflés en pâte à choux, au nom peu élégant ?",
+    "choices": [
+      "Les merveilles",
+      "Les oreillettes",
+      "Les bugnes",
+      "Les pets-de-nonne"
+    ],
+    "answer": 3,
+    "explanation": "On les appelle aussi, plus poliment, « soupirs de nonne ».",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q819",
+    "theme": "France",
+    "question": "En quelle année est paru le premier Guide Michelin ?",
+    "choices": [
+      "1900",
+      "1889",
+      "1926",
+      "1931"
+    ],
+    "answer": 0,
+    "explanation": "Il était offert aux automobilistes pour… leur faire user leurs pneus.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q820",
+    "theme": "Monde",
+    "question": "Quel pays est le premier producteur mondial de cacao ?",
+    "choices": [
+      "L'Équateur",
+      "Le Ghana",
+      "La Côte d'Ivoire",
+      "Le Brésil"
+    ],
+    "answer": 2,
+    "explanation": "Elle fournit à elle seule environ 40 % du cacao mondial.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q821",
+    "theme": "Monde",
+    "question": "De quel pays vient le ceviche, du poisson cru mariné au citron vert ?",
+    "choices": [
+      "Le Pérou",
+      "Le Mexique",
+      "L'Argentine",
+      "Le Chili"
+    ],
+    "answer": 0,
+    "explanation": "C'est le plat national du Pérou.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q822",
+    "theme": "Monde",
+    "question": "Quel est l'ingrédient principal du guacamole ?",
+    "choices": [
+      "Le concombre",
+      "La tomate",
+      "Le poivron",
+      "L'avocat"
+    ],
+    "answer": 3,
+    "explanation": "La recette remonte aux Aztèques.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q823",
+    "theme": "Monde",
+    "question": "Avec quoi fabrique-t-on le tofu ?",
+    "choices": [
+      "Le pois chiche",
+      "Le soja",
+      "Le blé",
+      "Le riz"
+    ],
+    "answer": 1,
+    "explanation": "On fait cailler du lait de soja, un peu comme pour un fromage.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q824",
+    "theme": "Monde",
+    "question": "Quelle épice provient des stigmates d'une fleur de crocus ?",
+    "choices": [
+      "Le paprika",
+      "La cardamome",
+      "Le curcuma",
+      "Le safran"
+    ],
+    "answer": 3,
+    "explanation": "Il faut environ 150 000 fleurs pour obtenir un kilo de safran.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q825",
+    "theme": "Monde",
+    "question": "Quel plat japonais consiste en une anguille grillée posée sur du riz ?",
+    "choices": [
+      "L'unadon",
+      "Le katsudon",
+      "Le gyūdon",
+      "L'oyakodon"
+    ],
+    "answer": 0,
+    "explanation": "Le gyūdon est au bœuf, le katsudon au porc pané, l'oyakodon au poulet et à l'œuf.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q826",
+    "theme": "Monde",
+    "question": "Quel plat écossais est une panse de mouton farcie d'abats et d'avoine ?",
+    "choices": [
+      "Le Cullen skink",
+      "Le haggis",
+      "Le black pudding",
+      "Le scotch egg"
+    ],
+    "answer": 1,
+    "explanation": "Le poète Robert Burns lui a dédié une ode, récitée chaque 25 janvier.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q827",
+    "theme": "Monde",
+    "question": "Quel plat indien est à base de lentilles mijotées ?",
+    "choices": [
+      "Le biryani",
+      "Le tandoori",
+      "Le naan",
+      "Le dal"
+    ],
+    "answer": 3,
+    "explanation": "Le naan est un pain, le tandoori une cuisson au four en terre.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q828",
+    "theme": "Monde",
+    "question": "Quel est le nom de la confiserie espagnole aux amandes et au miel ?",
+    "choices": [
+      "Le flan",
+      "Le polvorón",
+      "Le churro",
+      "Le turrón"
+    ],
+    "answer": 3,
+    "explanation": "On le mange surtout à Noël, comme le nougat en France.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q829",
+    "theme": "Monde",
+    "question": "De quelle ville vient la pizza margherita ?",
+    "choices": [
+      "Rome",
+      "Palerme",
+      "Naples",
+      "Milan"
+    ],
+    "answer": 2,
+    "explanation": "Elle aurait été baptisée en 1889 en l'honneur de la reine Marguerite, aux couleurs du drapeau italien.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q830",
+    "theme": "Monde",
+    "question": "Quel fromage italien est indispensable au tiramisu ?",
+    "choices": [
+      "La ricotta",
+      "Le mascarpone",
+      "La mozzarella",
+      "Le gorgonzola"
+    ],
+    "answer": 1,
+    "explanation": "On le mêle aux jaunes d'œufs et au sucre pour la crème.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q831",
+    "theme": "Monde",
+    "question": "Quelle boisson japonaise est fabriquée à partir de riz fermenté ?",
+    "choices": [
+      "Le shochu",
+      "Le matcha",
+      "Le yuzu",
+      "Le saké"
+    ],
+    "answer": 3,
+    "explanation": "Le matcha est un thé vert, le yuzu un agrume.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q832",
+    "theme": "Monde",
+    "question": "Quelle sauce grecque est faite de yaourt, de concombre et d'ail ?",
+    "choices": [
+      "La tapenade",
+      "Le baba ganoush",
+      "Le tzatziki",
+      "Le houmous"
+    ],
+    "answer": 2,
+    "explanation": "Le houmous est à base de pois chiches, le baba ganoush d'aubergine.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q833",
+    "theme": "Monde",
+    "question": "Quel pays a inventé le goulasch ?",
+    "choices": [
+      "La République tchèque",
+      "La Hongrie",
+      "L'Autriche",
+      "La Pologne"
+    ],
+    "answer": 1,
+    "explanation": "Ce ragoût au paprika était le plat des bouviers des plaines hongroises.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q834",
+    "theme": "Monde",
+    "question": "Quel autre nom porte la canneberge ?",
+    "choices": [
+      "La groseille",
+      "L'airelle",
+      "La myrtille",
+      "La cranberry"
+    ],
+    "answer": 3,
+    "explanation": "Elle est cultivée dans des champs inondés au moment de la récolte.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q835",
+    "theme": "Monde",
+    "question": "Comment appelle-t-on la pâtisserie portugaise à la crème en pâte feuilletée ?",
+    "choices": [
+      "La sfogliatella",
+      "Le baklava",
+      "Le pastel de nata",
+      "Le churro"
+    ],
+    "answer": 2,
+    "explanation": "Les plus célèbres viennent du quartier de Belém, à Lisbonne.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q836",
+    "theme": "Monde",
+    "question": "Quel fruit appelle-t-on aussi « groseille de Chine » ?",
+    "choices": [
+      "Le kiwi",
+      "Le kumquat",
+      "Le kaki",
+      "Le litchi"
+    ],
+    "answer": 0,
+    "explanation": "Originaire de Chine, il a été rebaptisé kiwi par les Néo-Zélandais, qui l'ont rendu célèbre.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q837",
+    "theme": "Monde",
+    "question": "Comment appelle-t-on le fruit du plaqueminier ?",
+    "choices": [
+      "Le kiwano",
+      "Le fruit de la passion",
+      "Le kumquat",
+      "Le kaki"
+    ],
+    "answer": 3,
+    "explanation": "Il se mange bien mûr, quand sa chair devient presque liquide.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q838",
+    "theme": "Monde",
+    "question": "Quelle expression désigne un alcool servi avec des glaçons ?",
+    "choices": [
+      "Straight up",
+      "Sec",
+      "On the rocks",
+      "Neat"
+    ],
+    "answer": 2,
+    "explanation": "« Neat » désigne au contraire un alcool servi pur, sans glace.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q839",
+    "theme": "Monde",
+    "question": "Quel pays produit le plus de café au monde ?",
+    "choices": [
+      "L'Éthiopie",
+      "Le Vietnam",
+      "La Colombie",
+      "Le Brésil"
+    ],
+    "answer": 3,
+    "explanation": "Le Brésil produit environ un tiers du café mondial ; le Vietnam est deuxième.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q840",
+    "theme": "Cuisine",
+    "question": "Quel légume est l'ingrédient principal du baba ganoush ?",
+    "choices": [
+      "L'aubergine",
+      "La courgette",
+      "Le poivron",
+      "Le pois chiche"
+    ],
+    "answer": 0,
+    "explanation": "On fait griller l'aubergine jusqu'à ce que sa peau noircisse, pour le goût fumé.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q841",
+    "theme": "Cuisine",
+    "question": "Que signifie « al dente » pour des pâtes ?",
+    "choices": [
+      "Servies froides",
+      "Très cuites",
+      "Encore un peu fermes sous la dent",
+      "Cuites à la vapeur"
+    ],
+    "answer": 2,
+    "explanation": "L'expression italienne signifie littéralement « à la dent ».",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q842",
+    "theme": "Cuisine",
+    "question": "Comment appelle-t-on la technique qui consiste à flamber un plat à l'alcool ?",
+    "choices": [
+      "Blanchir",
+      "Napper",
+      "Déglacer",
+      "Flamber"
+    ],
+    "answer": 3,
+    "explanation": "Déglacer, c'est décoller les sucs d'une poêle avec un liquide.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q843",
+    "theme": "Cuisine",
+    "question": "Quel est le principal ingrédient de la mayonnaise, avec l'huile ?",
+    "choices": [
+      "Le jaune d'œuf",
+      "Le blanc d'œuf",
+      "La crème",
+      "Le beurre"
+    ],
+    "answer": 0,
+    "explanation": "On ajoute de la moutarde, qui aide l'émulsion à prendre.",
+    "category": "gastronomie"
+  },
+  {
+    "id": "q844",
+    "theme": "Cuisine",
+    "question": "À partir de quelle plante fabrique-t-on la tequila ?",
+    "choices": [
+      "Le maïs",
+      "Le cactus",
+      "La canne à sucre",
+      "L'agave bleu"
+    ],
+    "answer": 3,
+    "explanation": "Le cœur de l'agave, la piña, est cuit puis fermenté et distillé.",
+    "category": "gastronomie"
   }
 ]

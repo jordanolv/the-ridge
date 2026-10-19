@@ -1,5 +1,7 @@
 import EnigmeStateModel, { IEnigmeStateDoc, Riddle } from '../models/enigme-state.model';
 
+const RECENT_RIDDLES_KEPT = 300;
+
 export class EnigmeRepository {
   static async get(): Promise<IEnigmeStateDoc | null> {
     return EnigmeStateModel.findOne();
@@ -23,6 +25,7 @@ export class EnigmeRepository {
     threadId: string;
     messageId: string;
     riddle: Riddle;
+    riddleKey: string;
     endsAt: Date;
     announceMessageId?: string | null;
   }): Promise<void> {
@@ -38,6 +41,7 @@ export class EnigmeRepository {
     doc.solvers = [];
     doc.announceMessageId = params.announceMessageId ?? undefined;
     doc.nextSpawnAt = undefined;
+    doc.recentRiddleKeys = [...(doc.recentRiddleKeys ?? []), params.riddleKey].slice(-RECENT_RIDDLES_KEPT);
     doc.markModified('riddle');
     doc.markModified('revealedAt');
     doc.markModified('hintedAt');

@@ -3,6 +3,7 @@ import * as path from 'path';
 import { formatInTimeZone } from 'date-fns-tz';
 import { MountainService, MountainInfo } from '../../peak-hunters/services/mountain.service';
 import { QuizQuestion } from './quiz.service';
+import { pickLeastRecent } from '../../../shared/utils/bag';
 
 interface BankQuestion {
   id: string;
@@ -20,6 +21,12 @@ export const MOUNTAIN_THEME = '🏔️ Montagne';
 
 const CATEGORY_LABELS: Record<string, string> = {
   'culture-g': '🧠 Culture G',
+  'histoire': '🏛️ Histoire',
+  'sciences': '🔬 Sciences',
+  'arts': '🎨 Arts & Lettres',
+  'cinema': '🎬 Cinéma & Séries',
+  'sport': '⚽ Sport',
+  'gastronomie': '🍽️ Gastronomie',
   'geographie': '🌍 Géographie',
   'animaux': '🐾 Animaux',
   'faune-flore': '🌿 Faune & Flore',
@@ -226,9 +233,10 @@ export class QuizQuestionBankService {
 
     const categories = sample([...new Set(this.bank.map((q) => q.category))], count - questions.length);
     for (const category of categories) {
-      const pool = this.bank.filter((q) => q.category === category && !usedIds.has(`bank:${q.id}`));
-      if (pool.length === 0) continue;
-      const q = this.toQuizQuestion(pick(pool));
+      const pool = this.bank.filter((q) => q.category === category);
+      const picked = pickLeastRecent(pool, (q) => `bank:${q.id}`, recentIds);
+      if (!picked) continue;
+      const q = this.toQuizQuestion(picked);
       usedIds.add(q.id);
       questions.push(q);
     }

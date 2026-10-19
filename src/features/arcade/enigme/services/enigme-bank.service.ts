@@ -1,5 +1,6 @@
 import bank from '../data/enigmes.json';
 import type { EnigmeType, Riddle } from '../models/enigme-state.model';
+import { pickLeastRecent } from '../../../../shared/utils/bag';
 
 const ANAGRAM_WORDS = [
   'MONTAGNE', 'GLACIER', 'SOMMET', 'CASCADE', 'RIVIERE', 'VOLCAN', 'DESERT', 'PLANETE', 'GALAXIE', 'FUSEE',
@@ -13,7 +14,7 @@ const ANAGRAM_WORDS = [
 ];
 
 const rand = (n: number) => Math.floor(Math.random() * n);
-const pick = <T>(arr: T[]): T => arr[rand(arr.length)];
+const pick = <T>(arr: readonly T[]): T => arr[rand(arr.length)];
 const between = (min: number, max: number) => min + rand(max - min + 1);
 
 /** Normalise pour comparer : minuscules, sans accents, sans ponctuation ni espaces. */
@@ -40,8 +41,8 @@ function shuffleLetters(word: string): string {
   return out;
 }
 
-function generateAnagramme(): Riddle {
-  const word = pick(ANAGRAM_WORDS);
+function generateAnagramme(recent: readonly string[]): Riddle {
+  const word = pickLeastRecent(ANAGRAM_WORDS, anagramKey, recent)!;
   return {
     type: 'anagramme',
     question: `Remets les lettres dans l'ordre :\n## ${shuffleLetters(word).split('').join(' ')}`,
@@ -131,7 +132,13 @@ function generateCalcul(): Riddle {
   };
 }
 
-const GENERATORS: Record<'suite' | 'anagramme' | 'calcul', () => Riddle> = {
+const anagramKey = (word: string) => `anagramme:${word}`;
+
+export function riddleKey(riddle: Riddle): string {
+  return riddle.type === 'anagramme' ? anagramKey(riddle.answers[0]) : `${riddle.type}:${riddle.question}`;
+}
+
+const GENERATORS: Record<'suite' | 'anagramme' | 'calcul', (recent: readonly string[]) => Riddle> = {
   suite: generateSuite,
   anagramme: generateAnagramme,
   calcul: generateCalcul,
@@ -149,12 +156,18 @@ export const ENIGME_TYPE_LABELS: Record<EnigmeType, string> = {
 };
 
 export class EnigmeBankService {
-  /** Un type au hasard, puis une énigme de ce type (générée ou piochée dans la banque). */
-  static pickRiddle(): Riddle {
+  /** Un type au hasard, puis une énigme de ce type pas encore posée récemment (générée ou piochée dans la banque). */
+  static pickRiddle(recent: readonly string[] = []): Riddle {
     const type = pick(Object.keys(ENIGME_TYPE_LABELS) as EnigmeType[]);
-    if (type in GENERATORS) return GENERATORS[type as keyof typeof GENERATORS]();
+    if (type in GENERATORS) {
+      const generate = GENERATORS[type as keyof typeof GENERATORS];
+      const seen = new Set(recent);
+      let riddle = generate(recent);
+      for (let tries = 0; tries < 20 && seen.has(riddleKey(riddle)); tries++) riddle = generate(recent);
+      return riddle;
+    }
 
-    return pick(BANK.filter((r) => r.type === type));
+    return pickLeastRecent(BANK.filter((r) => r.type === type), riddleKey, recent)!;
   }
 
   static isCorrect(riddle: Riddle, raw: string): boolean {

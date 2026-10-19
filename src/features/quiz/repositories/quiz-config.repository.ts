@@ -1,6 +1,8 @@
 import QuizConfigModel, { IQuizConfigDoc } from '../models/quiz-config.model';
 import { QuizQuestion } from '../services/quiz.service';
 
+const RECENT_QUESTIONS_KEPT = 1000;
+
 export class QuizConfigRepository {
   static async getOrCreate(): Promise<IQuizConfigDoc> {
     const existing = await QuizConfigModel.findOne();
@@ -17,7 +19,7 @@ export class QuizConfigRepository {
     doc.activeAnswers = {};
     doc.firstCorrectByQuestion = {};
     const prev = doc.recentQuestionTexts ?? [];
-    doc.recentQuestionTexts = [...prev, ...questions.map((q) => q.id)].slice(-60);
+    doc.recentQuestionTexts = [...prev, ...questions.map((q) => q.id)].slice(-RECENT_QUESTIONS_KEPT);
     doc.markModified('activeQuestions');
     doc.markModified('activeThemeChoices');
     doc.markModified('activeAnswers');
