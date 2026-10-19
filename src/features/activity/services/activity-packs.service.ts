@@ -50,7 +50,7 @@ export class ActivityPacksService {
     const opened = await openPack(user.id, tier);
     if ('reason' in opened) return opened;
 
-    const show: Omit<PackShow, 'startsAt'> = {
+    const show: Omit<PackShow, 'startsAt' | 'speed' | 'paceAnchor'> = {
       id: randomUUID(),
       opener: user,
       tier,
@@ -59,6 +59,6 @@ export class ActivityPacksService {
       cards: opened.cards.map(toShowCard),
       skippedAt: null,
     };
-    return { ok: true, show: ActivityLiveService.schedule(instanceId, show) };
+    return { ok: true, show: ActivityLiveService.schedule(instanceId, show), packs: await this.tiers(user.id).catch(() => []) };
   }
 }

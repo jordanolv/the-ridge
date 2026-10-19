@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from 'react';
-import type { ActivityUser, FeedEntry, LiveClientMessage, LiveReaction, LiveServerMessage, PackShow, ReactionEmoji } from '../../../src/features/activity/activity.types';
-import { showEnd } from '../../../src/features/activity/pack-show.timeline';
+import type { ActivityUser, FeedEntry, LiveClientMessage, LiveReaction, LiveServerMessage, PackShow, ReactionEmoji, ShowSpeed } from '../../../src/features/activity/activity.types';
+import { showEnd, withSpeed } from '../../../src/features/activity/pack-show.timeline';
 import { SAMPLE_FEED } from './sample';
 import type { Session } from './session';
 
@@ -80,6 +80,12 @@ export function skip(show: PackShow): void {
     return;
   }
   send({ type: 'skip', showId: show.id });
+}
+
+/** Appliquée tout de suite à l'écran sans attendre l'aller-retour ; la diffusion du serveur fait foi ensuite. */
+export function setSpeed(show: PackShow, speed: ShowSpeed): void {
+  update({ shows: state.shows.map(s => (s.id === show.id ? { ...s, ...withSpeed(s, speed, serverNow()) } : s)) });
+  if (state.status !== 'preview') send({ type: 'speed', showId: show.id, speed });
 }
 
 export function startLive(session: Session, user: ActivityUser): () => void {

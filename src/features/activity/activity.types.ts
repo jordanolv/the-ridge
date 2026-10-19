@@ -176,9 +176,16 @@ export interface PackShow {
   cards: ShowCard[];
   startsAt: number;
   skippedAt: number | null;
+  speed: ShowSpeed;
+  /** Dernier changement de vitesse : l'instant serveur et la position dans l'ouverture à cet instant. */
+  paceAnchor: { at: number; t: number } | null;
 }
 
-export type OpenPackResult = { ok: true; show: PackShow } | { ok: false; reason: 'no-pack' | 'draw-failed' };
+export const SHOW_SPEEDS = [1, 2, 4] as const;
+export type ShowSpeed = (typeof SHOW_SPEEDS)[number];
+
+/** `packs` : ce qui reste après celui-ci, pour proposer d'enchaîner depuis le récap. */
+export type OpenPackResult = { ok: true; show: PackShow; packs: PackTierInfo[] } | { ok: false; reason: 'no-pack' | 'draw-failed' };
 
 export interface FeedEntry {
   id: string;
@@ -210,4 +217,5 @@ export type LiveServerMessage =
 export type LiveClientMessage =
   | { type: 'join'; token: string; instanceId: string }
   | { type: 'react'; emoji: ReactionEmoji }
-  | { type: 'skip'; showId: string };
+  | { type: 'skip'; showId: string }
+  | { type: 'speed'; showId: string; speed: ShowSpeed };
