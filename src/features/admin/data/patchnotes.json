@@ -547,7 +547,7 @@
   },
   {
     "version": "1.11.0",
-    "timestamp": 1791973734,
+    "timestamp": 1792411132,
     "sections": [
       {
         "type": "new",
@@ -565,12 +565,14 @@
             "items": [
               "Chaque lundi, une **paie** est versée à tous ceux qui ont été actifs dans la semaine : **30 min de vocal** suffisent pour être payé",
               "Une **base fixe** pour tout le monde, plus une **part selon ton activité** (vocal et messages)",
-              "Tu reçois ta **fiche de paie en MP** : base, part d'activité, total et ton rang"
+              "Tu reçois ta **fiche de paie en MP** : base, part d'activité, total et ton rang",
+              "À la fin de chaque session vocale, le récap affiche ton **rang de la semaine** et une **estimation de ta paie** du lundi"
             ]
           },
           {
             "title": "🛒 /shop — la boutique du serveur",
             "items": [
+              "Deux rayons : **Packs** et **Cosmétiques**, avec ton solde toujours affiché en haut",
               "🎨 **Rôle coloré** — 40 💰 / mois : ton propre rôle, à la couleur que tu veux (code hexa accepté, dégradé si le serveur le permet)",
               "🎁 **Packs Peak Hunters**, achetés en un clic : **Sentier** 15 💰 (3 cartes) · **Falaise** 25 💰 (5 cartes, la dernière avec de meilleures chances) · **Sommet** 45 💰 (5 cartes, la dernière Épique ou Légendaire)",
               "Les packs sont limités à **200 💰 par semaine** et par joueur, remis à zéro le lundi : la collection reste une chasse, même pour les plus riches",
@@ -612,7 +614,7 @@
             "title": "🏆 Récompenses à la nouvelle échelle",
             "items": [
               "Bingo, Avalanche, Juste Prix : **40 💰** la victoire · Énigme : **40 / 25 / 15 💰** pour le podium",
-              "Raids : **20 / 50 / 100 💰** selon la rareté · Daily : **0 à 10 💰**",
+              "Raids : **20 à 200 💰** selon la rareté et ta part des dégâts · Daily : **0 à 10 💰**",
               "🎂 Anniversaire : **200 💰** de cadeau, en plus des 5 expéditions",
               "XP, expéditions et fragments ne changent pas"
             ]
