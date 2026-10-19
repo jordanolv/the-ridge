@@ -12,7 +12,6 @@ export default {
         .setDescription('La fonctionnalité à configurer')
         .setRequired(true)
         .addChoices(
-          { name: 'Logs', value: 'logs' },
           { name: 'Anniversaires', value: 'birthday' },
           // On peut ajouter d'autres features ici plus tard
         ))
@@ -38,10 +37,6 @@ export default {
       let result: { success: boolean; message: string };
 
       switch (feature) {
-        case 'logs':
-          result = await adminService.setLogsChannel(client, channel.id);
-          break;
-
         case 'birthday':
           result = await adminService.setBirthdayChannel(client, channel.id);
           break;

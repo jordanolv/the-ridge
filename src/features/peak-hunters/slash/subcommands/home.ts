@@ -195,7 +195,7 @@ export async function handleHomeButton(
   } else if (action === 'expe') {
     const doc = await UserMountainsRepository.getOrCreate(user.id);
     const total = doc.sentierTickets + doc.falaiseTickets + doc.sommetTickets;
-    components = [buildExpeditionContainer(user, doc.sentierTickets, doc.falaiseTickets, doc.sommetTickets, doc.fragments)];
+    components = [buildExpeditionContainer(user, doc)];
   } else if (action === 'map') {
     const countries = await MapService.getCountriesForUser(user.id);
     const totalCountries = MapService.getTotalCountryCount();

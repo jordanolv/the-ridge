@@ -29,6 +29,18 @@ export class PartyRepository {
     return PartyEventModel.create(eventData);
   }
 
+  /** Null si la soirée est déjà terminée : la condition est dans le filtre, un double clic ne la clôture qu'une fois. */
+  async endOnce(eventId: string, updates: Partial<PartyEvent>): Promise<PartyEvent | null> {
+    if (!Types.ObjectId.isValid(eventId)) {
+      throw new NotFoundError('Événement non trouvé');
+    }
+    return PartyEventModel.findOneAndUpdate(
+      { _id: eventId, status: { $ne: 'ended' } },
+      { ...updates, status: 'ended' },
+      { new: true },
+    );
+  }
+
   async update(eventId: string, updates: Partial<PartyEvent>): Promise<PartyEvent> {
     if (!Types.ObjectId.isValid(eventId)) {
       throw new NotFoundError('Événement non trouvé');

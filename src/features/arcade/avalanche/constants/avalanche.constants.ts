@@ -10,7 +10,7 @@ export const AVALANCHE_NUMBER_MAX = 50;
 export const AVALANCHE_MIN_PLAYERS = 2;
 
 export const AVALANCHE_REWARD = {
-  money: 750,
+  money: 40,
   xp: 600,
   expeditions: 4,
 };

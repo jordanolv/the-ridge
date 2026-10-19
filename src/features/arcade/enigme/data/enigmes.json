@@ -1,76 +1,750 @@
 [
-  { "type": "devinette", "question": "Qu'est-ce qui a des dents mais ne mord jamais ?", "answers": ["peigne", "un peigne"], "hint": "On s'en sert le matin devant le miroir." },
-  { "type": "devinette", "question": "Je suis plein le jour et vide la nuit. Qui suis-je ?", "answers": ["chaussure", "chaussures", "soulier", "souliers", "une chaussure"], "hint": "On en porte deux, et on les retire avant de dormir." },
-  { "type": "devinette", "question": "Plus j'ai de gardiens, moins je suis gardé. Qui suis-je ?", "answers": ["secret", "un secret", "le secret"], "hint": "On le confie à voix basse." },
-  { "type": "devinette", "question": "Qu'est-ce qui monte et descend sans jamais bouger ?", "answers": ["escalier", "un escalier", "les escaliers", "escaliers"], "hint": "On le prend quand l'ascenseur est en panne." },
-  { "type": "devinette", "question": "Je commence la nuit et je termine le matin. Qui suis-je ?", "answers": ["n", "la lettre n", "lettre n", "le n"], "hint": "Regarde bien les mots eux-mêmes… c'est une lettre." },
-  { "type": "devinette", "question": "Qu'est-ce qui a un cou mais pas de tête ?", "answers": ["bouteille", "une bouteille", "la bouteille"], "hint": "On la débouche pour trinquer." },
-  { "type": "devinette", "question": "Plus je sèche, plus je deviens mouillée. Qui suis-je ?", "answers": ["serviette", "une serviette", "la serviette"], "hint": "Elle attend à la sortie de la douche." },
-  { "type": "devinette", "question": "J'ai un lit mais je ne dors jamais. Qui suis-je ?", "answers": ["riviere", "une riviere", "la riviere", "fleuve", "un fleuve", "le fleuve"], "hint": "Je coule vers la mer." },
-  { "type": "devinette", "question": "Je peux traverser une vitre sans la casser. Qui suis-je ?", "answers": ["lumiere", "la lumiere"], "hint": "Le soleil en envoie à volonté." },
-  { "type": "devinette", "question": "J'ai des villes mais pas de maisons, des forêts mais pas d'arbres, de l'eau mais pas de poissons. Qui suis-je ?", "answers": ["carte", "une carte", "la carte", "carte geographique", "une carte geographique"], "hint": "On la déplie pour ne pas se perdre." },
-  { "type": "devinette", "question": "On me jette quand on a besoin de moi et on me reprend quand on n'en a plus besoin. Qui suis-je ?", "answers": ["ancre", "une ancre", "l'ancre", "lancre"], "hint": "Les marins me connaissent bien." },
-  { "type": "devinette", "question": "Je t'appartiens, mais les autres m'utilisent bien plus que toi. Qui suis-je ?", "answers": ["prenom", "ton prenom", "mon prenom", "nom", "ton nom", "mon nom", "le prenom"], "hint": "On te l'a donné à la naissance." },
-  { "type": "devinette", "question": "Plus on m'en enlève, plus je deviens grand. Qui suis-je ?", "answers": ["trou", "un trou", "le trou"], "hint": "Une pelle suffit à me faire grandir." },
-  { "type": "devinette", "question": "J'ai une tête et une queue, mais pas de corps. Qui suis-je ?", "answers": ["piece", "une piece", "piece de monnaie", "une piece de monnaie", "la piece"], "hint": "On me lance pour tirer au sort." },
-  { "type": "devinette", "question": "Je suis léger comme une plume, pourtant même le plus fort ne peut me retenir plus de quelques minutes. Qui suis-je ?", "answers": ["souffle", "le souffle", "respiration", "la respiration", "son souffle"], "hint": "Tu le retiens sous l'eau." },
-  { "type": "devinette", "question": "J'ai des touches mais aucune porte à ouvrir. Qui suis-je ?", "answers": ["piano", "un piano", "le piano", "clavier", "un clavier"], "hint": "Noires et blanches, mes touches font de la musique." },
-  { "type": "devinette", "question": "Je parle toutes les langues sans en avoir appris aucune. Qui suis-je ?", "answers": ["echo", "un echo", "l'echo", "lecho"], "hint": "Crie dans la montagne et je te répondrai." },
-  { "type": "devinette", "question": "J'ai des racines que personne ne voit, je suis plus haut que les arbres, je monte, je monte, et pourtant je ne pousse jamais. Qui suis-je ?", "answers": ["montagne", "une montagne", "la montagne"], "hint": "Les grimpeurs en rêvent, et Peak Hunters aussi." },
-  { "type": "devinette", "question": "Trente chevaux blancs sur une colline rouge : d'abord ils mâchent, puis ils frappent, puis ils restent immobiles. Qui sont-ils ?", "answers": ["dents", "les dents", "des dents", "dent"], "hint": "Ils sont dans ta bouche." },
-  { "type": "devinette", "question": "Qu'est-ce qu'on peut casser sans jamais le toucher ?", "answers": ["silence", "le silence", "promesse", "une promesse", "la promesse"], "hint": "Un simple mot suffit à le briser." },
-  { "type": "devinette", "question": "Je suis toujours devant toi mais tu ne peux jamais me voir. Qui suis-je ?", "answers": ["avenir", "l'avenir", "lavenir", "futur", "le futur"], "hint": "Personne ne sait ce qu'il réserve." },
-  { "type": "devinette", "question": "Qu'est-ce qui a quatre pattes le matin, deux le midi et trois le soir ?", "answers": ["homme", "l'homme", "lhomme", "humain", "l'humain", "etre humain", "l'etre humain", "un homme"], "hint": "L'énigme du Sphinx… pense à une vie entière." },
-  { "type": "devinette", "question": "Je suis noir quand tu m'achètes, rouge quand tu m'utilises, gris quand tu me jettes. Qui suis-je ?", "answers": ["charbon", "le charbon", "du charbon"], "hint": "On me met dans le barbecue." },
-  { "type": "devinette", "question": "J'ai un œil mais je ne vois rien. Qui suis-je ?", "answers": ["aiguille", "une aiguille", "l'aiguille", "cyclone", "un cyclone", "ouragan", "un ouragan"], "hint": "On passe un fil à travers moi." },
-  { "type": "devinette", "question": "Quel mot devient plus court quand on lui ajoute deux lettres ?", "answers": ["court", "le mot court"], "hint": "La réponse est dans la question." },
-  { "type": "devinette", "question": "Je peux être craqué, fait, raconté et joué. Qui suis-je ?", "answers": ["blague", "une blague", "la blague"], "hint": "Si elle est bonne, tout le monde rit." },
-  { "type": "devinette", "question": "Plus tu en prends, plus tu en laisses derrière toi. Que sont-ils ?", "answers": ["pas", "des pas", "les pas", "empreintes", "des empreintes"], "hint": "Regarde dans la neige derrière toi." },
-  { "type": "devinette", "question": "J'ai des ailes mais je ne suis pas un oiseau, je vis dans le noir et je dors la tête en bas. Qui suis-je ?", "answers": ["chauve-souris", "chauve souris", "chauvesouris", "une chauve-souris", "la chauve-souris"], "hint": "Batman m'a choisie comme emblème." },
-
-  { "type": "charade", "question": "Mon premier est un animal qui miaule.\nMon second est le contraire de tard.\nMon tout est une demeure fortifiée.", "answers": ["chateau", "un chateau", "le chateau"], "hint": "On y trouve un donjon et parfois un pont-levis." },
-  { "type": "charade", "question": "Mon premier est un métal précieux.\nMon second est un habitant du ciel.\nMon tout est un fruit.", "answers": ["orange", "une orange", "l'orange"], "hint": "Le fruit porte le nom de sa couleur." },
-  { "type": "charade", "question": "Mon premier coupe du bois.\nMon second est une boisson chaude.\nMon tout est une grande ville.", "answers": ["cite", "une cite", "la cite"], "hint": "Synonyme de ville, on parle aussi de cité médiévale." },
-  { "type": "charade", "question": "Mon premier est une note de musique.\nMon second est une autre note de musique.\nMon troisième est une négation.\nMon tout est un jeu de société.", "answers": ["domino", "dominos", "les dominos", "un domino"], "hint": "On aligne des pièces avec des points." },
-  { "type": "charade", "question": "Mon premier est un animal qui miaule.\nMon second recouvre tout le corps.\nMon tout se porte sur la tête.", "answers": ["chapeau", "un chapeau", "le chapeau"], "hint": "On le soulève pour saluer." },
-  { "type": "charade", "question": "Mon premier est un animal qui miaule.\nMon second est un adjectif possessif.\nMon tout est le petit de mon premier.", "answers": ["chaton", "un chaton", "le chaton"], "hint": "Il est tout petit et tout doux." },
-  { "type": "charade", "question": "Mon premier est un rongeur.\nMon second est une boisson chaude.\nMon tout signifie manqué.", "answers": ["rate", "raté"], "hint": "C'est ce qu'on dit quand on vise à côté." },
-  { "type": "charade", "question": "Mon premier est un poisson plat.\nMon second, tu en as deux sur le visage.\nMon tout brille dans le ciel.", "answers": ["soleil", "le soleil"], "hint": "Il se lève à l'est." },
-  { "type": "charade", "question": "Mon premier est une note de musique.\nMon second est le verbe aller à la troisième personne.\nMon troisième est le contraire de laid.\nMon tout est dans la salle de bain.", "answers": ["lavabo", "un lavabo", "le lavabo"], "hint": "On s'y lave les mains." },
-  { "type": "charade", "question": "Mon premier est un mois de l'année.\nMon second est un organe de la vue.\nMon tout est une ville du sud de la France.", "answers": ["marseille"], "hint": "Ville de l'OM et du Vieux-Port." },
-  { "type": "charade", "question": "Mon premier vit dans les égouts.\nMon second est l'arrière du corps.\nMon tout flotte sur l'eau.", "answers": ["radeau", "un radeau", "le radeau"], "hint": "Des troncs attachés ensemble." },
-  { "type": "charade", "question": "Mon premier est une ancienne pièce de monnaie.\nMon second est ce que l'on fait quand c'est drôle.\nMon tout illumine un visage.", "answers": ["sourire", "un sourire", "le sourire"], "hint": "Il montre les dents… gentiment." },
-  { "type": "charade", "question": "Mon premier est un pronom personnel.\nMon second est un contenant pour boire.\nMon tout est une fleur.", "answers": ["tulipe", "une tulipe", "la tulipe"], "hint": "Les Pays-Bas en sont couverts au printemps." },
-  { "type": "charade", "question": "Mon premier est ce que fait la vache.\nMon second est une partie de la jambe.\nMon tout est un objet pour écrire.", "answers": ["feutre", "un feutre", "le feutre"], "hint": "Sa pointe est douce et son encre colore." },
-
-  { "type": "emoji", "question": "🦁 👑", "answers": ["le roi lion", "roi lion", "lion king", "the lion king"], "hint": "Un film d'animation Disney." },
-  { "type": "emoji", "question": "🐟 🔍 🌊", "answers": ["le monde de nemo", "monde de nemo", "nemo", "finding nemo"], "hint": "Un père poisson-clown cherche son fils." },
-  { "type": "emoji", "question": "❄️ 👸 ⛄", "answers": ["la reine des neiges", "reine des neiges", "frozen"], "hint": "Libérée, délivrée…" },
-  { "type": "emoji", "question": "🚢 🧊 💔", "answers": ["titanic"], "hint": "Un paquebot, un iceberg, une histoire d'amour." },
-  { "type": "emoji", "question": "🕷️ 🧑 🏙️", "answers": ["spider-man", "spiderman", "spider man"], "hint": "Un super-héros qui tisse sa toile." },
-  { "type": "emoji", "question": "🧙‍♂️ ⚡ 👓", "answers": ["harry potter"], "hint": "Un sorcier avec une cicatrice sur le front." },
-  { "type": "emoji", "question": "💍 🌋 🧝", "answers": ["le seigneur des anneaux", "seigneur des anneaux", "lord of the rings", "the lord of the rings"], "hint": "Un anneau pour les gouverner tous." },
-  { "type": "emoji", "question": "🦖 🏝️ 🚙", "answers": ["jurassic park", "jurassic world"], "hint": "Des dinosaures ressuscités dans un parc." },
-  { "type": "emoji", "question": "👽 📞 🚲 🌕", "answers": ["e.t.", "et", "e t", "et l'extraterrestre", "et l'extra-terrestre", "e.t. l'extra-terrestre"], "hint": "« Téléphone maison. »" },
-  { "type": "emoji", "question": "🦈 🏖️ 😱", "answers": ["les dents de la mer", "dents de la mer", "jaws"], "hint": "Un film de Spielberg qui a vidé les plages." },
-  { "type": "emoji", "question": "🤖 ❤️ 🌱 🚀", "answers": ["wall-e", "walle", "wall e"], "hint": "Un petit robot qui nettoie la Terre." },
-  { "type": "emoji", "question": "🐀 👨‍🍳 🇫🇷", "answers": ["ratatouille"], "hint": "Un rat qui cuisine à Paris." },
-  { "type": "emoji", "question": "🎈 🏠 👴", "answers": ["la-haut", "la haut", "là-haut", "up"], "hint": "Une maison qui s'envole avec des ballons." },
-  { "type": "emoji", "question": "🐼 🥋 🍜", "answers": ["kung fu panda", "kung-fu panda", "kungfu panda"], "hint": "Un panda qui devient le guerrier dragon." },
-  { "type": "emoji", "question": "🏴‍☠️ 🍾 💀 ⚓", "answers": ["pirates des caraibes", "pirate des caraibes", "pirates of the caribbean"], "hint": "Jack Sparrow en est le capitaine." },
-  { "type": "emoji", "question": "🚗 ⏰ ⚡ 🔙", "answers": ["retour vers le futur", "back to the future"], "hint": "Une DeLorean et 88 miles à l'heure." },
-  { "type": "emoji", "question": "🟥 🟩 🔺 ⬜ 🦑", "answers": ["squid game"], "hint": "Une série coréenne où des jeux d'enfants deviennent mortels." },
-  { "type": "emoji", "question": "🏰 🐉 ❄️ 🔥 🪑", "answers": ["game of thrones", "le trone de fer", "trone de fer"], "hint": "Winter is coming." },
-  { "type": "emoji", "question": "👨‍🔬 🧪 🍳 💊 🏜️", "answers": ["breaking bad"], "hint": "Un prof de chimie qui tourne mal." },
-  { "type": "emoji", "question": "🎭 💰 🏦 🔴", "answers": ["la casa de papel", "casa de papel", "money heist"], "hint": "Des braqueurs en combinaison rouge." },
-  { "type": "emoji", "question": "🍄 🧑‍🔧 🐢", "answers": ["mario", "super mario", "super mario bros", "mario bros"], "hint": "Un plombier moustachu." },
-  { "type": "emoji", "question": "🟡 👻 🍒", "answers": ["pac-man", "pacman", "pac man"], "hint": "Un jeu d'arcade où l'on mange des pastilles." },
-  { "type": "emoji", "question": "🐔 🦷", "answers": ["quand les poules auront des dents", "les poules auront des dents", "poules auront des dents"], "hint": "Une expression pour dire « jamais »." },
-  { "type": "emoji", "question": "🐈 🗣️ 😮", "answers": ["avoir un chat dans la gorge", "un chat dans la gorge", "chat dans la gorge"], "hint": "Une expression, quand la voix est enrouée." },
-  { "type": "emoji", "question": "🥕 🔥 🍲", "answers": ["les carottes sont cuites", "carottes sont cuites", "les carottes sont cuites !"], "hint": "Une expression, quand tout est perdu." },
-  { "type": "emoji", "question": "👅 🐈", "answers": ["donner sa langue au chat", "langue au chat", "je donne ma langue au chat"], "hint": "Une expression, quand on abandonne une devinette." },
-  { "type": "emoji", "question": "🥖 🍫", "answers": ["pain au chocolat", "chocolatine", "petit pain"], "hint": "Un débat éternel à la boulangerie… les deux réponses sont acceptées." },
-  { "type": "emoji", "question": "🐘 🏺 🏪", "answers": ["un elephant dans un magasin de porcelaine", "elephant dans un magasin de porcelaine", "comme un elephant dans un magasin de porcelaine"], "hint": "Une expression pour quelqu'un de maladroit." },
-  { "type": "emoji", "question": "🎂 🍒", "answers": ["la cerise sur le gateau", "cerise sur le gateau"], "hint": "Une expression pour le petit plus final." },
-  { "type": "emoji", "question": "🐺 🐑 🏠", "answers": ["le loup dans la bergerie", "un loup dans la bergerie", "loup dans la bergerie"], "hint": "Une expression pour un intrus dangereux." }
+  {
+    "type": "devinette",
+    "question": "Qu'est-ce qui a des dents mais ne mord jamais ?",
+    "answers": [
+      "peigne",
+      "un peigne"
+    ],
+    "hint": "On s'en sert le matin devant le miroir."
+  },
+  {
+    "type": "devinette",
+    "question": "Je suis plein le jour et vide la nuit. Qui suis-je ?",
+    "answers": [
+      "chaussure",
+      "chaussures",
+      "soulier",
+      "souliers",
+      "une chaussure"
+    ],
+    "hint": "On en porte deux, et on les retire avant de dormir."
+  },
+  {
+    "type": "devinette",
+    "question": "Plus j'ai de gardiens, moins je suis gardé. Qui suis-je ?",
+    "answers": [
+      "secret",
+      "un secret",
+      "le secret"
+    ],
+    "hint": "On le confie à voix basse."
+  },
+  {
+    "type": "devinette",
+    "question": "Qu'est-ce qui monte et descend sans jamais bouger ?",
+    "answers": [
+      "escalier",
+      "un escalier",
+      "les escaliers",
+      "escaliers"
+    ],
+    "hint": "On le prend quand l'ascenseur est en panne."
+  },
+  {
+    "type": "devinette",
+    "question": "Je commence la nuit et je termine le matin. Qui suis-je ?",
+    "answers": [
+      "n",
+      "la lettre n",
+      "lettre n",
+      "le n"
+    ],
+    "hint": "Regarde bien les mots eux-mêmes… c'est une lettre."
+  },
+  {
+    "type": "devinette",
+    "question": "Qu'est-ce qui a un cou mais pas de tête ?",
+    "answers": [
+      "bouteille",
+      "une bouteille",
+      "la bouteille"
+    ],
+    "hint": "On la débouche pour trinquer."
+  },
+  {
+    "type": "devinette",
+    "question": "Plus je sèche, plus je deviens mouillée. Qui suis-je ?",
+    "answers": [
+      "serviette",
+      "une serviette",
+      "la serviette"
+    ],
+    "hint": "Elle attend à la sortie de la douche."
+  },
+  {
+    "type": "devinette",
+    "question": "J'ai un lit mais je ne dors jamais. Qui suis-je ?",
+    "answers": [
+      "riviere",
+      "une riviere",
+      "la riviere",
+      "fleuve",
+      "un fleuve",
+      "le fleuve"
+    ],
+    "hint": "Je coule vers la mer."
+  },
+  {
+    "type": "devinette",
+    "question": "Je peux traverser une vitre sans la casser. Qui suis-je ?",
+    "answers": [
+      "lumiere",
+      "la lumiere"
+    ],
+    "hint": "Le soleil en envoie à volonté."
+  },
+  {
+    "type": "devinette",
+    "question": "J'ai des villes mais pas de maisons, des forêts mais pas d'arbres, de l'eau mais pas de poissons. Qui suis-je ?",
+    "answers": [
+      "carte",
+      "une carte",
+      "la carte",
+      "carte geographique",
+      "une carte geographique"
+    ],
+    "hint": "On la déplie pour ne pas se perdre."
+  },
+  {
+    "type": "devinette",
+    "question": "On me jette quand on a besoin de moi et on me reprend quand on n'en a plus besoin. Qui suis-je ?",
+    "answers": [
+      "ancre",
+      "une ancre",
+      "l'ancre",
+      "lancre"
+    ],
+    "hint": "Les marins me connaissent bien."
+  },
+  {
+    "type": "devinette",
+    "question": "Je t'appartiens, mais les autres m'utilisent bien plus que toi. Qui suis-je ?",
+    "answers": [
+      "prenom",
+      "ton prenom",
+      "mon prenom",
+      "nom",
+      "ton nom",
+      "mon nom",
+      "le prenom"
+    ],
+    "hint": "On te l'a donné à la naissance."
+  },
+  {
+    "type": "devinette",
+    "question": "Plus on m'en enlève, plus je deviens grand. Qui suis-je ?",
+    "answers": [
+      "trou",
+      "un trou",
+      "le trou"
+    ],
+    "hint": "Une pelle suffit à me faire grandir."
+  },
+  {
+    "type": "devinette",
+    "question": "J'ai une tête et une queue, mais pas de corps. Qui suis-je ?",
+    "answers": [
+      "piece",
+      "une piece",
+      "piece de monnaie",
+      "une piece de monnaie",
+      "la piece"
+    ],
+    "hint": "On me lance pour tirer au sort."
+  },
+  {
+    "type": "devinette",
+    "question": "Je suis léger comme une plume, pourtant même le plus fort ne peut me retenir plus de quelques minutes. Qui suis-je ?",
+    "answers": [
+      "souffle",
+      "le souffle",
+      "respiration",
+      "la respiration",
+      "son souffle"
+    ],
+    "hint": "Tu le retiens sous l'eau."
+  },
+  {
+    "type": "devinette",
+    "question": "J'ai des touches mais aucune porte à ouvrir. Qui suis-je ?",
+    "answers": [
+      "piano",
+      "un piano",
+      "le piano",
+      "clavier",
+      "un clavier"
+    ],
+    "hint": "Noires et blanches, mes touches font de la musique."
+  },
+  {
+    "type": "devinette",
+    "question": "Je parle toutes les langues sans en avoir appris aucune. Qui suis-je ?",
+    "answers": [
+      "echo",
+      "un echo",
+      "l'echo",
+      "lecho"
+    ],
+    "hint": "Crie dans la montagne et je te répondrai."
+  },
+  {
+    "type": "devinette",
+    "question": "J'ai des racines que personne ne voit, je suis plus haut que les arbres, je monte, je monte, et pourtant je ne pousse jamais. Qui suis-je ?",
+    "answers": [
+      "montagne",
+      "une montagne",
+      "la montagne"
+    ],
+    "hint": "Les grimpeurs en rêvent, et Peak Hunters aussi."
+  },
+  {
+    "type": "devinette",
+    "question": "Trente chevaux blancs sur une colline rouge : d'abord ils mâchent, puis ils frappent, puis ils restent immobiles. Qui sont-ils ?",
+    "answers": [
+      "dents",
+      "les dents",
+      "des dents",
+      "dent"
+    ],
+    "hint": "Ils sont dans ta bouche."
+  },
+  {
+    "type": "devinette",
+    "question": "Qu'est-ce qu'on peut casser sans jamais le toucher ?",
+    "answers": [
+      "silence",
+      "le silence",
+      "promesse",
+      "une promesse",
+      "la promesse"
+    ],
+    "hint": "Un simple mot suffit à le briser."
+  },
+  {
+    "type": "devinette",
+    "question": "Je suis toujours devant toi mais tu ne peux jamais me voir. Qui suis-je ?",
+    "answers": [
+      "avenir",
+      "l'avenir",
+      "lavenir",
+      "futur",
+      "le futur"
+    ],
+    "hint": "Personne ne sait ce qu'il réserve."
+  },
+  {
+    "type": "devinette",
+    "question": "Qu'est-ce qui a quatre pattes le matin, deux le midi et trois le soir ?",
+    "answers": [
+      "homme",
+      "l'homme",
+      "lhomme",
+      "humain",
+      "l'humain",
+      "etre humain",
+      "l'etre humain",
+      "un homme"
+    ],
+    "hint": "L'énigme du Sphinx… pense à une vie entière."
+  },
+  {
+    "type": "devinette",
+    "question": "Je suis noir quand tu m'achètes, rouge quand tu m'utilises, gris quand tu me jettes. Qui suis-je ?",
+    "answers": [
+      "charbon",
+      "le charbon",
+      "du charbon"
+    ],
+    "hint": "On me met dans le barbecue."
+  },
+  {
+    "type": "devinette",
+    "question": "J'ai un œil mais je ne vois rien. Qui suis-je ?",
+    "answers": [
+      "aiguille",
+      "une aiguille",
+      "l'aiguille",
+      "cyclone",
+      "un cyclone",
+      "ouragan",
+      "un ouragan"
+    ],
+    "hint": "On passe un fil à travers moi."
+  },
+  {
+    "type": "devinette",
+    "question": "Quel mot devient plus court quand on lui ajoute deux lettres ?",
+    "answers": [
+      "court",
+      "le mot court"
+    ],
+    "hint": "La réponse est dans la question."
+  },
+  {
+    "type": "devinette",
+    "question": "Je peux être craqué, fait, raconté et joué. Qui suis-je ?",
+    "answers": [
+      "blague",
+      "une blague",
+      "la blague"
+    ],
+    "hint": "Si elle est bonne, tout le monde rit."
+  },
+  {
+    "type": "devinette",
+    "question": "Plus tu en prends, plus tu en laisses derrière toi. Que sont-ils ?",
+    "answers": [
+      "pas",
+      "des pas",
+      "les pas",
+      "empreintes",
+      "des empreintes"
+    ],
+    "hint": "Regarde dans la neige derrière toi."
+  },
+  {
+    "type": "devinette",
+    "question": "J'ai des ailes mais je ne suis pas un oiseau, je vis dans le noir et je dors la tête en bas. Qui suis-je ?",
+    "answers": [
+      "chauve-souris",
+      "chauve souris",
+      "chauvesouris",
+      "une chauve-souris",
+      "la chauve-souris"
+    ],
+    "hint": "Batman m'a choisie comme emblème."
+  },
+  {
+    "type": "charade",
+    "question": "Mon premier est un animal qui miaule.\nMon second est le contraire de tard.\nMon tout est une demeure fortifiée.",
+    "answers": [
+      "chateau",
+      "un chateau",
+      "le chateau"
+    ],
+    "hint": "On y trouve un donjon et parfois un pont-levis."
+  },
+  {
+    "type": "charade",
+    "question": "Mon premier est un métal précieux.\nMon second est un habitant du ciel.\nMon tout est un fruit.",
+    "answers": [
+      "orange",
+      "une orange",
+      "l'orange"
+    ],
+    "hint": "Le fruit porte le nom de sa couleur."
+  },
+  {
+    "type": "charade",
+    "question": "Mon premier coupe du bois.\nMon second est une boisson chaude.\nMon tout est une grande ville.",
+    "answers": [
+      "cite",
+      "une cite",
+      "la cite"
+    ],
+    "hint": "Synonyme de ville, on parle aussi de cité médiévale."
+  },
+  {
+    "type": "charade",
+    "question": "Mon premier est une note de musique.\nMon second est une autre note de musique.\nMon troisième est une négation.\nMon tout est un jeu de société.",
+    "answers": [
+      "domino",
+      "dominos",
+      "les dominos",
+      "un domino"
+    ],
+    "hint": "On aligne des pièces avec des points."
+  },
+  {
+    "type": "charade",
+    "question": "Mon premier est un animal qui miaule.\nMon second recouvre tout le corps.\nMon tout se porte sur la tête.",
+    "answers": [
+      "chapeau",
+      "un chapeau",
+      "le chapeau"
+    ],
+    "hint": "On le soulève pour saluer."
+  },
+  {
+    "type": "charade",
+    "question": "Mon premier est un animal qui miaule.\nMon second est un adjectif possessif.\nMon tout est le petit de mon premier.",
+    "answers": [
+      "chaton",
+      "un chaton",
+      "le chaton"
+    ],
+    "hint": "Il est tout petit et tout doux."
+  },
+  {
+    "type": "charade",
+    "question": "Mon premier est un rongeur.\nMon second est une boisson chaude.\nMon tout signifie manqué.",
+    "answers": [
+      "rate",
+      "raté"
+    ],
+    "hint": "C'est ce qu'on dit quand on vise à côté."
+  },
+  {
+    "type": "charade",
+    "question": "Mon premier est un poisson plat.\nMon second, tu en as deux sur le visage.\nMon tout brille dans le ciel.",
+    "answers": [
+      "soleil",
+      "le soleil"
+    ],
+    "hint": "Il se lève à l'est."
+  },
+  {
+    "type": "charade",
+    "question": "Mon premier est une note de musique.\nMon second est le verbe aller à la troisième personne.\nMon troisième est le contraire de laid.\nMon tout est dans la salle de bain.",
+    "answers": [
+      "lavabo",
+      "un lavabo",
+      "le lavabo"
+    ],
+    "hint": "On s'y lave les mains."
+  },
+  {
+    "type": "charade",
+    "question": "Mon premier est un mois de l'année.\nMon second est un organe de la vue.\nMon tout est une ville du sud de la France.",
+    "answers": [
+      "marseille"
+    ],
+    "hint": "Ville de l'OM et du Vieux-Port."
+  },
+  {
+    "type": "charade",
+    "question": "Mon premier vit dans les égouts.\nMon second est l'arrière du corps.\nMon tout flotte sur l'eau.",
+    "answers": [
+      "radeau",
+      "un radeau",
+      "le radeau"
+    ],
+    "hint": "Des troncs attachés ensemble."
+  },
+  {
+    "type": "charade",
+    "question": "Mon premier est une ancienne pièce de monnaie.\nMon second est ce que l'on fait quand c'est drôle.\nMon tout illumine un visage.",
+    "answers": [
+      "sourire",
+      "un sourire",
+      "le sourire"
+    ],
+    "hint": "Il montre les dents… gentiment."
+  },
+  {
+    "type": "charade",
+    "question": "Mon premier est un pronom personnel.\nMon second est un contenant pour boire.\nMon tout est une fleur.",
+    "answers": [
+      "tulipe",
+      "une tulipe",
+      "la tulipe"
+    ],
+    "hint": "Les Pays-Bas en sont couverts au printemps."
+  },
+  {
+    "type": "charade",
+    "question": "Mon premier est ce que fait la vache.\nMon second est une partie de la jambe.\nMon tout est un objet pour écrire.",
+    "answers": [
+      "feutre",
+      "un feutre",
+      "le feutre"
+    ],
+    "hint": "Sa pointe est douce et son encre colore."
+  },
+  {
+    "type": "emoji",
+    "question": "**Quel film se cache derrière ces emojis ?**\n\n🦁 👑",
+    "answers": [
+      "le roi lion",
+      "roi lion",
+      "lion king",
+      "the lion king"
+    ],
+    "hint": "Un film d'animation Disney."
+  },
+  {
+    "type": "emoji",
+    "question": "**Quel film se cache derrière ces emojis ?**\n\n🐟 🔍 🌊",
+    "answers": [
+      "le monde de nemo",
+      "monde de nemo",
+      "nemo",
+      "finding nemo"
+    ],
+    "hint": "Un père poisson-clown cherche son fils."
+  },
+  {
+    "type": "emoji",
+    "question": "**Quel film se cache derrière ces emojis ?**\n\n❄️ 👸 ⛄",
+    "answers": [
+      "la reine des neiges",
+      "reine des neiges",
+      "frozen"
+    ],
+    "hint": "Libérée, délivrée…"
+  },
+  {
+    "type": "emoji",
+    "question": "**Quel film se cache derrière ces emojis ?**\n\n🚢 🧊 💔",
+    "answers": [
+      "titanic"
+    ],
+    "hint": "Un paquebot, un iceberg, une histoire d'amour."
+  },
+  {
+    "type": "emoji",
+    "question": "**Quel film se cache derrière ces emojis ?**\n\n🕷️ 🧑 🏙️",
+    "answers": [
+      "spider-man",
+      "spiderman",
+      "spider man"
+    ],
+    "hint": "Un super-héros qui tisse sa toile."
+  },
+  {
+    "type": "emoji",
+    "question": "**Quel film se cache derrière ces emojis ?**\n\n🧙‍♂️ ⚡ 👓",
+    "answers": [
+      "harry potter"
+    ],
+    "hint": "Un sorcier avec une cicatrice sur le front."
+  },
+  {
+    "type": "emoji",
+    "question": "**Quel film se cache derrière ces emojis ?**\n\n💍 🌋 🧝",
+    "answers": [
+      "le seigneur des anneaux",
+      "seigneur des anneaux",
+      "lord of the rings",
+      "the lord of the rings"
+    ],
+    "hint": "Un anneau pour les gouverner tous."
+  },
+  {
+    "type": "emoji",
+    "question": "**Quel film se cache derrière ces emojis ?**\n\n🦖 🏝️ 🚙",
+    "answers": [
+      "jurassic park",
+      "jurassic world"
+    ],
+    "hint": "Des dinosaures ressuscités dans un parc."
+  },
+  {
+    "type": "emoji",
+    "question": "**Quel film se cache derrière ces emojis ?**\n\n👽 📞 🚲 🌕",
+    "answers": [
+      "e.t.",
+      "et",
+      "e t",
+      "et l'extraterrestre",
+      "et l'extra-terrestre",
+      "e.t. l'extra-terrestre"
+    ],
+    "hint": "« Téléphone maison. »"
+  },
+  {
+    "type": "emoji",
+    "question": "**Quel film se cache derrière ces emojis ?**\n\n🦈 🏖️ 😱",
+    "answers": [
+      "les dents de la mer",
+      "dents de la mer",
+      "jaws"
+    ],
+    "hint": "Un film de Spielberg qui a vidé les plages."
+  },
+  {
+    "type": "emoji",
+    "question": "**Quel film se cache derrière ces emojis ?**\n\n🤖 ❤️ 🌱 🚀",
+    "answers": [
+      "wall-e",
+      "walle",
+      "wall e"
+    ],
+    "hint": "Un petit robot qui nettoie la Terre."
+  },
+  {
+    "type": "emoji",
+    "question": "**Quel film se cache derrière ces emojis ?**\n\n🐀 👨‍🍳 🇫🇷",
+    "answers": [
+      "ratatouille"
+    ],
+    "hint": "Un rat qui cuisine à Paris."
+  },
+  {
+    "type": "emoji",
+    "question": "**Quel film se cache derrière ces emojis ?**\n\n🎈 🏠 👴",
+    "answers": [
+      "la-haut",
+      "la haut",
+      "là-haut",
+      "up"
+    ],
+    "hint": "Une maison qui s'envole avec des ballons."
+  },
+  {
+    "type": "emoji",
+    "question": "**Quel film se cache derrière ces emojis ?**\n\n🐼 🥋 🍜",
+    "answers": [
+      "kung fu panda",
+      "kung-fu panda",
+      "kungfu panda"
+    ],
+    "hint": "Un panda qui devient le guerrier dragon."
+  },
+  {
+    "type": "emoji",
+    "question": "**Quel film se cache derrière ces emojis ?**\n\n🏴‍☠️ 🍾 💀 ⚓",
+    "answers": [
+      "pirates des caraibes",
+      "pirate des caraibes",
+      "pirates of the caribbean"
+    ],
+    "hint": "Jack Sparrow en est le capitaine."
+  },
+  {
+    "type": "emoji",
+    "question": "**Quel film se cache derrière ces emojis ?**\n\n🚗 ⏰ ⚡ 🔙",
+    "answers": [
+      "retour vers le futur",
+      "back to the future"
+    ],
+    "hint": "Une DeLorean et 88 miles à l'heure."
+  },
+  {
+    "type": "emoji",
+    "question": "**Quelle série se cache derrière ces emojis ?**\n\n🟥 🟩 🔺 ⬜ 🦑",
+    "answers": [
+      "squid game"
+    ],
+    "hint": "Une série coréenne où des jeux d'enfants deviennent mortels."
+  },
+  {
+    "type": "emoji",
+    "question": "**Quelle série se cache derrière ces emojis ?**\n\n🏰 🐉 ❄️ 🔥 🪑",
+    "answers": [
+      "game of thrones",
+      "le trone de fer",
+      "trone de fer"
+    ],
+    "hint": "Winter is coming."
+  },
+  {
+    "type": "emoji",
+    "question": "**Quelle série se cache derrière ces emojis ?**\n\n👨‍🔬 🧪 🍳 💊 🏜️",
+    "answers": [
+      "breaking bad"
+    ],
+    "hint": "Un prof de chimie qui tourne mal."
+  },
+  {
+    "type": "emoji",
+    "question": "**Quelle série se cache derrière ces emojis ?**\n\n🎭 💰 🏦 🔴",
+    "answers": [
+      "la casa de papel",
+      "casa de papel",
+      "money heist"
+    ],
+    "hint": "Des braqueurs en combinaison rouge."
+  },
+  {
+    "type": "emoji",
+    "question": "**Quel jeu vidéo se cache derrière ces emojis ?**\n\n🍄 🧑‍🔧 🐢",
+    "answers": [
+      "mario",
+      "super mario",
+      "super mario bros",
+      "mario bros"
+    ],
+    "hint": "Un plombier moustachu."
+  },
+  {
+    "type": "emoji",
+    "question": "**Quel jeu vidéo se cache derrière ces emojis ?**\n\n🟡 👻 🍒",
+    "answers": [
+      "pac-man",
+      "pacman",
+      "pac man"
+    ],
+    "hint": "Un jeu d'arcade où l'on mange des pastilles."
+  },
+  {
+    "type": "emoji",
+    "question": "**Quelle expression française se cache derrière ces emojis ?**\n\n🐔 🦷",
+    "answers": [
+      "quand les poules auront des dents",
+      "les poules auront des dents",
+      "poules auront des dents"
+    ],
+    "hint": "Une expression pour dire « jamais »."
+  },
+  {
+    "type": "emoji",
+    "question": "**Quelle expression française se cache derrière ces emojis ?**\n\n🐈 🗣️ 😮",
+    "answers": [
+      "avoir un chat dans la gorge",
+      "un chat dans la gorge",
+      "chat dans la gorge"
+    ],
+    "hint": "Une expression, quand la voix est enrouée."
+  },
+  {
+    "type": "emoji",
+    "question": "**Quelle expression française se cache derrière ces emojis ?**\n\n🥕 🔥 🍲",
+    "answers": [
+      "les carottes sont cuites",
+      "carottes sont cuites",
+      "les carottes sont cuites !"
+    ],
+    "hint": "Une expression, quand tout est perdu."
+  },
+  {
+    "type": "emoji",
+    "question": "**Quelle expression française se cache derrière ces emojis ?**\n\n👅 🐈",
+    "answers": [
+      "donner sa langue au chat",
+      "langue au chat",
+      "je donne ma langue au chat"
+    ],
+    "hint": "Une expression, quand on abandonne une devinette."
+  },
+  {
+    "type": "emoji",
+    "question": "**Que se cache-t-il derrière ces emojis ?**\n\n🥖 🍫",
+    "answers": [
+      "pain au chocolat",
+      "chocolatine",
+      "petit pain"
+    ],
+    "hint": "Un débat éternel à la boulangerie… les deux réponses sont acceptées."
+  },
+  {
+    "type": "emoji",
+    "question": "**Quelle expression française se cache derrière ces emojis ?**\n\n🐘 🏺 🏪",
+    "answers": [
+      "un elephant dans un magasin de porcelaine",
+      "elephant dans un magasin de porcelaine",
+      "comme un elephant dans un magasin de porcelaine"
+    ],
+    "hint": "Une expression pour quelqu'un de maladroit."
+  },
+  {
+    "type": "emoji",
+    "question": "**Quelle expression française se cache derrière ces emojis ?**\n\n🎂 🍒",
+    "answers": [
+      "la cerise sur le gateau",
+      "cerise sur le gateau"
+    ],
+    "hint": "Une expression pour le petit plus final."
+  },
+  {
+    "type": "emoji",
+    "question": "**Quelle expression française se cache derrière ces emojis ?**\n\n🐺 🐑 🏠",
+    "answers": [
+      "le loup dans la bergerie",
+      "un loup dans la bergerie",
+      "loup dans la bergerie"
+    ],
+    "hint": "Une expression pour un intrus dangereux."
+  }
 ]

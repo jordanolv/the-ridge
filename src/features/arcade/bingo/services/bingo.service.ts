@@ -36,6 +36,7 @@ import {
   BINGO_THREAD_SLOWMODE_SECONDS,
 } from '../constants/bingo.constants';
 import { addFragmentsAndAward } from '../../../peak-hunters/services/expedition.service';
+import { rc } from '../../../../shared/economy/currency';
 
 const LOG_FEATURE = '🎯 Bingo';
 
@@ -66,7 +67,7 @@ export class BingoService {
       .addTextDisplayComponents(
         new TextDisplayBuilder().setContent(
           [
-            `🏆 Numéro gagnant : **${BINGO_REWARD.money}** 💰 · **${BINGO_REWARD.xp}** XP · **${BINGO_REWARD.expeditions}** pack(s) (termine le bingo)`,
+            `🏆 Numéro gagnant : **${BINGO_REWARD.money}** ${rc()} · **${BINGO_REWARD.xp}** XP · **${BINGO_REWARD.expeditions}** pack(s) (termine le bingo)`,
             `🎁 ${BINGO_BONUS_COUNT} numéros bonus cachés : **${BINGO_BONUS_EXPEDITIONS}** pack chacun (sans arrêter le bingo !)`,
             `🤝 Tous les participants gagnent **${BINGO_PARTICIPATION_FRAGMENTS}** fragments à la victoire`,
           ].join('\n'),
@@ -121,7 +122,7 @@ export class BingoService {
       .addSeparatorComponents(new SeparatorBuilder().setDivider(false))
       .addTextDisplayComponents(
         new TextDisplayBuilder().setContent(
-          `Récompense remportée : **${BINGO_REWARD.money}** 💰 · **${BINGO_REWARD.xp}** XP · **${BINGO_REWARD.expeditions}** pack(s)`,
+          `Récompense remportée : **${BINGO_REWARD.money}** ${rc()} · **${BINGO_REWARD.xp}** XP · **${BINGO_REWARD.expeditions}** pack(s)`,
         ),
       );
   }
@@ -424,7 +425,7 @@ export class BingoService {
 
     const totalPacks = BINGO_REWARD.expeditions;
 
-    await UserService.updateUserMoney(user.id, BINGO_REWARD.money);
+    await UserService.updateUserMoney(user.id, BINGO_REWARD.money, 'Bingo — gain');
     await LevelingService.giveXpDirectly(client, user.id, BINGO_REWARD.xp);
     const expeditions = await awardExpeditions(user.id, totalPacks);
     await UserService.recordArcadeWin(user.id, 'bingo');
@@ -442,7 +443,7 @@ export class BingoService {
     await message.reply({
       content: [
         `🎉 **BINGO !** <@${user.id}> a trouvé le nombre **${target}** en **${guessCount}** coup${guessCount > 1 ? 's' : ''} !`,
-        `🏆 +**${BINGO_REWARD.money}** 💰 · +**${BINGO_REWARD.xp}** XP · +**${totalPacks}** pack(s) ${expeditions.summary}`,
+        `🏆 +**${BINGO_REWARD.money}** ${rc()} · +**${BINGO_REWARD.xp}** XP · +**${totalPacks}** pack(s) ${expeditions.summary}`,
         ...(participants.length > 0 ? [`🤝 ${participants.length} participant${participants.length > 1 ? 's' : ''} repartent avec **${BINGO_PARTICIPATION_FRAGMENTS}** fragments chacun !`] : []),
       ].join('\n'),
     }).catch(() => {});

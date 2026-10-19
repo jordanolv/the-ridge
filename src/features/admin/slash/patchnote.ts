@@ -10,6 +10,7 @@ import {
 } from 'discord.js';
 import * as fs from 'fs/promises';
 import * as path from 'path';
+import { withCurrency } from '../../../shared/economy/currency';
 
 type SectionType = 'new' | 'update' | 'fix';
 
@@ -64,7 +65,7 @@ function buildPatchnoteContainers(note: Patchnote): ContainerBuilder[] {
 
     for (let i = 0; i < section.blocks.length; i++) {
       const block = section.blocks[i];
-      const itemLines = block.items.map(item => `- ${item}`).join('\n');
+      const itemLines = block.items.map(item => `- ${withCurrency(item)}`).join('\n');
 
       container.addTextDisplayComponents(
         new TextDisplayBuilder().setContent(`**${block.title}**\n${itemLines}`),

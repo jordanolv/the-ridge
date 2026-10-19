@@ -5,13 +5,14 @@ import { ChatGamingService } from '../../chat-gaming/services/chat-gaming.servic
 import { UserService } from '../../user/services/user.service';
 import { ContainerBuilder, TextDisplayBuilder, SeparatorBuilder, MessageFlags } from 'discord.js';
 import { LogService } from '../../../shared/logs/logs.service';
-import { NotFoundError } from './party.types';
+import { NotFoundError, ValidationError } from './party.types';
 import { PartyEvent } from '../models/party-event.model';
 import UserModel from '../../user/models/user.model';
 import AppConfigModel from '../../discord/models/app-config.model';
 import { getGuildId } from '../../../shared/guild';
 import { LevelingService } from '../../leveling/services/leveling.service';
-import { ConfigPanelService } from '../../config-panel/services/config-panel.service';
+import { awardExpeditions } from '../../peak-hunters/services/expedition.service';
+import { rc } from '../../../shared/economy/currency';
 
 export interface CreateEventInput {
   name: string;
@@ -30,7 +31,11 @@ export interface EndEventInput {
   attendedParticipants: string[];
   rewardAmount?: number;
   xpAmount?: number;
+  expeditionAmount?: number;
 }
+
+/** Une prime collective : au niveau d'un raid légendaire, le plus gros gain d'événement (economy.md §6). */
+export const PARTY_MAX_MONEY_REWARD = 100;
 
 export class PartyService {
   private static repo = new PartyRepository();
@@ -57,7 +62,6 @@ export class PartyService {
       const logMessage = `**${event.eventInfo.name}** — ${event.eventInfo.game}\n` +
         `<@${userId}> a rejoint · ${updated.participants.length}/${event.eventInfo.maxSlots} places`;
       await LogService.info(logMessage, { feature: 'party', title: 'Participant ajouté' });
-      await ConfigPanelService.refreshPanel(client, 'party');
     } catch (err) {
       console.error('[Party] Erreur réaction add:', err);
     }
@@ -76,7 +80,6 @@ export class PartyService {
       const logMessage = `**${event.eventInfo.name}** — ${event.eventInfo.game}\n` +
         `<@${userId}> a quitté · ${updated.participants.length}/${event.eventInfo.maxSlots} places`;
       await LogService.info(logMessage, { feature: 'party', title: 'Participant retiré' });
-      await ConfigPanelService.refreshPanel(client, 'party');
     } catch (err) {
       console.error('[Party] Erreur réaction remove:', err);
     }
@@ -174,6 +177,10 @@ export class PartyService {
     return this.repo.findActiveEvents();
   }
 
+  static async getPastEvents(limit: number): Promise<PartyEvent[]> {
+    return this.repo.findPastEvents(limit);
+  }
+
   static async getEventById(eventId: string): Promise<PartyEvent | null> {
     return this.repo.findById(eventId);
   }
@@ -202,16 +209,22 @@ export class PartyService {
     const event = await this.repo.findById(eventId);
     if (!event) throw new NotFoundError('Événement non trouvé');
 
-    const updated = await this.repo.update(eventId, {
-      status: 'ended',
+    if ((data.rewardAmount ?? 0) > PARTY_MAX_MONEY_REWARD) {
+      throw new ValidationError(`Récompense limitée à ${PARTY_MAX_MONEY_REWARD} 💰 par présent`);
+    }
+
+    const attendedParticipants = [...new Set(data.attendedParticipants)];
+    const updated = await this.repo.endOnce(eventId, {
       endedAt: new Date(),
-      attendedParticipants: data.attendedParticipants,
+      attendedParticipants,
       rewardAmount: data.rewardAmount ?? 0,
       xpAmount: data.xpAmount ?? 0,
+      expeditionAmount: data.expeditionAmount ?? 0,
     });
+    if (!updated) throw new ValidationError('Cette soirée est déjà terminée');
 
-    if (data.attendedParticipants.length > 0) {
-      await this.distributeRewards(client, updated, data.attendedParticipants, data.rewardAmount ?? 0, data.xpAmount ?? 0);
+    if (attendedParticipants.length > 0) {
+      await this.distributeRewards(client, updated, attendedParticipants, data.rewardAmount ?? 0, data.xpAmount ?? 0, data.expeditionAmount ?? 0);
     }
 
     try {
@@ -228,12 +241,13 @@ export class PartyService {
     await DiscordPartyService.removeAllReactions(client, updated);
     await DiscordPartyService.archiveThread(client, updated);
 
-    const attendedList = data.attendedParticipants.length > 0
-      ? data.attendedParticipants.map(id => `<@${id}>`).join(', ')
+    const attendedList = attendedParticipants.length > 0
+      ? attendedParticipants.map(id => `<@${id}>`).join(', ')
       : '*aucun*';
     const rewardLine = [
       data.rewardAmount ? `💰 ${data.rewardAmount}/pers` : null,
       data.xpAmount ? `⭐ ${data.xpAmount} XP/pers` : null,
+      data.expeditionAmount ? `🏔️ ${data.expeditionAmount} expédition(s)/pers` : null,
     ].filter(Boolean).join(' · ') || 'Aucune récompense';
     const logMessage = `**${event.eventInfo.name}** — ${event.eventInfo.game}\n` +
       `👥 Présents : ${attendedList}\n${rewardLine}`;
@@ -250,6 +264,7 @@ export class PartyService {
     attendedParticipants: string[],
     rewardAmount: number,
     xpAmount: number,
+    expeditionAmount: number,
   ): Promise<void> {
     await Promise.all(attendedParticipants.map(async participantId => {
       try {
@@ -263,20 +278,27 @@ export class PartyService {
         await UserModel.findOneAndUpdate(
           { discordId: participantId },
           {
-            ...(rewardAmount > 0 && { $inc: { 'profil.money': rewardAmount } }),
-            $inc: { 'stats.partyParticipated': 1 },
+            $inc: { 'stats.partyParticipated': 1, ...(rewardAmount > 0 && { 'profil.money': rewardAmount }) },
           },
         );
 
+        if (rewardAmount > 0) {
+          await LogService.economy(participantId, rewardAmount, `Soirée : ${event.eventInfo.name}`, 'party');
+        }
+
         if (xpAmount > 0) {
           await LevelingService.giveXpDirectly(client, participantId, xpAmount);
+        }
+
+        if (expeditionAmount > 0) {
+          await awardExpeditions(participantId, expeditionAmount);
         }
       } catch (err) {
         console.error(`[Party] Erreur distribution ${participantId}:`, err);
       }
     }));
 
-    await this.sendRewardsEmbed(client, event, attendedParticipants, rewardAmount, xpAmount);
+    await this.sendRewardsEmbed(client, event, attendedParticipants, rewardAmount, xpAmount, expeditionAmount);
   }
 
   private static async sendRewardsEmbed(
@@ -285,6 +307,7 @@ export class PartyService {
     attendedParticipants: string[],
     moneyPerParticipant: number,
     xpPerParticipant: number,
+    expeditionsPerParticipant: number,
   ): Promise<void> {
     try {
       if (!event.discord.threadId) return;
@@ -300,8 +323,9 @@ export class PartyService {
         : '*Aucun*';
 
       const rewardParts: string[] = [];
-      if (moneyPerParticipant > 0) rewardParts.push(`💰 **${moneyPerParticipant}** / personne`);
+      if (moneyPerParticipant > 0) rewardParts.push(`${rc()} **${moneyPerParticipant}** / personne`);
       if (xpPerParticipant > 0) rewardParts.push(`⭐ **${xpPerParticipant} XP** / personne`);
+      if (expeditionsPerParticipant > 0) rewardParts.push(`🏔️ **${expeditionsPerParticipant}** expédition${expeditionsPerParticipant > 1 ? 's' : ''} / personne`);
 
       const container = new ContainerBuilder()
         .setAccentColor(color)

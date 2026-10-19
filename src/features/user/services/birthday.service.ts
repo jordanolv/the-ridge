@@ -12,9 +12,11 @@ import { toZonedTime } from 'date-fns-tz';
 import UserModel from '../models/user.model';
 import { UserMountainsRepository } from '../../peak-hunters/repositories/user-mountains.repository';
 import { LogService } from '../../../shared/logs/logs.service';
+import { rc } from '../../../shared/economy/currency';
 
 export const BIRTHDAY_TZ = 'Europe/Paris';
 export const BIRTHDAY_EXPEDITIONS = 5;
+export const BIRTHDAY_MONEY_GIFT = 200;
 
 export async function sendBirthdayAnnouncement(
   client: Client,
@@ -30,12 +32,13 @@ export async function sendBirthdayAnnouncement(
   const discordUser = await client.users.fetch(discordId).catch(() => null);
   const avatarUrl = discordUser?.displayAvatarURL({ size: 256 });
 
-  const moneyGift = Math.floor(Math.random() * 901) + 100;
+  const moneyGift = BIRTHDAY_MONEY_GIFT;
 
   await Promise.all([
     UserModel.updateOne({ discordId }, { $inc: { 'profil.money': moneyGift } }),
     UserMountainsRepository.addExpeditions(discordId, BIRTHDAY_EXPEDITIONS),
   ]);
+  await LogService.economy(discordId, moneyGift, 'Cadeau anniversaire', 'Birthday');
   await LogService.info(`<@${discordId}> a reçu **${BIRTHDAY_EXPEDITIONS} expéditions** 🗺️ pour son anniversaire 🎂`, { feature: 'Birthday', title: '🗺️ Expéditions gagnées' });
 
   const container = new ContainerBuilder()
@@ -62,7 +65,7 @@ export async function sendBirthdayAnnouncement(
       new TextDisplayBuilder().setContent(
         [
           '### 🎁 Cadeaux du jour',
-          `-# 💰 **+${moneyGift} pièces** ajoutées à ton solde`,
+          `-# **+${moneyGift}** ${rc()} ajoutés à ton solde`,
           `-# 🗺️ **+${BIRTHDAY_EXPEDITIONS} expéditions** pour découvrir des montagnes`,
         ].join('\n')
       ),

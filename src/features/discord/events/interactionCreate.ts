@@ -1,6 +1,6 @@
-import {
-  MessageFlags, ChannelSelectMenuInteraction, Events, Interaction, ModalSubmitInteraction, RoleSelectMenuInteraction, StringSelectMenuInteraction, UserSelectMenuInteraction } from 'discord.js';
+import { MessageFlags, Events, Interaction } from 'discord.js';
 import { BotClient } from '../../../bot/client';
+import { LogService } from '../../../shared/logs/logs.service';
 import { AppConfigService } from '../services/app-config.service';
 import {
   handleGroupButton,
@@ -18,11 +18,6 @@ import {
   handleVocInviteUserSelect,
   VOC_CONFIG_MODAL_ID
 } from '../../voice/interactions/vocConfigHandler';
-import {
-  PANEL_BUTTON_PREFIX,
-  parsePanelCustomId,
-  panelRegistry,
-} from '../../config-panel/services/config-panel.registry';
 import { MONEY_MODAL_PREFIX } from '../../admin/slash/money';
 import giveExpeditionCommand, { GIVE_EXPEDITION_BUTTON_PREFIX, GIVE_EXPEDITION_MODAL_PREFIX } from '../../peak-hunters/slash/give-expedition';
 import { EMBED_EDIT_MODAL_PREFIX } from '../../admin/slash/embed';
@@ -52,33 +47,14 @@ import {
   handleDraftStringSelect,
 } from '../../draft/events/draft-interactions';
 import { EnigmeService } from '../../arcade/enigme/services/enigme.service';
-import { ENIGME_BUTTON_ID, ENIGME_MODAL_ID } from '../../arcade/enigme/constants/enigme.constants';
+import { ENIGME_BUTTON_ID, ENIGME_HINT_BUTTON_ID, ENIGME_MODAL_ID, ENIGME_REVEAL_BUTTON_ID } from '../../arcade/enigme/constants/enigme.constants';
 import { QuizService, QUIZ_BUTTON_PREFIX, QUIZ_THEME_PREFIX } from '../../quiz/services/quiz.service';
 import { PersonalityTestService, PTEST_BUTTON_PREFIX } from '../../personality-test/services/personality-test.service';
+import { COLOR_MODAL_ID, handleShopButton, handleShopColorModal, handleShopSelect, SHOP_PREFIX } from '../../shop/events/shop-interactions';
+import { handleMeButton, ME_BUTTON_PREFIX } from '../../user/events/me-interactions';
+import { handlePackButton, PACK_BUTTON_PREFIX } from '../../peak-hunters/services/pack.service';
 import { isSilentDiscordError } from '../../../shared/utils/discord-errors';
 const PROFILE_MODAL_ID = 'profile-config-modal';
-
-async function routeToPanelSelectMenu(
-  interaction: ChannelSelectMenuInteraction | RoleSelectMenuInteraction | StringSelectMenuInteraction | UserSelectMenuInteraction,
-  client: BotClient,
-): Promise<boolean> {
-  const parsed = parsePanelCustomId(interaction.customId);
-  if (!parsed) return false;
-  const panel = panelRegistry.get(parsed.panelId);
-  if (panel?.handleSelectMenu) await panel.handleSelectMenu(interaction as any, client);
-  return true;
-}
-
-async function routeToPanelModal(
-  interaction: ModalSubmitInteraction,
-  client: BotClient,
-): Promise<boolean> {
-  const parsed = parsePanelCustomId(interaction.customId);
-  if (!parsed) return false;
-  const panel = panelRegistry.get(parsed.panelId);
-  if (panel?.handleModal) await panel.handleModal(interaction, client);
-  return true;
-}
 
 export default {
   name: Events.InteractionCreate,
@@ -107,6 +83,14 @@ export default {
             return;
           }
           await command.execute(interaction, client);
+          await LogService.record({
+            level: 'info',
+            kind: 'command',
+            title: `/${interaction.commandName}`,
+            userId: interaction.user.id,
+            channelId: interaction.channelId ?? undefined,
+            message: `<@${interaction.user.id}> a utilisé \`/${interaction.commandName}\` dans <#${interaction.channelId}>`,
+          });
         } catch (error) {
           if (isSilentDiscordError(error)) return;
           console.error(`[InteractionCreate] Erreur dans /${interaction.commandName}:`, error);
@@ -121,12 +105,6 @@ export default {
       else if (interaction.isButton()) {
         if (interaction.customId.startsWith(GROUP_BUTTON_PREFIX + ':')) {
           await handleGroupButton(interaction, client);
-        } else if (interaction.customId.startsWith(PANEL_BUTTON_PREFIX + ':')) {
-          const parsed = parsePanelCustomId(interaction.customId);
-          if (parsed) {
-            const panel = panelRegistry.get(parsed.panelId);
-            if (panel?.handleButton) await panel.handleButton(interaction, client);
-          }
         } else if (interaction.customId.startsWith('leaderboard_')) {
           const leaderboardCommand = client.slashCommands.get('leaderboard');
           if (leaderboardCommand && typeof leaderboardCommand.handleButtonInteraction === 'function') {
@@ -140,12 +118,18 @@ export default {
           await handleHomeButton(interaction, client);
         } else if (interaction.customId.startsWith('mountain:expe:')) {
           await handleExpeditionButton(interaction, client);
+        } else if (interaction.customId.startsWith(PACK_BUTTON_PREFIX + ':')) {
+          await handlePackButton(interaction);
         } else if (interaction.customId.startsWith(SPAWN_BUTTON_PREFIX + ':')) {
           await SpawnService.handleClaim(interaction, client);
         } else if (interaction.customId.startsWith(VOICE_CHECK_BUTTON_PREFIX + ':')) {
           await PeakHuntersPlugin.handleVoiceCheck(interaction);
         } else if (interaction.customId.startsWith(INV_BUTTON_PREFIX + ':')) {
           await handleInventaireButton(interaction, client);
+        } else if (interaction.customId.startsWith(SHOP_PREFIX + ':')) {
+          await handleShopButton(interaction);
+        } else if (interaction.customId.startsWith(ME_BUTTON_PREFIX + ':')) {
+          await handleMeButton(interaction);
         } else if (interaction.customId.startsWith('impostor_')) {
           await handleImpostorButtonInteraction(interaction, client);
         } else if (interaction.customId.startsWith('bet:')) {
@@ -156,6 +140,10 @@ export default {
           await QuizService.handleAnswer(client, interaction);
         } else if (interaction.customId.startsWith(QUIZ_THEME_PREFIX + ':')) {
           await QuizService.handleThemePick(client, interaction);
+        } else if (interaction.customId === ENIGME_REVEAL_BUTTON_ID) {
+          await EnigmeService.handleReveal(interaction);
+        } else if (interaction.customId === ENIGME_HINT_BUTTON_ID) {
+          await EnigmeService.handleHint(interaction);
         } else if (interaction.customId === ENIGME_BUTTON_ID) {
           await EnigmeService.handleButton(interaction);
         } else if (interaction.customId.startsWith(PTEST_BUTTON_PREFIX + ':')) {
@@ -171,31 +159,21 @@ export default {
           if (groupNotifsCommand?.handleSelect) await groupNotifsCommand.handleSelect(interaction, client);
         } else if (interaction.customId.startsWith(GROUP_BUTTON_PREFIX + ':')) {
           await handleGroupSelectMenu(interaction, client);
-        } else if (interaction.customId.startsWith(PANEL_BUTTON_PREFIX + ':')) {
-          await routeToPanelSelectMenu(interaction, client);
         } else if (interaction.customId.startsWith('bet:winner:')) {
           await handleBetSelectMenu(interaction, client);
         } else if (interaction.customId.startsWith('bet:place:')) {
           await handleBetPlaceSelect(interaction, client);
         } else if (interaction.customId.startsWith('draft:pick:')) {
           await handleDraftStringSelect(interaction, client);
+        } else if (interaction.customId.startsWith(SHOP_PREFIX + ':')) {
+          await handleShopSelect(interaction);
         } else if (interaction.customId.startsWith('impostor_')) {
           await handleImpostorSelectMenu(interaction, client);
         }
       }
 
-      else if (interaction.isChannelSelectMenu()) {
-        await routeToPanelSelectMenu(interaction, client);
-      }
-
-      else if (interaction.isRoleSelectMenu()) {
-        await routeToPanelSelectMenu(interaction, client);
-      }
-
       else if (interaction.isUserSelectMenu()) {
-        if (interaction.customId.startsWith(PANEL_BUTTON_PREFIX + ':')) {
-          await routeToPanelSelectMenu(interaction, client);
-        } else if (interaction.customId.startsWith(VOC_INVITE_USER_SELECT_ID)) {
+        if (interaction.customId.startsWith(VOC_INVITE_USER_SELECT_ID)) {
           await handleVocInviteUserSelect(interaction, client);
         } else if (interaction.customId.startsWith('draft:')) {
           await handleDraftUserSelect(interaction, client);
@@ -209,8 +187,6 @@ export default {
           await handleGroupDescModal(interaction);
         } else if (interaction.customId.startsWith(GROUP_TIME_MODAL_PREFIX + ':')) {
           await handleGroupTimeModal(interaction);
-        } else if (interaction.customId.startsWith(PANEL_BUTTON_PREFIX + ':')) {
-          await routeToPanelModal(interaction, client);
         } else if (interaction.customId === PROFILE_MODAL_ID) {
           const profileCommand = client.slashCommands.get('profil');
           if (profileCommand && typeof profileCommand.handleModal === 'function') {
@@ -236,6 +212,8 @@ export default {
           if (embedCommand?.handleEditModal) await embedCommand.handleEditModal(interaction, client);
         } else if (interaction.customId.startsWith(PTEST_BUTTON_PREFIX + ':')) {
           await PersonalityTestService.handleModal(client, interaction);
+        } else if (interaction.customId.startsWith(COLOR_MODAL_ID + ':')) {
+          await handleShopColorModal(interaction);
         }
       }
     } catch (error) {

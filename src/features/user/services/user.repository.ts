@@ -2,6 +2,8 @@ import UserModel, { IUser } from '../models/user.model';
 import { AppConfigService } from '../../discord/services/app-config.service';
 import { NotFoundError, BirthdaySearchCriteria, BirthdayUser } from './user.types';
 
+export type RankedField = 'stats.totalMsg' | 'stats.voiceTime' | 'stats.dailyStreak' | 'stats.activityPoints' | 'stats.partyParticipated';
+
 export class UserRepository {
 
   // ===== USER OPERATIONS =====
@@ -21,7 +23,7 @@ export class UserRepository {
     return UserModel.create({
       discordId: userData.discordId,
       name: userData.name,
-      profil: { money: 500, exp: 0, lvl: 1 },
+      profil: { money: 50, exp: 0, lvl: 1 },
       stats: { totalMsg: 0, voiceTime: 0, voiceHistory: [] },
       infos: {
         registeredAt: new Date(),
@@ -207,5 +209,25 @@ export class UserRepository {
       .find({})
       .sort({ 'stats.voiceTime': -1 })
       .limit(limit);
+  }
+
+  async countUsers(): Promise<number> {
+    return UserModel.countDocuments({});
+  }
+
+  /** Rang dans un classement : 1 + le nombre de joueurs strictement devant. */
+  async rankBy(field: RankedField, value: number): Promise<number> {
+    return 1 + (await UserModel.countDocuments({ [field]: { $gt: value } }));
+  }
+
+  async topBy(field: RankedField, limit: number): Promise<{ discordId: string; name: string; value: number }[]> {
+    const users = await UserModel.find({ [field]: { $gt: 0 } }).sort({ [field]: -1 }).limit(limit).select(`discordId name ${field}`).lean();
+    const [group, key] = field.split('.') as ['stats', keyof IUser['stats']];
+    return users.map(u => ({ discordId: u.discordId, name: u.name, value: Number(u[group]?.[key] ?? 0) }));
+  }
+
+  async namesOf(discordIds: string[]): Promise<Map<string, string>> {
+    const users = await UserModel.find({ discordId: { $in: discordIds } }).select('discordId name').lean();
+    return new Map(users.map(u => [u.discordId, u.name]));
   }
 }

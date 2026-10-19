@@ -8,9 +8,11 @@ import '../events/voice.events';
 import type { VoiceTickSession } from '../events/voice.events';
 import { VoiceConfigRepository } from '../repositories/voice-config.repository';
 import { VoiceSessionRepository } from '../repositories/voice-session.repository';
-import { VOICE_XP_PER_MINUTE, VOICE_MONEY_PER_MINUTE, VOICE_MIN_RECAP_SECONDS } from '../constants/voice.constants';
+import { VOICE_XP_PER_MINUTE, VOICE_MIN_RECAP_SECONDS } from '../constants/voice.constants';
+import { estimateWeeklySalary, SalaryEstimate } from '../../../shared/economy/salary-estimate';
 import UserModel from '../../user/models/user.model';
 import { LevelingService } from '../../leveling/services/leveling.service';
+import { rc } from '../../../shared/economy/currency';
 
 // ─── Plugin contract ────────────────────────────────────────────────────────
 
@@ -388,18 +390,17 @@ export class VoiceSessionService {
   ): Promise<void> {
     const activeMinutes = Math.floor(session.activeSeconds / 60);
     const xpGained = activeMinutes * VOICE_XP_PER_MINUTE;
-    const moneyGained = activeMinutes * VOICE_MONEY_PER_MINUTE;
 
     let leveledUp = false;
     let newLevel = 0;
 
-    if (xpGained > 0 || moneyGained > 0) {
+    // Le vocal ne verse plus d'argent : la seule source est la paie du lundi (economy.md §3).
+    if (xpGained > 0) {
       try {
         const user = await UserModel.findOne({ discordId: session.userId });
         if (user) {
           const oldLevel = user.profil.lvl;
           user.profil.exp += xpGained;
-          user.profil.money += moneyGained;
 
           while (user.profil.exp >= LevelingService.getXpToLevelUp(user.profil.lvl)) {
             user.profil.lvl++;
@@ -408,6 +409,9 @@ export class VoiceSessionService {
           await user.save();
           leveledUp = user.profil.lvl > oldLevel;
           newLevel = user.profil.lvl;
+          if (leveledUp) {
+            await LogService.info(`<@${session.userId}> passe niveau **${newLevel}**`, { feature: 'leveling', title: 'Level up' });
+          }
         }
       } catch (err) {
         console.error('[VoiceSession] Erreur mise à jour récompenses:', err);
@@ -415,9 +419,11 @@ export class VoiceSessionService {
     }
 
     if (!skipRecapEmbed && session.activeSeconds >= VOICE_MIN_RECAP_SECONDS) {
+      const salary = await estimateWeeklySalary(session.userId).catch(() => null);
       await this.sendSessionRecap(client, session, {
         xpGained,
-        moneyGained,
+        pointsGained: session.activeSeconds,
+        salary,
         leveledUp,
         newLevel,
       });
@@ -447,7 +453,8 @@ export class VoiceSessionService {
     session: VoiceSession & { channelName: string },
     rewards: {
       xpGained: number;
-      moneyGained: number;
+      pointsGained: number;
+      salary: SalaryEstimate | null;
       leveledUp: boolean;
       newLevel: number;
     },
@@ -474,7 +481,11 @@ export class VoiceSessionService {
     const duration = this.formatDuration(session.durationSeconds);
     const activeDuration = this.formatDuration(session.activeSeconds);
 
-    let rewardLines = `+**${rewards.xpGained}** XP ✨  ·  +**${rewards.moneyGained}** <:ridgecoin:1424543836029325492>`;
+    let rewardLines = `+**${rewards.xpGained}** XP ✨  ·  +**${rewards.pointsGained.toLocaleString('fr-FR')}** pts d'activité 📊`;
+    if (rewards.salary) {
+      const { rank, qualified, estimate } = rewards.salary;
+      rewardLines += `\n-# ${rank}ᵉ/${qualified} cette semaine · ≈ **${estimate.toLocaleString('fr-FR')}** ${rc()} lundi`;
+    }
     if (rewards.leveledUp) rewardLines += `\n🎉 **Level up !** Niveau **${rewards.newLevel}**`;
 
     const container = new ContainerBuilder()

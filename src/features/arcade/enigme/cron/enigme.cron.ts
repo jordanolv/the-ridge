@@ -1,7 +1,7 @@
 import { CronJob } from 'cron';
 import { BotClient } from '../../../../bot/client';
 import { EnigmeService } from '../services/enigme.service';
-import { ENIGME_HINT_HOUR, ENIGME_REVEAL_HOUR, ENIGME_SPAWN_HOUR } from '../constants/enigme.constants';
+import { ENIGME_REVEAL_HOUR, ENIGME_SPAWN_HOUR } from '../constants/enigme.constants';
 
 const TZ = 'Europe/Paris';
 
@@ -19,7 +19,7 @@ export class EnigmeCron {
     const chalk = require('chalk');
     console.log(
       chalk.yellow('   ├─ 🧩 Énigme') +
-        chalk.gray(` • minuit ${TZ}, selon planning hebdo, lancement ${ENIGME_SPAWN_HOUR}h, indice ${ENIGME_HINT_HOUR}h, révélation ${ENIGME_REVEAL_HOUR}h`),
+        chalk.gray(` • minuit ${TZ}, selon planning hebdo, lancement ${ENIGME_SPAWN_HOUR}h, révélation ${ENIGME_REVEAL_HOUR}h`),
     );
   }
 

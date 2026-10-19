@@ -1,0 +1,410 @@
+# shop.md — La boutique de The Ridge
+
+Ce document fixe ce qui se vend, à quel prix, et surtout **ce qui ne se vend pas**.
+Il est le pendant de [`economy.md`](economy.md) : l'économie décide du débit d'argent
+qui entre, la boutique décide de celui qui sort.
+
+**Avant d'ajouter un article, lire ce fichier. Avant de le contredire, le modifier.**
+
+---
+
+## État d'avancement
+
+| | État |
+|---|---|
+| Commande `/shop` — catalogue, achat, expiration | ✅ implémenté |
+| Achat multiple des locations (1 à 6 mois) | ✅ implémenté |
+| Packs achetés en un clic depuis le catalogue, quantité − / + | ✅ implémenté |
+| Catalogue en catégories (Packs, Cosmétiques) | ✅ implémenté |
+| Rôle coloré perso (couleur libre, dégradé si le serveur le permet) | ✅ vendable |
+| Packs Peak Hunters | ✅ achetables, stockés en inventaire |
+| Design de carte `/me` | 🟡 câblé, en attente des images de fond |
+| Ouverture animée des packs | ✅ un pack à la fois, carte par carte (§5) |
+| Fermeture tant que la redénomination n'a pas tourné | ✅ implémenté (§8) |
+| Palier prestige | 🔴 à trancher (§7) |
+
+---
+
+## 1. Pourquoi la boutique existe
+
+Elle n'existe pas pour donner des trucs cools aux joueurs. Elle existe parce que
+`economy.md` §7 est sans issue : le salaire contrôle le débit d'émission mais ne
+détruit rien. Sans puits, la masse croît pour toujours et toute grille de prix finit
+fausse.
+
+Conséquence : **la question n'est jamais « est-ce que ça ferait plaisir ? » mais
+« combien ça brûle, et est-ce que ça brûle encore le mois prochain ? »**
+
+Un article qui ne brûle qu'une fois par joueur n'est pas un puits, c'est un délai.
+
+---
+
+## 2. Les trois règles
+
+**1. Loue, ne vends pas.** Un cosmétique à 30 jours s'aligne sur un revenu
+hebdomadaire et devient un loyer récurrent. Un objet permanent est acheté une fois et
+le joueur riche vide le catalogue en une soirée. Les exceptions permanentes doivent
+se justifier par une rareté externe (§4, emoji perso) ou par un mécanisme de rachat
+(§7).
+
+**2. Rien qui rapporte.** Aucun article ne donne d'argent, d'activityPoints, de
+salaire ou d'avantage sur la paie. Un article qui produit de l'argent transforme la
+boutique — le puits — en source, et annule tout `economy.md`. L'**XP** et les
+**cosmétiques** sont hors de ce périmètre : l'XP n'est pas une monnaie
+(`economy.md` §3), un cadre de carte ne rapporte rien.
+
+Cas limite assumé : les **packs** (§4) accélèrent la collection Peak Hunters, qui
+s'obtient sinon en vocal. C'est accepté parce que la collection n'a aucun pouvoir —
+elle ne produit ni argent ni points, seulement du statut.
+
+**3. Tout achat est un `burn`.** `LogService.economy(userId, -prix, raison, 'shop', 'burn')`.
+Sans ça la page Économie compte l'achat comme une circulation neutre et l'inflation
+affichée ment (`economy.md` §5).
+
+---
+
+## 3. Fixer un prix
+
+L'ancrage de `economy.md` §1 s'applique : **1 RC ≈ 1 €**. Un prix se justifie en
+nommant son équivalent réel, jamais au feeling.
+
+Référence de revenu : **paie médiane 237 RC / semaine**, soit ~1 030 / mois.
+
+| Bande | Prix | Ce que c'est |
+|---|---:|---|
+| Impulsion | 2–5 | un café — le prix d'une carte |
+| Petit plaisir | 15–40 | une place de cinéma, un abonnement |
+| Achat réfléchi | 75–150 | une sortie, un jeu |
+| Gros achat | 200–600 | un objet qu'on économise une ou deux semaines |
+| Prestige | 10 000+ | hors échelle, réservé au haut de la distribution |
+
+---
+
+## 4. Catalogue v1
+
+| Article | Prix | Durée | Statut |
+|---|---:|---|---|
+| Rôle coloré perso | 40 | 30 j | ✅ validé |
+| Pack Sentier — 3 cartes | 15 | consommable | ✅ validé |
+| Pack Falaise — 5 cartes | 25 | consommable | ✅ validé |
+| Pack Sommet — 5 cartes | 45 | consommable | ✅ validé |
+| Design de carte `/me` | 50 | 30 j | ✅ validé |
+| Emoji perso | 300 | permanent | 🟡 proposé |
+| Le Sommet | 10 000+ | permanent, unique | 🟡 proposé (§7) |
+
+### Les packs
+
+Une **expédition** (gagnée en vocal) donne une carte. Un **pack** (acheté) en donne
+plusieurs, dont une garantie. C'est ce qui les distingue : la boutique ne vend pas la
+même chose en plus cher, elle vend l'ouverture.
+
+| Pack | Cartes | Table des N−1 premières | Table de la dernière | Prix |
+|---|---:|---|---|---:|
+| Sentier | 3 | `sentier` | `sentier` | 15 |
+| Falaise | 5 | `sentier` | `falaise` — meilleures chances, communes possibles | 25 |
+| Sommet | 5 | `sentier` | `sommet` — Épique ou Légendaire garantie | 45 |
+
+**Aucune nouvelle table de probabilités.** `EXPEDITION_TIER_RARITY_WEIGHTS` existe
+déjà avec ses trois entrées ; elles cessent d'être des « niveaux d'expédition » pour
+devenir des **qualités de slot** :
+
+| Table | Commune | Rare | Épique | Légendaire |
+|---|---:|---:|---:|---:|
+| `sentier` | 60 | 25 | 12 | 3 |
+| `falaise` | 40 | 35 | 20 | 5 |
+| `sommet` | 0 | 10 | 65 | 25 |
+
+Seul le Sommet garantit une rareté. La Falaise améliore les chances sans rien promettre :
+sa dernière carte peut être commune (40 %), et c'est voulu — un pack qui ne déçoit
+jamais n'a plus de moment fort. Son texte en boutique ne promet donc rien d'autre que
+« de meilleures chances ».
+
+Pas de table modifiée pour les packs : `falaise` et `sommet` servent aussi aux
+expéditions gratuites, et le jeu est pensé sur le long terme.
+
+Structure volée aux boosters Pokémon, et pour la même raison : des cartes banales qui
+défilent, **une carte du fond qui décide de tout**. Sans slot garanti, un pack à
+5 cartes communes est cinq déceptions au lieu d'une.
+
+### Comment les prix sont fixés
+
+**Une carte = un café ≈ 5 RC** (`economy.md` §1 et §7 : un consommable, achat
+d'impulsion, 2–5). Le joueur doit pouvoir lire le prix sans calcul : trois cafés pour
+un Sentier, une place de cinéma pour une Falaise, un repas pour un Sommet.
+
+```
+Sentier  = 3 cartes × 5               = 15
+Falaise  = 1⅔ Sentier                 = 25
+Sommet   = 3 Sentiers                 = 45
+```
+
+Les packs chers ne sont **pas** tarifés par carte : ils se comparent au même budget
+dépensé en Sentiers. Un pack plus cher donne moins de cartes mais plus de haut de
+tableau — sinon il ne serait qu'un piège pour qui ne fait pas le calcul. Simulé sur
+450 RC :
+
+| 450 RC en… | Communes | Rares | Épiques | Légendaires |
+|---|---:|---:|---:|---:|
+| 30 Sentiers | 54 | 22,5 | 10,8 | **2,7** |
+| 18 Falaises | 50 | **24** | **12** | 3,1 |
+| 10 Sommets | 24 | 11 | 11,3 | **3,7** |
+
+Le Sentier est le volume, la Falaise le milieu de tableau, le Sommet la chasse aux
+légendaires. Aucun ne domine les deux autres. **Ne pas monter un pack cher sans
+refaire ce tableau** : à 30, la Falaise repasse sous deux Sentiers ; l'ancienne grille
+(150 / 300 / 600) donnait un Sommet battu sur tous les plans par quatre Sentiers.
+
+L'ancienne grille partait d'« une carte = 50 RC », un chiffre qui ne nommait aucun
+équivalent réel — 150 € pour trois cartes cassait l'ancrage exactement comme la prime
+de 750 (`economy.md` §6). Elle excluait aussi la moitié du serveur : le solde médian
+après redénomination est de ~50 RC.
+
+**Le puits tient par la collection, pas par le prix unitaire.** Finir les 289
+montagnes coûte ~11 000 RC en packs (simulé, sans compter les fragments des doublons),
+soit environ deux ans de dépense pour un joueur médian qui y met la moitié de sa paie,
+et plus que n'importe quel solde après le plafond de 5 000 (`economy.md` §8). La limite
+hebdomadaire (ci-dessous) empêche de toute façon de l'acheter d'un coup. Le jour où des
+joueurs approchent de la fin, la réponse reste d'**ajouter des montagnes**.
+
+### Fragments et boutique
+
+Les fragments ne concurrencent pas la boutique, ils servent un autre public. Une heure
+de vocal rapporte ~0,2 carte en fragments et ~48 RC de paie, soit une dizaine de cartes
+en boutique. Ce n'est pas un problème : l'argent de la paie vient du vocal, donc la
+boutique ne remplace pas le vocal, elle le convertit.
+
+Les fragments sont le **chemin gratuit** : celui des 73 comptes sur 83 qui ne touchent
+pas de paie, et la valeur résiduelle des doublons. Ne pas les rendre plus chers pour
+« protéger » la boutique.
+
+### Une limite de 200 RC de packs par semaine
+
+Chaque joueur peut dépenser au plus **200 RC en packs par semaine** (lundi → dimanche,
+heure de Paris), tous packs confondus. Constante `PACK_WEEKLY_BUDGET` dans `catalog.ts`,
+dépense suivie dans la collection `shop_pack_budgets` ; `/shop` affiche où on en est.
+
+La boutique est à prix fixes : sans limite, un gros solde ne fait monter aucun prix, il
+**finit Peak Hunters le premier soir**. Le seul vrai coût d'un riche, c'est que la
+collection perd son sens pour lui, et devant tout le serveur.
+
+La limite ne gêne pas un joueur ordinaire : la paie médiane est de ~237 RC par semaine,
+et rares sont ceux qui en mettraient 200 dans les packs. Elle ne touche que ceux qui ont
+un stock. À 200, on peut encore s'offrir 4 Sommets par semaine (150 n'en laissait que 3,
+ce qui frustrait plus qu'il ne protégeait). Elle
+fixe aussi la vitesse maximale de complétion, la même pour tous :
+
+| Limite / semaine | Collection complète au plus tôt (en Falaises) |
+|---|---:|
+| 100 | ~2 ans |
+| 150 | ~16 mois |
+| **200** | **~1 an** |
+| 250 | ~10 mois |
+
+Les expéditions gratuites et les fragments raccourcissent ces durées, pour tout le monde
+pareil. **Ne pas la monter pour « libérer » la boutique** : c'est elle qui fait de la
+collection un jeu long, pas les prix. La vraie réponse à une collection trop vite finie
+reste d'ajouter des montagnes.
+
+Un prix progressif (le n-ième pack de la semaine plus cher) a été écarté : il dit la
+même chose qu'une limite, en moins lisible, et casse l'ancrage d'une carte = un café.
+
+### Le design de carte `/me`
+
+`/me` répond **en public**. C'est la seule surface où un joueur se met vraiment en
+scène devant le salon, donc la seule qui justifie un cosmétique payant.
+
+Le thème s'applique à **tous les onglets** de `/me` (Profil, Activité, Jeux, Peak Hunters) :
+un design acheté habille tout le profil, pas seulement la première carte. Le rendu est
+décrit dans CLAUDE.md, section *Profil `/me`*.
+
+**Un thème est une image de fond.** Tout `.png`/`.jpg`/`.webp`/`.svg` déposé dans
+`assets/cards/` devient un design achetable au redémarrage, l'id venant du nom du
+fichier. Les panneaux en verre dépoli, textes, icônes et logo sont posés par-dessus :
+l'image doit être **sans texte**, en 16:9 (1500×900 idéalement, sinon recadrée au centre).
+Un `<id>.json` facultatif règle le libellé et les couleurs ; une valeur invalide est
+ignorée et signalée dans les logs au démarrage, sans casser `/me` :
+
+```json
+{ "label": "Crépuscule", "panelColor": "#2b1d3a", "panelOpacity": 0.5, "blur": 14, "accent": "#f5a623" }
+```
+
+`classique` est le thème gratuit par défaut et doit exister. Pour juger un thème sans
+lancer le bot :
+
+```bash
+node -r @swc-node/register scripts/preview-card.ts all <id>
+```
+
+Le design acheté est stocké dans `profil.cardTheme` — pas lu depuis les locations de
+la boutique. `/me` n'a donc rien à savoir de la boutique, et un thème dont le fichier
+a disparu retombe silencieusement sur le classique au lieu de casser la commande.
+
+Une idée de bannière libre uploadée par le joueur a été écartée : une image arbitraire
+sur une carte publique demande une file de modération, c'est-à-dire une feature, pas
+un article.
+
+---
+
+## 5. L'ouverture des packs
+
+Aujourd'hui l'ouverture d'une expédition est instantanée : un `editReply` et la
+montagne est là. Tout le plaisir d'un pack est dans les secondes d'avant.
+
+Un pack s'ouvre **carte par carte, au clic**, jamais d'un bloc :
+
+| Étape | Affichage | Durée |
+|---|---|---|
+| Achat | le pack entre en inventaire, bouton **Ouvrir** | — |
+| Ouverture | toujours publique : depuis `/shop` (éphémère), un nouveau message dans le salon, ensuite édité en place | — |
+| Chaque carte | WebP animé : flou qui se lève, reflet, nom en fondu ; barre `▮▮▯▯▯`, tableau de chasse `⬜×2 🟦×1`, flèches ◀ ▶ | au clic |
+| Bilan | remplace la dernière carte ~3,5 s après son animation : les N cartes côte à côte en une image, nouvelles obtenues, progression `87/289`, fragments rendus, boutons « Revoir les cartes » et « Ouvrir un autre pack ». ▶ « Bilan du pack » le montre sans attendre. Rouvrir un pack crée un nouveau message, l'ancien bilan reste dans le fil sans boutons | auto |
+
+Le clic fait le rythme mieux qu'un timer : le joueur décide quand il retourne la
+carte suivante, et ◀ revient sur celles déjà vues. Comme dans un booster, **la carte
+la plus rare passe en dernier** (`withRarestLast`) ; les autres gardent l'ordre du
+tirage, une rare peut donc sortir avant. La barre d'accent prend la couleur de rareté
+avant que le nom soit lisible.
+
+L'animation est un **WebP animé de 480×270**, rendu par `@napi-rs/canvas` et encodé
+par `ffmpeg-static` — les deux étaient déjà dans les dépendances, rien à installer.
+Elle est **générée une seule fois par montagne** puis servie par Cloudinary
+(`the-ridge/mountains/reveal/{slug}`), donc ~1,4 s pour le premier joueur qui la sort
+et zéro pour tous les suivants. Les animations du pack sont générées **une par une dès
+l'ouverture**, pendant que le joueur retourne les premières cartes. Une carte pas
+encore prête s'affiche floutée en attendant ; au-delà de 6 s ou en cas d'échec, on
+retombe sur l'image fixe — une animation ratée ne doit jamais coûter la carte.
+
+L'image du bilan est rendue à la volée (`pack-strip.service.ts`) et jointe au
+message, pas envoyée sur Cloudinary : elle est propre à une ouverture.
+
+`scripts/pregenerate-reveals.ts` génère les 289 d'avance si on ne veut aucun joueur
+qui attende. Le WebP a été préféré au GIF : 6× plus léger (120 Ko contre 700) et sans
+banding sur les dégradés de ciel, animation vérifiée sur desktop et mobile.
+
+Contraintes :
+
+- **Un pack acheté est un objet d'inventaire** (`sentierPacks`, `falaisePacks`,
+  `sommetPacks` sur `user_mountains`), pas une ouverture en attente. Il se retrouve
+  dans `/me onglet:Inventaire` (et `/peak-hunters` → Packs) et s'ouvre quand le joueur veut — un achat non ouvert
+  ne se perd jamais.
+- **Les cartes sont tirées et débloquées au premier clic**, pas à l'achat. Le pack est
+  décrémenté par un update conditionnel (`{ $gte: 1 }`), donc deux clics simultanés ne
+  peuvent pas ouvrir le même pack. Si le bot tombe pendant l'animation, les cartes sont
+  déjà dans la collection ; seules les frames restantes sont perdues.
+- **Un pack à la fois, toujours avec l'animation.** Acheter 4 packs ne donne pas un
+  bilan groupé : c'est quatre ouvertures. Le bilan propose directement d'ouvrir le
+  suivant. Un bilan groupé supprimerait le seul moment qui justifie le prix.
+
+---
+
+## 6. Ce qui a été écarté, et pourquoi
+
+Ne pas les reproposer sans argument nouveau.
+
+| Article | Raison du rejet |
+|---|---|
+| Pseudo custom | Les membres peuvent déjà changer leur pseudo eux-mêmes. |
+| Bureau / vocal privé | Fragmente un serveur dont toute la valeur est d'être en vocal ensemble. |
+| Rôle de groupe mentionnable | Aucune demande, complexité de permissions pour rien. |
+| Titre sous le pseudo | Affiché dans `/profil`, où personne ne va. Invisible = sans valeur. |
+| Accent color perso | Le container n'est rendu que pour son propre auteur : le joueur serait seul à voir ce qu'il a payé. |
+| Boost d'argent / de points | Viole la règle 2 (§2). |
+
+---
+
+## 7. Le palier prestige — non tranché
+
+`economy.md` §9 : 8 comptes détiennent 75 % de la masse. Après la redénomination, les
+soldes sont plafonnés à 5 000 (`economy.md` §8) : cinq comptes y sont, une dizaine
+au-dessus de 2 000. Aucun loyer à 40 RC n'absorbe ça.
+
+Piste actuelle — **Le Sommet, aux enchères permanentes** :
+
+> Un seul détenteur sur le serveur. Rôle en haut de la liste, couleur unique.
+> N'importe qui peut le racheter en payant **+10 %** du dernier prix. L'ancien
+> détenteur récupère 50 % (`transfer`), le reste part en `burn`.
+
+C'est le seul objet permanent qui reste un puits récurrent : il brûle à chaque
+passage de main et il ne vise que le haut de la distribution. Prix plancher : **à revoir
+sous le plafond de 5 000** — l'ancien 10 000 n'est plus atteignable par personne.
+
+Reste à trancher : le plancher, le pas d'enchère, et ce qui se passe si personne ne
+rachète pendant des mois (un détenteur à vie est un puits mort).
+
+---
+
+## 8. Implémentation — le minimum
+
+`src/features/shop/` — le catalogue est de la donnée (`catalog.ts`), pas du code.
+
+```
+catalog.ts                    articles, prix, variantes
+models/shop-rental.model.ts   une ligne par (userId, itemId) en cours
+services/shop.service.ts      achat : débit, livraison, log burn
+services/color-role.service.ts  rôle perso par acheteur (models/color-role.model.ts)
+services/shop-ui.service.ts   containers ComponentsV2
+cron/shop-expiry.cron.ts      révocation, toutes les heures
+```
+
+**Une ligne de location par article, pas par variante.** Racheter une autre couleur
+remplace la précédente et cumule le temps restant — le joueur ne peut pas se
+retrouver avec deux rôles colorés dont un seul est visible.
+
+### Le rôle coloré
+
+Chaque acheteur a **son propre rôle** (`🎨 <pseudo>`), créé au premier achat juste sous
+le rôle du bot, puis recoloré à chaque rachat plutôt que recréé. Son id est stocké dans
+`shop_color_roles` : un renommage côté Discord ne casse pas le lien. À l'expiration, le
+rôle est **supprimé**, même si le joueur a quitté le serveur.
+
+La couleur est libre : un select propose des couleurs toutes prêtes, le bouton *Ma
+propre couleur* ouvre un modal où l'on tape un code hexa (`#FF8800`, `F80`). Si le
+serveur a la fonctionnalité Discord `ENHANCED_ROLE_COLORS` (boost niveau 2), le modal
+propose une seconde couleur pour un **dégradé**, au même prix. La couleur voyage dans le
+`customId` (`ff8800` ou `ff8800-3498db`), comme une variante.
+
+Le noir pur est envoyé en `#010101` : pour Discord, la couleur `0` veut dire « pas de
+couleur ». Les anciens rôles partagés (`🎨 Écarlate`…) portent le même préfixe et sont
+retirés du joueur à son prochain achat ou à l'expiration ; une fois vides, ils peuvent
+être supprimés à la main.
+
+Les consommables (packs) n'ont pas de ligne : ils créditent et disparaissent.
+
+L'affichage est une liste de cartes : une `SectionBuilder` par article, **le prix
+dans le bouton** en accessoire (`40 💰`, jamais un « Voir » neutre — on sait ce qu'on
+paie avant de cliquer). Les variantes passent par un select avec pastille colorée,
+pas par une rangée de boutons : ça tient jusqu'à 25 entrées et affiche la sélection
+courante en placeholder.
+
+Discord n'a pas de grille — seul `MediaGalleryBuilder` tuile, et uniquement des
+images non cliquables. Une grille dessinée au canvas a été envisagée puis écartée :
+trop cher pour cinq articles.
+
+Un **consommable** (pack) s'achète directement depuis le bouton prix du catalogue, sans
+écran intermédiaire ; l'écran de résultat propose *Ouvrir* et *Encore un*. Seules les
+**locations** passent par l'écran de l'article.
+
+La quantité d'une location (`−` / `+`, plafond 6) multiplie le prix **et** la durée :
+3 mois de rôle coloré = 120 RC. Tout l'état de navigation tient dans le `customId`
+(`shop:view:<article>:<variante>:<quantité>`), donc aucune session à stocker.
+
+Quatre points qui ne se devinent pas :
+
+- **La boutique est fermée tant que `redenominate-v1` n'est pas dans `migrations`.**
+  Les prix sont à la nouvelle échelle ; entre le déploiement et le script, un solde
+  non migré achèterait dix fois trop. Sur une base locale, lancer
+  `node scripts/redenominate.mjs --apply` une fois pour l'ouvrir.
+
+- **Le débit est conditionnel** (`'profil.money': { $gte: prix }` dans le filtre du
+  `updateOne`), pas un `read` puis un `$inc`. Deux clics simultanés sur *Acheter* ne
+  peuvent pas passer tous les deux.
+- **Livraison ratée = remboursement**, et rien n'est écrit dans le journal économie :
+  un achat annulé ne doit laisser aucune trace de `burn`.
+- **Le `burn` est loggué après la livraison**, jamais avant.
+
+Ajouter un article = une entrée dans `catalog.ts`, plus un `case` dans `grant` et
+`revokeItem` s'il faut livrer quelque chose. Si un article demande sa propre
+plomberie, c'est un signe qu'il ne rentre pas dans la boutique.
+
+Pas de vitrine, pas de stock tournant, pas de remises tant que le catalogue tient sur
+une page.

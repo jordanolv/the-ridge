@@ -6,39 +6,12 @@ import {
   ChannelType,
   PermissionsBitField
 } from 'discord.js';
-import { LogService } from '../../../shared/logs/logs.service';
 import { UserRepository } from '../../user/services/user.repository';
 import { getGuildId } from '../../../shared/guild';
-import ConfigPanelModel from '../../config-panel/models/config-panel.model';
 
 export class AdminService {
 
   // ===== CHANNEL CONFIGURATION =====
-  async setLogsChannel(client: Client, channelId: string): Promise<{
-    success: boolean;
-    message: string;
-  }> {
-    try {
-      const validation = await this.validateChannel(client, channelId);
-      if (!validation.isValid) {
-        return { success: false, message: validation.error! };
-      }
-
-      await ConfigPanelModel.updateOne({}, { $set: { forumChannelId: channelId } }, { upsert: true });
-      
-      return {
-        success: true,
-        message: `✅ Canal de logs configuré : <#${channelId}>`
-      };
-    } catch (error) {
-      console.error('Error setting logs channel:', error);
-      return {
-        success: false,
-        message: '❌ Erreur lors de la configuration du canal de logs'
-      };
-    }
-  }
-
   async setBirthdayChannel(client: Client, channelId: string): Promise<{
     success: boolean;
     message: string;
@@ -143,11 +116,6 @@ export class AdminService {
     }
   }
 
-  async toggleLogs(enabled: boolean): Promise<{ success: boolean; message: string }> {
-    const status = enabled ? 'activés' : 'désactivés';
-    return { success: true, message: `✅ Les logs ont été ${status} avec succès!` };
-  }
-
   private async validateChannel(client: Client, channelId: string): Promise<{
     isValid: boolean;
     error?: string;
@@ -194,49 +162,5 @@ export class AdminService {
 
   static hasManageRolesPermission(member: GuildMember): boolean {
     return member.permissions.has(PermissionsBitField.Flags.ManageRoles);
-  }
-
-  async getServerInfo(client: Client): Promise<{
-    name: string;
-    memberCount: number;
-    channelCount: number;
-    roleCount: number;
-    createdAt: Date;
-    features: {
-      logs: { enabled: boolean; channelId?: string };
-      birthday: { enabled: boolean; channelId?: string };
-    };
-  } | null> {
-    try {
-      const guild = client.guilds.cache.get(getGuildId());
-      if (!guild) return null;
-
-      await guild.members.fetch();
-
-      const logsChannelId = await LogService.getLogsThreadId();
-      const userRepo = new UserRepository();
-      const birthdayConfig = await userRepo.getBirthdayConfig();
-
-      return {
-        name: guild.name,
-        memberCount: guild.memberCount,
-        channelCount: guild.channels.cache.size,
-        roleCount: guild.roles.cache.size,
-        createdAt: guild.createdAt,
-        features: {
-          logs: {
-            enabled: !!logsChannelId,
-            channelId: logsChannelId || undefined
-          },
-          birthday: {
-            enabled: birthdayConfig.enabled,
-            channelId: birthdayConfig.channel || undefined
-          }
-        }
-      };
-    } catch (error) {
-      console.error('Error getting server info:', error);
-      return null;
-    }
   }
 }

@@ -211,6 +211,7 @@ export class RaidService {
         { discordId: p.userId },
         { $inc: { 'profil.money': coinsGained } },
       );
+      await LogService.economy(p.userId, coinsGained, 'Raid — récompense', 'Peak Hunters');
       await LevelingService.giveXpDirectly(client, p.userId, xpGained);
       let expeditionTiers: ExpeditionTier[] = [];
       if (expeditionsGained > 0) {

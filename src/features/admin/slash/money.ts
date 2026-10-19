@@ -13,6 +13,7 @@ import {
 } from 'discord.js';
 import { BotClient } from '../../../bot/client';
 import { UserService } from '../../user/services/user.service';
+import { rc } from '../../../shared/economy/currency';
 
 export const MONEY_MODAL_PREFIX = 'admin_money_modal:';
 
@@ -47,7 +48,7 @@ export default {
               .setStyle(TextInputStyle.Short)
               .setRequired(false)
               .setMaxLength(100)
-              .setPlaceholder(`Solde actuel : ${currentMoney} coins`),
+              .setPlaceholder(`Solde actuel : ${currentMoney} 💰`),
           ),
         );
 
@@ -76,7 +77,7 @@ export default {
 
     await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
-    const updated = await UserService.updateUserMoney(targetId, amount);
+    const updated = await UserService.updateUserMoney(targetId, amount, `Ajustement admin (${interaction.user.tag})`, amount > 0 ? 'mint' : 'burn');
     if (!updated) {
       await interaction.editReply({ content: '❌ Utilisateur introuvable en base de données.' });
       return;
@@ -91,8 +92,8 @@ export default {
       .setTitle(`${amount > 0 ? '➕' : '➖'} Argent ${action}`)
       .addFields(
         { name: 'Utilisateur', value: `<@${targetId}>`, inline: true },
-        { name: 'Montant', value: `${amount > 0 ? '+' : ''}${amount} coins`, inline: true },
-        { name: 'Nouveau solde', value: `${newBalance} coins`, inline: true },
+        { name: 'Montant', value: `${amount > 0 ? '+' : ''}${amount} ${rc()}`, inline: true },
+        { name: 'Nouveau solde', value: `${newBalance} ${rc()}`, inline: true },
       )
       .setFooter({ text: `Par ${interaction.user.username}${reason ? ` · ${reason}` : ''}` });
 
@@ -105,11 +106,11 @@ export default {
         embeds: [
           new EmbedBuilder()
             .setColor(amount > 0 ? 0x57f287 : 0xed4245)
-            .setTitle(`${amount > 0 ? '💰 Vous avez reçu des coins !' : '💸 Des coins ont été retirés'}`)
+            .setTitle(`${amount > 0 ? "💰 Vous avez reçu de l'argent !" : "💸 De l'argent a été retiré"}`)
             .setDescription(
-              `Un administrateur a ${action} **${absAmount} coins** de votre compte.${reason ? `\n**Raison :** ${reason}` : ''}`
+              `Un administrateur a ${action} **${absAmount}** ${rc()} de votre compte.${reason ? `\n**Raison :** ${reason}` : ''}`
             )
-            .addFields({ name: 'Nouveau solde', value: `${newBalance} coins` }),
+            .addFields({ name: 'Nouveau solde', value: `${newBalance} ${rc()}` }),
         ],
       });
     } catch {

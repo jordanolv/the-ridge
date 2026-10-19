@@ -6,7 +6,7 @@ export const JP_NUMBER_MIN = 1;
 export const JP_NUMBER_MAX = 1000;
 
 export const JP_REWARD_CLOSEST = {
-  money: 750,
+  money: 40,
   xp: 600,
   expeditions: 4,
 };

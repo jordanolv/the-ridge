@@ -23,7 +23,6 @@ const pendingGames = new Map<string, {
   challengerScore: number;
   opponentScore: number;
   targetScore: number;
-  bet: number;
   currentRound: number;
   resolving: boolean;
   timeout?: NodeJS.Timeout;
@@ -41,13 +40,6 @@ export default {
     )
     .addIntegerOption(option =>
       option
-        .setName('mise')
-        .setDescription('Montant de RidgeCoins à miser (0 par défaut)')
-        .setRequired(false)
-        .setMinValue(0)
-    )
-    .addIntegerOption(option =>
-      option
         .setName('points')
         .setDescription('Nombre de points pour gagner (3 par défaut)')
         .setRequired(false)
@@ -59,10 +51,9 @@ export default {
     try {
       const opponent = interaction.options.getUser('adversaire', true);
       const challenger = interaction.user;
-      const bet = interaction.options.getInteger('mise') || 0;
       const targetScore = interaction.options.getInteger('points') || 3;
 
-      const validationError = await ArcadeValidationService.validatePvPGame(challenger, opponent, bet, 'shifumi');
+      const validationError = await ArcadeValidationService.validatePvPGame(challenger, opponent, 'shifumi');
       if (validationError) {
         await interaction.editReply({ content: validationError });
         return;
@@ -73,7 +64,6 @@ export default {
         opponent,
         gameName: 'Shifumi',
         gameEmoji: '✂️',
-        bet,
         targetScore
       });
 
@@ -87,7 +77,7 @@ export default {
         .setTitle(`✂️ Manche 1`)
         .setDescription(`${challenger} **0** - **0** ${opponent}\n\nFaites vos choix !`)
         .setColor(0x00aaff)
-        .setFooter({ text: this.footerText(targetScore, bet) });
+        .setFooter({ text: this.footerText(targetScore) });
 
       const message = await interaction.editReply({
         content: '',
@@ -101,7 +91,6 @@ export default {
         challengerScore: 0,
         opponentScore: 0,
         targetScore,
-        bet,
         currentRound: 1,
         resolving: false,
         timeout: setTimeout(() => this.cancelGame(gameId, interaction), 60000)
@@ -198,7 +187,7 @@ export default {
           `${resultMsg}`
         )
         .setColor(0x00aaff)
-        .setFooter({ text: this.footerText(game.targetScore, game.bet) });
+        .setFooter({ text: this.footerText(game.targetScore) });
 
       await interaction.editReply({ embeds: [roundEmbed], components: [] });
 
@@ -227,7 +216,7 @@ export default {
           `${game.challenger} **${game.challengerScore}** - **${game.opponentScore}** ${game.opponent}\n\nFaites vos choix !`
         )
         .setColor(0x00aaff)
-        .setFooter({ text: this.footerText(game.targetScore, game.bet) });
+        .setFooter({ text: this.footerText(game.targetScore) });
 
       const message = await interaction.editReply({ embeds: [nextRoundEmbed], components: [row] });
 
@@ -250,11 +239,6 @@ export default {
         await UserService.recordArcadeLoss(loser.id, 'shifumi');
         await ArcadeStatsService.incrementGameCount('shifumi');
 
-        if (game.bet > 0) {
-          await UserService.updateUserMoney(loser.id, -game.bet);
-          await UserService.updateUserMoney(winner.id, game.bet);
-          victoryMsg += `\n\n💰 **+${game.bet}** RidgeCoins pour ${winner.username}`;
-        }
       } catch (error) {
         console.error('Erreur lors de la fin de partie shifumi:', error);
       }
@@ -266,7 +250,7 @@ export default {
           victoryMsg
         )
         .setColor(0xffd700)
-        .setFooter({ text: this.footerText(game.targetScore, game.bet) });
+        .setFooter({ text: this.footerText(game.targetScore) });
 
       await interaction.editReply({ embeds: [finalEmbed], components: [] });
     } catch (error) {
@@ -315,8 +299,8 @@ export default {
     );
   },
 
-  footerText(targetScore: number, bet: number): string {
-    return `Premier à ${targetScore} points` + (bet > 0 ? ` • Mise: ${bet} RidgeCoins` : '') + ` • /shifumi`;
+  footerText(targetScore: number): string {
+    return `Premier à ${targetScore} points` + ` • /shifumi`;
   },
 
   determineWinner(choice1: ShifumiChoice, choice2: ShifumiChoice): 'player1' | 'player2' | 'draw' {

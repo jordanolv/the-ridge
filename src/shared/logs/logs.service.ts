@@ -1,7 +1,4 @@
 import {
-  ForumChannel,
-  ThreadChannel,
-  EmbedBuilder,
   GuildMember,
   PartialGuildMember,
   User,
@@ -14,237 +11,149 @@ import {
   Guild,
   AuditLogEvent,
 } from 'discord.js';
-import { BotClient } from '../../bot/client';
-import { getGuildId } from '../guild';
-import ConfigPanelModel from '../../features/config-panel/models/config-panel.model';
+import BotLogModel, { LogLevel, MoneyFlow } from './bot-log.model';
 
-let _client: BotClient | null = null;
-let _cachedThreadId: string | null = null;
+interface LogEntry {
+  level: LogLevel;
+  message: string;
+  kind: string;
+  feature?: string;
+  title?: string;
+  userId?: string;
+  channelId?: string;
+  amount?: number;
+  flow?: MoneyFlow;
+}
+
+const truncate = (value: string | null | undefined, max = 500): string =>
+  !value ? '_vide_' : value.length > max ? `${value.slice(0, max)}…` : value;
 
 export class LogService {
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // THREAD MANAGEMENT
-  // ═══════════════════════════════════════════════════════════════════════════
-
-  static async init(client: BotClient): Promise<void> {
-    _client = client;
-    _cachedThreadId = null;
-
-    const guild = client.guilds.cache.get(getGuildId());
-    if (!guild) return;
-
-    const state = await ConfigPanelModel.findOne();
-    if (!state?.forumChannelId) return;
-
-    const forum = guild.channels.cache.get(state.forumChannelId) as ForumChannel | undefined;
-    if (!forum) return;
-
-    const fetched = await forum.threads.fetchActive();
-    const thread = fetched.threads.find(t => t.name === '📋 Logs') ?? null;
-
-    if (thread) {
-      await ConfigPanelModel.updateOne({}, { $set: { logsThreadId: thread.id } });
-      _cachedThreadId = thread.id;
-      console.log(`[LogService] Thread de logs initialisé : ${thread.id}`);
-    } else {
-      console.warn('[LogService] Thread "📋 Logs" introuvable dans le forum admin.');
-    }
-  }
-
-  static async getLogsThreadId(): Promise<string | null> {
-    if (_cachedThreadId) return _cachedThreadId;
-    const state = await ConfigPanelModel.findOne();
-    const id = (state as any)?.logsThreadId ?? null;
-    _cachedThreadId = id;
-    return id;
-  }
-
-  private static async saveLogsThreadId(threadId: string): Promise<void> {
-    await ConfigPanelModel.updateOne({}, { $set: { logsThreadId: threadId } });
-    _cachedThreadId = threadId;
-  }
-
-  private static async getLogsThread(): Promise<ThreadChannel | null> {
-    if (!_client) return null;
-
-    const guild = _client.guilds.cache.get(getGuildId());
-    if (!guild) return null;
-
-    const threadId = await this.getLogsThreadId();
-    if (threadId) {
-      try {
-        const thread = await guild.channels.fetch(threadId) as ThreadChannel | null;
-        if (thread) {
-          if (thread.archived) await thread.setArchived(false);
-          return thread;
-        }
-      } catch { /* introuvable, on cherche par nom */ }
-    }
-
-    const state = await ConfigPanelModel.findOne();
-    if (!state?.forumChannelId) return null;
-
-    const forum = guild.channels.cache.get(state.forumChannelId) as ForumChannel | undefined;
-    if (!forum) return null;
-
-    const fetched = await forum.threads.fetchActive();
-    const thread = fetched.threads.find(t => t.name === '📋 Logs') ?? null;
-
-    if (thread) {
-      await this.saveLogsThreadId(thread.id);
-      return thread;
-    }
-
-    return null;
-  }
-
-  static async sendDaySeparator(): Promise<void> {
+  static async record(entry: LogEntry): Promise<void> {
     try {
-      const thread = await this.getLogsThread();
-      if (!thread) return;
-      const label = new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Europe/Paris' });
-      await thread.send({ content: `\n─────────────────────────────\n📅 **${label.charAt(0).toUpperCase() + label.slice(1)}**\n─────────────────────────────` });
+      await BotLogModel.create(entry);
     } catch (error) {
-      console.error('[LogService] Erreur séparateur de jour:', error);
+      console.error('[LogService] Écriture du log impossible:', error);
     }
-  }
-
-  static async send(embed: EmbedBuilder): Promise<void> {
-    try {
-      const thread = await this.getLogsThread();
-      if (!thread) return;
-      await thread.send({ embeds: [embed] });
-    } catch (error) {
-      console.error('[LogService] Erreur envoi log:', error);
-    }
-  }
-
-  static async sendEmbed(embed: EmbedBuilder): Promise<void> {
-    return this.send(embed);
   }
 
   static async info(message: string, options?: { feature?: string; title?: string }): Promise<void> {
-    const embed = new EmbedBuilder()
-      .setTitle(options?.title ?? 'ℹ️ Info')
-      .setDescription(message)
-      .setColor(0x3498db)
-      .setTimestamp();
-    if (options?.feature) embed.setFooter({ text: options.feature });
-    await this.send(embed);
+    await this.record({ level: 'info', kind: 'app', message, ...options });
   }
 
   static async success(message: string, options?: { feature?: string; title?: string }): Promise<void> {
-    const embed = new EmbedBuilder()
-      .setTitle(options?.title ?? '✅ Succès')
-      .setDescription(message)
-      .setColor(0x27ae60)
-      .setTimestamp();
-    if (options?.feature) embed.setFooter({ text: options.feature });
-    await this.send(embed);
+    await this.record({ level: 'success', kind: 'app', message, ...options });
   }
 
   static async warning(message: string, options?: { feature?: string; title?: string }): Promise<void> {
-    const embed = new EmbedBuilder()
-      .setTitle(options?.title ?? '⚠️ Avertissement')
-      .setDescription(message)
-      .setColor(0xf39c12)
-      .setTimestamp();
-    if (options?.feature) embed.setFooter({ text: options.feature });
-    await this.send(embed);
+    await this.record({ level: 'warning', kind: 'app', message, ...options });
   }
 
   static async error(message: string, options?: { feature?: string; title?: string }): Promise<void> {
-    const embed = new EmbedBuilder()
-      .setTitle(options?.title ?? '❌ Erreur')
-      .setDescription(message)
-      .setColor(0xe74c3c)
-      .setTimestamp();
-    if (options?.feature) embed.setFooter({ text: options.feature });
-    await this.send(embed);
+    await this.record({ level: 'error', kind: 'app', message, ...options });
   }
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // MESSAGES
-  // ═══════════════════════════════════════════════════════════════════════════
+  static async economy(
+    userId: string | null,
+    amount: number,
+    reason: string,
+    feature?: string,
+    flow: MoneyFlow = 'mint',
+  ): Promise<void> {
+    if (amount === 0) return;
+    const sign = amount > 0 ? '+' : '';
+    await this.record({
+      level: 'info',
+      kind: 'economy',
+      title: reason,
+      feature,
+      userId: userId ?? undefined,
+      amount,
+      flow,
+      message: `${userId ? `<@${userId}> ` : ''}${sign}${amount} 💰 — ${reason}`,
+    });
+  }
+
+  /** Mouvements d'argent d'un joueur depuis `since` : de quoi retracer l'évolution de son solde. */
+  static async economyMovements(userId: string, since: Date): Promise<{ date: Date; amount: number }[]> {
+    const entries = await BotLogModel.find({ kind: 'economy', userId, createdAt: { $gte: since } })
+      .select('amount createdAt')
+      .lean();
+    return entries.map(entry => ({ date: entry.createdAt, amount: entry.amount ?? 0 }));
+  }
 
   static async logMessageEdit(oldMessage: Message | PartialMessage, newMessage: Message | PartialMessage): Promise<void> {
     if (!oldMessage.author || oldMessage.author.bot) return;
     if (oldMessage.content === newMessage.content) return;
 
-    const embed = new EmbedBuilder()
-      .setTitle('📝 Message modifié')
-      .setColor(0xf39c12)
-      .setAuthor({ name: oldMessage.author.tag, iconURL: oldMessage.author.displayAvatarURL() })
-      .addFields(
-        { name: 'Auteur', value: `<@${oldMessage.author.id}>`, inline: true },
-        { name: 'Salon', value: `<#${oldMessage.channelId}>`, inline: true },
-        { name: 'Lien', value: `[Voir le message](${newMessage.url})`, inline: true },
-        { name: 'Avant', value: (oldMessage.content || '_vide_').slice(0, 1024), inline: false },
-        { name: 'Après', value: (newMessage.content || '_vide_').slice(0, 1024), inline: false },
-      )
-      .setTimestamp();
-    await this.send(embed);
+    await this.record({
+      level: 'warning',
+      kind: 'message.edit',
+      title: 'Message modifié',
+      userId: oldMessage.author.id,
+      channelId: oldMessage.channelId,
+      message: `<@${oldMessage.author.id}> a modifié un message dans <#${oldMessage.channelId}>\n**Avant** : ${truncate(oldMessage.content)}\n**Après** : ${truncate(newMessage.content)}\n[Voir le message](${newMessage.url})`,
+    });
+  }
+
+  private static async findMessageDeleter(message: Message | PartialMessage): Promise<string> {
+    if (!message.guild || !message.author) return '*inconnu*';
+    const authorId = message.author.id;
+    try {
+      const auditLogs = await message.guild.fetchAuditLogs({ type: AuditLogEvent.MessageDelete, limit: 5 });
+      const entry = auditLogs.entries.find(
+        (e) =>
+          e.target?.id === authorId &&
+          e.extra?.channel?.id === message.channelId &&
+          Date.now() - e.createdTimestamp < 10_000,
+      );
+      // ponytail: Discord n'écrit rien dans l'audit log quand l'auteur supprime son propre
+      // message, et agrège les suppressions d'un même modérateur — d'où la fenêtre de 10s.
+      return entry?.executor ? `<@${entry.executor.id}>` : `<@${authorId}> (lui-même)`;
+    } catch {
+      return '*inconnu*';
+    }
   }
 
   static async logMessageDelete(message: Message | PartialMessage): Promise<void> {
     if (!message.author || message.author.bot) return;
 
-    const embed = new EmbedBuilder()
-      .setTitle('🗑️ Message supprimé')
-      .setColor(0xe74c3c)
-      .setAuthor({ name: message.author.tag, iconURL: message.author.displayAvatarURL() })
-      .addFields(
-        { name: 'Auteur', value: `<@${message.author.id}>`, inline: true },
-        { name: 'Salon', value: `<#${message.channelId}>`, inline: true },
-        { name: 'Contenu', value: (message.content || '_vide_').slice(0, 1024), inline: false },
-      )
-      .setTimestamp();
+    const attachments = message.attachments.size > 0
+      ? `\n**Fichiers** : ${message.attachments.map((a) => a.url).join(', ')}`
+      : '';
 
-    if (message.attachments.size > 0) {
-      embed.addFields({ name: 'Fichiers', value: message.attachments.map(a => a.url).join('\n').slice(0, 1024) });
-    }
+    const deleter = await this.findMessageDeleter(message);
 
-    await this.send(embed);
+    await this.record({
+      level: 'error',
+      kind: 'message.delete',
+      title: 'Message supprimé',
+      userId: message.author.id,
+      channelId: message.channelId,
+      message: `Message de <@${message.author.id}> supprimé par ${deleter} dans <#${message.channelId}>\n${truncate(message.content)}${attachments}`,
+    });
   }
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // MEMBRES
-  // ═══════════════════════════════════════════════════════════════════════════
 
   static async logMemberJoin(member: GuildMember): Promise<void> {
     const accountAge = Math.floor((Date.now() - member.user.createdTimestamp) / 86400000);
-    const embed = new EmbedBuilder()
-      .setTitle('📥 Membre rejoint')
-      .setColor(0x57f287)
-      .setAuthor({ name: member.user.tag, iconURL: member.user.displayAvatarURL() })
-      .addFields(
-        { name: 'Utilisateur', value: `<@${member.id}> (${member.user.tag})`, inline: true },
-        { name: 'ID', value: member.id, inline: true },
-        { name: 'Compte créé', value: `<t:${Math.floor(member.user.createdTimestamp / 1000)}:R> (${accountAge}j)`, inline: true },
-      )
-      .setThumbnail(member.user.displayAvatarURL())
-      .setTimestamp();
-    await this.send(embed);
+    await this.record({
+      level: 'success',
+      kind: 'member.join',
+      title: 'Membre rejoint',
+      userId: member.id,
+      message: `<@${member.id}> (${member.user.tag}) a rejoint — compte créé il y a ${accountAge} jour(s)`,
+    });
   }
 
   static async logMemberLeave(member: GuildMember | PartialGuildMember): Promise<void> {
-    const roles = member.roles.cache.filter(r => r.id !== member.guild.id).map(r => `<@&${r.id}>`).join(', ') || '*Aucun*';
-    const joinedAt = member.joinedAt ? `<t:${Math.floor(member.joinedTimestamp! / 1000)}:R>` : '*Inconnu*';
-
-    const embed = new EmbedBuilder()
-      .setTitle('📤 Membre parti')
-      .setColor(0xed4245)
-      .setAuthor({ name: member.user.tag, iconURL: member.user.displayAvatarURL() })
-      .addFields(
-        { name: 'Utilisateur', value: `${member.user.tag}`, inline: true },
-        { name: 'ID', value: member.id, inline: true },
-        { name: 'Rejoint', value: joinedAt, inline: true },
-        { name: 'Rôles', value: roles.slice(0, 1024), inline: false },
-      )
-      .setThumbnail(member.user.displayAvatarURL())
-      .setTimestamp();
-    await this.send(embed);
+    const roles = member.roles.cache.filter((r) => r.id !== member.guild.id).map((r) => `<@&${r.id}>`).join(', ') || '*aucun*';
+    await this.record({
+      level: 'error',
+      kind: 'member.leave',
+      title: 'Membre parti',
+      userId: member.id,
+      message: `**${member.user.tag}** (${member.id}) a quitté le serveur — rôles : ${roles}`,
+    });
   }
 
   static async logMemberUpdate(oldMember: GuildMember | PartialGuildMember, newMember: GuildMember): Promise<void> {
@@ -254,10 +163,10 @@ export class LogService {
       changes.push(`**Surnom** : \`${oldMember.nickname ?? 'aucun'}\` → \`${newMember.nickname ?? 'aucun'}\``);
     }
 
-    const addedRoles = newMember.roles.cache.filter(r => !oldMember.roles.cache.has(r.id) && r.id !== newMember.guild.id);
-    const removedRoles = oldMember.roles.cache.filter(r => !newMember.roles.cache.has(r.id) && r.id !== newMember.guild.id);
-    if (addedRoles.size > 0) changes.push(`**Rôles ajoutés** : ${addedRoles.map(r => `<@&${r.id}>`).join(', ')}`);
-    if (removedRoles.size > 0) changes.push(`**Rôles retirés** : ${removedRoles.map(r => `<@&${r.id}>`).join(', ')}`);
+    const addedRoles = newMember.roles.cache.filter((r) => !oldMember.roles.cache.has(r.id) && r.id !== newMember.guild.id);
+    const removedRoles = oldMember.roles.cache.filter((r) => !newMember.roles.cache.has(r.id) && r.id !== newMember.guild.id);
+    if (addedRoles.size > 0) changes.push(`**Rôles ajoutés** : ${addedRoles.map((r) => `<@&${r.id}>`).join(', ')}`);
+    if (removedRoles.size > 0) changes.push(`**Rôles retirés** : ${removedRoles.map((r) => `<@&${r.id}>`).join(', ')}`);
 
     const wasTimedOut = (oldMember as GuildMember).communicationDisabledUntil;
     const isTimedOut = newMember.communicationDisabledUntil;
@@ -269,14 +178,13 @@ export class LogService {
 
     if (changes.length === 0) return;
 
-    const embed = new EmbedBuilder()
-      .setTitle('✏️ Membre modifié')
-      .setColor(0x3498db)
-      .setAuthor({ name: newMember.user.tag, iconURL: newMember.user.displayAvatarURL() })
-      .setDescription(changes.join('\n'))
-      .addFields({ name: 'Utilisateur', value: `<@${newMember.id}>`, inline: true })
-      .setTimestamp();
-    await this.send(embed);
+    await this.record({
+      level: 'info',
+      kind: 'member.update',
+      title: 'Membre modifié',
+      userId: newMember.id,
+      message: `<@${newMember.id}> — ${changes.join(' · ')}`,
+    });
   }
 
   static async logUserUpdate(oldUser: User | null, newUser: User): Promise<void> {
@@ -292,31 +200,24 @@ export class LogService {
 
     if (changes.length === 0) return;
 
-    const embed = new EmbedBuilder()
-      .setTitle('👤 Profil utilisateur modifié')
-      .setColor(0x9b59b6)
-      .setAuthor({ name: newUser.tag, iconURL: newUser.displayAvatarURL() })
-      .setDescription(changes.join('\n'))
-      .setThumbnail(newUser.displayAvatarURL())
-      .setTimestamp();
-    await this.send(embed);
+    await this.record({
+      level: 'info',
+      kind: 'user.update',
+      title: 'Profil utilisateur modifié',
+      userId: newUser.id,
+      message: `<@${newUser.id}> — ${changes.join(' · ')}`,
+    });
   }
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // VOCAL
-  // ═══════════════════════════════════════════════════════════════════════════
-
   static async logVoiceMove(oldState: VoiceState, newState: VoiceState): Promise<void> {
-    const embed = new EmbedBuilder()
-      .setTitle('🔀 Déplacement vocal')
-      .setColor(0xf39c12)
-      .addFields(
-        { name: 'Utilisateur', value: `<@${newState.member!.id}>`, inline: true },
-        { name: 'Avant', value: `<#${oldState.channelId}>`, inline: true },
-        { name: 'Après', value: `<#${newState.channelId}>`, inline: true },
-      )
-      .setTimestamp();
-    await this.send(embed);
+    await this.record({
+      level: 'info',
+      kind: 'voice.move',
+      title: 'Déplacement vocal',
+      userId: newState.member!.id,
+      channelId: newState.channelId ?? undefined,
+      message: `<@${newState.member!.id}> : <#${oldState.channelId}> → <#${newState.channelId}>`,
+    });
   }
 
   static async logVoiceStateChange(oldState: VoiceState, newState: VoiceState): Promise<void> {
@@ -339,92 +240,63 @@ export class LogService {
 
     if (changes.length === 0) return;
 
-    const embed = new EmbedBuilder()
-      .setTitle('🎙️ Changement d\'état vocal')
-      .setColor(0x3498db)
-      .addFields(
-        { name: 'Utilisateur', value: `<@${member.id}>`, inline: true },
-        { name: 'Salon', value: newState.channelId ? `<#${newState.channelId}>` : '*Aucun*', inline: true },
-        { name: 'Changements', value: changes.join('\n'), inline: false },
-      )
-      .setTimestamp();
-    await this.send(embed);
+    await this.record({
+      level: 'info',
+      kind: 'voice.state',
+      title: 'Changement d\'état vocal',
+      userId: member.id,
+      channelId: newState.channelId ?? undefined,
+      message: `<@${member.id}> dans ${newState.channelId ? `<#${newState.channelId}>` : '*aucun salon*'} — ${changes.join(' · ')}`,
+    });
   }
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // SALONS
-  // ═══════════════════════════════════════════════════════════════════════════
-
   static async logChannelCreate(channel: GuildChannel): Promise<void> {
-    const embed = new EmbedBuilder()
-      .setTitle('➕ Salon créé')
-      .setColor(0x57f287)
-      .addFields(
-        { name: 'Nom', value: channel.name, inline: true },
-        { name: 'Type', value: String(channel.type), inline: true },
-        { name: 'Catégorie', value: channel.parent?.name ?? '*Aucune*', inline: true },
-      )
-      .setTimestamp();
-    await this.send(embed);
+    await this.record({
+      level: 'success',
+      kind: 'channel.create',
+      title: 'Salon créé',
+      channelId: channel.id,
+      message: `**${channel.name}** (type ${channel.type}) dans ${channel.parent?.name ?? '*aucune catégorie*'}`,
+    });
   }
 
   static async logChannelDelete(channel: GuildChannel): Promise<void> {
-    const embed = new EmbedBuilder()
-      .setTitle('🗑️ Salon supprimé')
-      .setColor(0xed4245)
-      .addFields(
-        { name: 'Nom', value: channel.name, inline: true },
-        { name: 'Type', value: String(channel.type), inline: true },
-        { name: 'Catégorie', value: channel.parent?.name ?? '*Aucune*', inline: true },
-      )
-      .setTimestamp();
-    await this.send(embed);
+    await this.record({
+      level: 'error',
+      kind: 'channel.delete',
+      title: 'Salon supprimé',
+      channelId: channel.id,
+      message: `**${channel.name}** (type ${channel.type}) dans ${channel.parent?.name ?? '*aucune catégorie*'}`,
+    });
   }
 
   static async logChannelUpdate(oldChannel: GuildChannel, newChannel: GuildChannel): Promise<void> {
-    const changes: string[] = [];
-    if (oldChannel.name !== newChannel.name) changes.push(`**Nom** : \`${oldChannel.name}\` → \`${newChannel.name}\``);
-
-    if (changes.length === 0) return;
-
-    const embed = new EmbedBuilder()
-      .setTitle('✏️ Salon modifié')
-      .setColor(0xf39c12)
-      .addFields(
-        { name: 'Salon', value: `<#${newChannel.id}>`, inline: true },
-        { name: 'Changements', value: changes.join('\n'), inline: false },
-      )
-      .setTimestamp();
-    await this.send(embed);
+    if (oldChannel.name === newChannel.name) return;
+    await this.record({
+      level: 'warning',
+      kind: 'channel.update',
+      title: 'Salon modifié',
+      channelId: newChannel.id,
+      message: `<#${newChannel.id}> — **Nom** : \`${oldChannel.name}\` → \`${newChannel.name}\``,
+    });
   }
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // RÔLES
-  // ═══════════════════════════════════════════════════════════════════════════
-
   static async logRoleCreate(role: Role): Promise<void> {
-    const embed = new EmbedBuilder()
-      .setTitle('➕ Rôle créé')
-      .setColor(role.color || 0x57f287)
-      .addFields(
-        { name: 'Nom', value: role.name, inline: true },
-        { name: 'Couleur', value: role.hexColor, inline: true },
-        { name: 'Mentionnable', value: role.mentionable ? 'Oui' : 'Non', inline: true },
-      )
-      .setTimestamp();
-    await this.send(embed);
+    await this.record({
+      level: 'success',
+      kind: 'role.create',
+      title: 'Rôle créé',
+      message: `**${role.name}** (${role.hexColor}) — mentionnable : ${role.mentionable ? 'oui' : 'non'}`,
+    });
   }
 
   static async logRoleDelete(role: Role): Promise<void> {
-    const embed = new EmbedBuilder()
-      .setTitle('🗑️ Rôle supprimé')
-      .setColor(0xed4245)
-      .addFields(
-        { name: 'Nom', value: role.name, inline: true },
-        { name: 'Couleur', value: role.hexColor, inline: true },
-      )
-      .setTimestamp();
-    await this.send(embed);
+    await this.record({
+      level: 'error',
+      kind: 'role.delete',
+      title: 'Rôle supprimé',
+      message: `**${role.name}** (${role.hexColor})`,
+    });
   }
 
   static async logRoleUpdate(oldRole: Role, newRole: Role): Promise<void> {
@@ -435,110 +307,72 @@ export class LogService {
 
     if (changes.length === 0) return;
 
-    const embed = new EmbedBuilder()
-      .setTitle('✏️ Rôle modifié')
-      .setColor(newRole.color || 0xf39c12)
-      .addFields(
-        { name: 'Rôle', value: `<@&${newRole.id}>`, inline: true },
-        { name: 'Changements', value: changes.join('\n'), inline: false },
-      )
-      .setTimestamp();
-    await this.send(embed);
+    await this.record({
+      level: 'warning',
+      kind: 'role.update',
+      title: 'Rôle modifié',
+      message: `<@&${newRole.id}> — ${changes.join(' · ')}`,
+    });
   }
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // MODÉRATION
-  // ═══════════════════════════════════════════════════════════════════════════
-
   static async logBanAdd(guild: Guild, user: User): Promise<void> {
-    let moderator = '*Inconnu*';
-    let reason = '*Aucune*';
+    let moderator = '*inconnu*';
+    let reason = '*aucune*';
     try {
       const auditLogs = await guild.fetchAuditLogs({ type: AuditLogEvent.MemberBanAdd, limit: 1 });
       const entry = auditLogs.entries.first();
       if (entry && entry.target?.id === user.id) {
         moderator = `<@${entry.executor?.id}>`;
-        reason = entry.reason ?? '*Aucune*';
+        reason = entry.reason ?? '*aucune*';
       }
     } catch { /* audit log pas accessible */ }
 
-    const embed = new EmbedBuilder()
-      .setTitle('🔨 Membre banni')
-      .setColor(0xed4245)
-      .setAuthor({ name: user.tag, iconURL: user.displayAvatarURL() })
-      .addFields(
-        { name: 'Utilisateur', value: `${user.tag} (${user.id})`, inline: true },
-        { name: 'Modérateur', value: moderator, inline: true },
-        { name: 'Raison', value: reason, inline: false },
-      )
-      .setTimestamp();
-    await this.send(embed);
+    await this.record({
+      level: 'error',
+      kind: 'ban.add',
+      title: 'Membre banni',
+      userId: user.id,
+      message: `**${user.tag}** (${user.id}) banni par ${moderator} — raison : ${reason}`,
+    });
   }
 
   static async logBanRemove(guild: Guild, user: User): Promise<void> {
-    let moderator = '*Inconnu*';
+    let moderator = '*inconnu*';
     try {
       const auditLogs = await guild.fetchAuditLogs({ type: AuditLogEvent.MemberBanRemove, limit: 1 });
       const entry = auditLogs.entries.first();
       if (entry && entry.target?.id === user.id) {
         moderator = `<@${entry.executor?.id}>`;
       }
-    } catch { }
+    } catch { /* audit log pas accessible */ }
 
-    const embed = new EmbedBuilder()
-      .setTitle('✅ Bannissement levé')
-      .setColor(0x57f287)
-      .setAuthor({ name: user.tag, iconURL: user.displayAvatarURL() })
-      .addFields(
-        { name: 'Utilisateur', value: `${user.tag} (${user.id})`, inline: true },
-        { name: 'Modérateur', value: moderator, inline: true },
-      )
-      .setTimestamp();
-    await this.send(embed);
+    await this.record({
+      level: 'success',
+      kind: 'ban.remove',
+      title: 'Bannissement levé',
+      userId: user.id,
+      message: `**${user.tag}** (${user.id}) débanni par ${moderator}`,
+    });
   }
 
-  // ═══════════════════════════════════════════════════════════════════════════
-  // INVITATIONS
-  // ═══════════════════════════════════════════════════════════════════════════
-
   static async logInviteCreate(invite: Invite): Promise<void> {
-    const embed = new EmbedBuilder()
-      .setTitle('🔗 Invitation créée')
-      .setColor(0x57f287)
-      .addFields(
-        { name: 'Code', value: invite.code, inline: true },
-        { name: 'Créée par', value: invite.inviter ? `<@${invite.inviter.id}>` : '*Inconnu*', inline: true },
-        { name: 'Salon', value: invite.channel ? `<#${invite.channel.id}>` : '*Inconnu*', inline: true },
-        { name: 'Expire', value: invite.expiresAt ? `<t:${Math.floor(invite.expiresAt.getTime() / 1000)}:R>` : 'Jamais', inline: true },
-        { name: 'Utilisations max', value: String(invite.maxUses ?? '∞'), inline: true },
-      )
-      .setTimestamp();
-    await this.send(embed);
+    await this.record({
+      level: 'info',
+      kind: 'invite.create',
+      title: 'Invitation créée',
+      userId: invite.inviter?.id,
+      channelId: invite.channel?.id,
+      message: `\`${invite.code}\` par ${invite.inviter ? `<@${invite.inviter.id}>` : '*inconnu*'} sur ${invite.channel ? `<#${invite.channel.id}>` : '*inconnu*'} — expire : ${invite.expiresAt ? `<t:${Math.floor(invite.expiresAt.getTime() / 1000)}:R>` : 'jamais'}, max ${invite.maxUses ?? '∞'} utilisation(s)`,
+    });
   }
 
   static async logInviteDelete(invite: Invite): Promise<void> {
-    const embed = new EmbedBuilder()
-      .setTitle('🗑️ Invitation supprimée')
-      .setColor(0xed4245)
-      .addFields(
-        { name: 'Code', value: invite.code, inline: true },
-        { name: 'Salon', value: invite.channel ? `<#${invite.channel.id}>` : '*Inconnu*', inline: true },
-      )
-      .setTimestamp();
-    await this.send(embed);
-  }
-
-  // ═══════════════════════════════════════════════════════════════════════════
-  // BOT ACTIONS
-  // ═══════════════════════════════════════════════════════════════════════════
-
-  static async logBotAction(title: string, description: string, color: number = 0x9b59b6): Promise<void> {
-    const embed = new EmbedBuilder()
-      .setTitle(`🤖 ${title}`)
-      .setDescription(description)
-      .setColor(color)
-      .setFooter({ text: 'Action bot' })
-      .setTimestamp();
-    await this.send(embed);
+    await this.record({
+      level: 'warning',
+      kind: 'invite.delete',
+      title: 'Invitation supprimée',
+      channelId: invite.channel?.id,
+      message: `\`${invite.code}\` sur ${invite.channel ? `<#${invite.channel.id}>` : '*inconnu*'}`,
+    });
   }
 }

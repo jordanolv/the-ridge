@@ -14,8 +14,9 @@ Bot Discord communautaire du serveur The Ridge. TypeScript, Discord.js v14, Mong
 ## Lancer le bot
 
 ```bash
-npm run dev      # swc, pas de build
-npm run watch    # idem + rechargement à chaud
+npm run dev      # bot + Activity (Vite) + tunnel, swc, pas de build
+npm run dev:bot  # le bot seul
+npm run watch    # le bot seul + rechargement à chaud
 npm run build    # tsc + tsc-alias + copie des assets — ce que vérifie la CI
 ```
 
@@ -35,7 +36,10 @@ feat/xxx ──PR──► dev ──PR──► main
 ```
 
 `main` et `dev` sont protégées : PR obligatoire, CI (`npm run build`) verte, pas de
-force-push. Jamais de commit direct sur ces deux branches — brancher depuis `dev`.
+force-push (`enforce_admins` actif : la protection s'applique aussi aux admins).
+Jamais de commit direct sur ces deux branches — brancher depuis `dev`. Un hook
+`PreToolUse` (`.claude/hooks/block-direct-main-dev.sh`) refuse tout `git commit` /
+`git push` fait depuis `main` ou `dev`, ou poussé explicitement vers elles.
 
 Le merge sur `dev` déploie staging, le merge sur `main` déploie la prod. Promotion
 `dev` → `main` en **merge commit**, pas en squash : un squash ferait diverger les
@@ -54,15 +58,14 @@ src/
 ├── config/        # commands.json
 ├── features/      # Une feature = un dossier autonome — `ls src/features/`
 │   └── discord/   # Events globaux (ready, messageCreate, interactionCreate)
-└── shared/        # cron, logs, guild, db, hooks, time, components, weekly-recap
+├── shared/        # cron, logs, guild, db, hooks, time, components, weekly-recap
+└── web/           # Dashboard admin (Express + public/admin.html)
 ```
 
 Noms de dossiers qui ne se devinent pas :
 
 - `peak-hunters` — le système de montagnes (s'appelait `mountain`)
 - `party` — les sessions vocales (s'appelait `vocal-party`)
-- `cdm` — pronostics Coupe du Monde 2026 (`/cdm`, `/cdm-pronos`, `/cdm-admin`)
-- `config-panel` — le routeur des panels admin, pas une feature métier
 
 Chaque feature suit la même structure :
 
@@ -72,7 +75,6 @@ feature/
 ├── repositories/  # Accès BDD (findById, create, update...)
 ├── services/      # Logique métier
 ├── slash/         # Commandes slash Discord
-├── panels/        # Panels admin (ConfigPanel)
 ├── cron/          # Jobs planifiés
 └── events/        # Event listeners Discord
 ```
@@ -101,36 +103,44 @@ export type IMyModel = DocumentType<MyModel>;
 export default MyModelDB;
 ```
 
-### Panels admin (ConfigPanel)
+### Dashboard admin
 
-Format customId : `cpanel:panelId:action`
+Toute l'administration passe par le dashboard web (`/admin`, port `WEB_PORT`), protégé
+par `ADMIN_PASSWORD` + JWT (`WEB_JWT_SECRET`). Il n'y a plus de panels de config dans
+Discord : le forum `⚙️┃config-bot` et le système `ConfigPanel` ont été supprimés.
 
-```ts
-export class MyPanel implements ConfigPanel {
-  id = 'my-panel';
-
-  async render(interaction): Promise<void> {
-    // Construire l'UI avec ContainerBuilder, SectionBuilder...
-    await interaction.reply({ components: [...], flags: MessageFlags.IsComponentsV2 });
-  }
-
-  async handleButton(interaction, client): Promise<void> {
-    const id = interaction.customId.split(':')[2]; // ← toujours [2]
-    if (id === 'my_action') { ... }
-  }
-
-  async handleSelectMenu(interaction, client): Promise<void> {
-    const id = interaction.customId.split(':')[2];
-    ...
-  }
-}
+```
+src/web/
+├── server.ts              # Express, sert /admin et /map
+├── auth.ts                # requireAdmin (JWT) partagé par les routes
+├── routes/admin.route.ts  # config des features, actions, joueurs
+├── routes/logs.route.ts   # journal + agrégats économie
+└── public/admin.html      # UI complète (vanilla, un seul fichier)
 ```
 
-Enregistrement dans `src/features/discord/events/ready.ts` :
+Ajouter un réglage = une entrée dans `GET /api/admin/config`, une branche dans
+`POST /api/admin/config/:feature`, et une carte dans `admin.html`.
+
+### Logs
+
+`LogService` écrit dans la collection `bot_logs` (TTL 90 jours), plus rien dans Discord.
 
 ```ts
-panelRegistry.register(new MyPanel());
+await LogService.info('message', { feature: 'party', title: 'Soirée créée' });
+await LogService.economy(userId, amount, 'Bingo — gain', 'arcade', 'mint');
 ```
+
+- `kind` classe l'entrée (`app`, `economy`, `message.delete`, `member.join`…) et sert de filtre côté dashboard.
+- Tout mouvement d'argent doit passer par `LogService.economy` — soit via
+  `UserService.updateUserMoney(discordId, amount, reason, flow)`, soit par un appel explicite
+  quand le `$inc` est fait à la main. Sans ça la page Économie ment.
+- Le `flow` dit ce que le mouvement fait à la masse monétaire : `mint` (création, défaut),
+  `burn` (destruction), `transfer` (circulation entre joueurs, masse inchangée). Une mise de
+  `/bet` est un `transfer` des deux côtés — la compter en `mint`/`burn` gonflerait
+  l'inflation affichée. Les duels d'arcade ne se jouent plus avec de l'argent : perdre
+  exprès contre un complice suffisait à faire passer de l'argent d'un compte à l'autre.
+- Les messages sont écrits en markup Discord (`<@id>`, `<#id>`) ; `renderMentions`
+  (`src/web/logs-render.ts`) les résout côté serveur pour le dashboard.
 
 ### Cron managers
 
@@ -188,7 +198,7 @@ Chaque lundi minuit (Paris), `ActivityRolesService.run()` :
 - **Voc** : 1 seconde = 1 point (ajouté dans `StatsService.applyVoiceSegmentsToUser`)
 - **Messages** : cooldown 30min en RAM (`Map<userId, timestamp>`), 1 slot valide = 450 points (= 25% du voc à activité égale)
 
-**Rôles (configurables via panel admin) :**
+**Rôles (configurables via le dashboard) :**
 
 - Top 3 → Podium
 - Top `activeThresholdPercent`% (défaut 10%) → Campeur
@@ -196,6 +206,101 @@ Chaque lundi minuit (Paris), `ActivityRolesService.run()` :
 - Reste → Void
 
 Les seuils % sont calculés sur `users.length` (tous les users en BDD).
+
+## Économie
+
+**Toute modification touchant à l'argent (`profil.money`), aux récompenses ou aux prix
+se lit d'abord dans [`docs/economy.md`](docs/economy.md).** Les règles d'ancrage, la formule du
+salaire hebdomadaire et les invariants qui cassent en silence y sont fixés — ils ne
+sont pas déductibles du code.
+
+Tout mouvement d'argent passe par `LogService.economy` avec le bon `flow`
+(`mint` | `transfer` | `burn`), sinon la page Économie ment.
+
+Le catalogue de la boutique, ses prix et ce qui a déjà été écarté sont dans
+[`docs/shop.md`](docs/shop.md) — à lire avant d'ajouter un article.
+
+## Profil `/me`
+
+`/me [onglet] [membre]` affiche une image par onglet, avec des boutons pour passer de l'un à
+l'autre (seul l'auteur de la commande peut cliquer). L'option `onglet` ouvre directement
+un onglet ; ses choix viennent de `tabs/index.ts`. Un onglet peut ajouter ses propres
+boutons (`actions`), proposés seulement sur son propre profil — l'Inventaire s'en sert
+pour ouvrir les packs dans un nouveau message. Rendu par
+[Takumi](https://github.com/kane50613/takumi) : arbre flexbox + CSS rastérisé en natif,
+~70 ms la carte. Tout vit dans `src/features/user/services/profile-card/` :
+
+```
+engine/      # renderer, thèmes, fond flouté, polices, emojis, images distantes, séries
+components/  # panneau, chiffre clé, barres, graphiques, classement, vignette…
+tabs/        # un fichier par onglet + index.ts (ordre des boutons) + samples.ts
+```
+
+**Ajouter un onglet** = un fichier `tabs/<nom>.tab.ts` (`defineTab` : cadres, `load`,
+`build`), une ligne dans `tabs/index.ts`, des données d'exemple dans `samples.ts`. Les
+boutons, le fond flouté et le test de rendu suivent tout seuls.
+
+- `load` fait les requêtes et télécharge les images ; `build` reste pur (données → arbre).
+- Les cadres sont fixes, leur contenu se place seul : jamais de coordonnées pour du texte.
+  Pseudo et montants rétrécissent (`textFit`), jamais tronqués.
+- Le flou sous les panneaux est cuit une fois par thème × onglet (`engine/backdrop.ts`),
+  préparé au démarrage (`ready`) : un `backdrop-filter` direct doublerait le temps de rendu.
+- Aperçu sans bot : `node -r @swc-node/register scripts/preview-card.ts [onglet|all] [thème]`.
+
+## Activity Discord (`activity/`)
+
+Le « camp de base » : une app web lancée depuis un salon vocal, qui tourne dans Discord.
+Front Vite + React + Tailwind dans `activity/` (dépendances à part), API dans
+`src/web/routes/activity.route.ts` + `src/features/activity/`. Le serveur web du bot sert
+l'interface **à la racine des domaines `activity*`** et l'API sous `/api/activity/*` : un
+seul conteneur, les URL mappings du portail pointent sur le domaine sans chemin, et les
+autres domaines (`theridge.fr`, `staging.theridge.fr`) redirigent `/` vers le dashboard.
+
+- Auth : `authorize` côté Activity → `POST /api/activity/token` (le secret client reste
+  serveur) → `authenticate`. Les appels suivants envoient le jeton Discord en Bearer ;
+  `ActivityAuthService.identify` le vérifie (cache 10 min).
+- Tout passe par ce domaine, images comprises (`/api/activity/avatar/:id`,
+  `/api/activity/brand/:asset`) : la CSP d'une Activity bloque les autres domaines.
+- Le contrat d'API est `src/features/activity/activity.types.ts`, importé tel quel par le front.
+- Rien n'est figé au build : l'Activity lit son client id via `/api/activity/config`,
+  la même image sert staging et prod.
+- Ouverte hors Discord (pas de `frame_id` dans l'URL), elle passe en aperçu avec
+  `activity/src/lib/sample.ts`.
+- Onglets : une page par section (`activity/src/pages/`), chacune charge son endpoint
+  (`/api/activity/home|packs|collection|stats|parties`) via `useResource`, avec ses données
+  d'aperçu dans `sample.ts`. Ajouter un onglet = une entrée dans `navigation.ts`, une page,
+  un endpoint + son service dans `src/features/activity/services/`.
+- Images relayées : sommets (`/api/activity/mountains/:id/image`, `?size=thumb` pour la
+  grille, redimensionnée par Cloudinary) et affiches de soirées (`/api/activity/parties/:id/image`).
+- **Direct** (`activity-live.service.ts`, WebSocket sur `/api/activity/live`) : une salle par
+  Activity lancée (`instanceId` du SDK). Une ouverture de pack est tirée côté serveur puis
+  diffusée avec une heure de départ ; chaque écran la joue au même instant d'après
+  `pack-show.timeline.ts`, partagé avec le front. Les ouvertures d'une salle passent en file.
+  Le fil du camp écoute `peak-hunters:pack:opened` sur le bus : il voit aussi les packs
+  ouverts depuis Discord.
+- **Mapbox** : la cinématique vole vers chaque sommet. Styles et tuiles passent par
+  `/api/activity/mapbox/*` (CSP) ; `MAPBOX_TOKEN` (jeton public `pk.`) dans l'env, sans lui
+  l'ouverture se joue sur un fond étoilé.
+
+```bash
+npm run dev   # bot + serveur web (3001) + Vite (5173, proxy /api → 3001) + tunnel
+```
+
+Une application Discord n'a qu'un seul mapping `/` : chaque environnement a donc la sienne,
+réglée une fois pour toutes.
+
+| Env | URL Mapping `/` | Servi par |
+|---|---|---|
+| Dev | `activity-dev.theridge.fr` | tunnel Cloudflare nommé `the-ridge-dev` → Vite local |
+| Staging | `activity-staging.theridge.fr` | appli Dokploy `staging` (domaine en plus de `staging.theridge.fr`) |
+| Prod | `activity.theridge.fr` | appli Dokploy `production` (domaine en plus de `theridge.fr`) |
+
+Le tunnel de dev ne tourne que pendant `npm run dev` (sinon Cloudflare répond 1033) ; il
+faut `cloudflared` et ses identifiants (`cloudflared tunnel login`) sur la machine de dev.
+
+Dans chaque application : *Activities → Settings* activé, *URL Mappings* comme ci-dessus,
+*OAuth2 → Redirects* : `https://127.0.0.1`. `DISCORD_CLIENT_ID` et `DISCORD_CLIENT_SECRET`
+de cette application dans l'env correspondant.
 
 ## Peak Hunters (montagnes)
 
@@ -257,9 +362,7 @@ Chaque bouton embarque le `lastMsgId` dans son customId (`mountain:home:ACTION:L
 ## Conventions
 
 - Pas d'`ephemeral: true` → utiliser `flags: 64` (ou `MessageFlags.Ephemeral`)
-- Panels : ne jamais `deferUpdate` dans le router, laisser chaque panel gérer sa propre interaction
 - Ownership des interactions : `interaction.message.interactionMetadata?.user.id`
-- Toujours utiliser `split(':')[2]` pour extraire l'action d'un customId de panel
 - Toutes les vues utilisent ComponentsV2 (`ContainerBuilder`) — ne pas revenir aux `EmbedBuilder` pour les nouvelles features sauf si l'affichage est préférable
 - Pattern navigation avec suppression du message précédent : embarquer le `lastMsgId` dans le customId, `deferUpdate` → delete → `followUp({fetchReply:true})` → `editReply` avec le nouveau msgId
 

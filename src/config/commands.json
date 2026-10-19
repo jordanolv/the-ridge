@@ -12,13 +12,8 @@
         },
         {
           "name": "me",
-          "description": "Générez votre carte de profil personnalisée avec vos stats",
-          "usage": ""
-        },
-        {
-          "name": "stats",
-          "description": "Affiche tes statistiques détaillées (arcade, expéditions, collection, activité)",
-          "usage": ""
+          "description": "Ton profil en onglets : carte, activité, jeux, collection Peak Hunters et inventaire",
+          "usage": "onglet:Jeux membre:@user"
         },
         {
           "name": "leaderboard",
@@ -28,6 +23,11 @@
         {
           "name": "daily",
           "description": "Réclamez votre récompense quotidienne (argent & XP aléatoires)",
+          "usage": ""
+        },
+        {
+          "name": "shop",
+          "description": "Achète des cosmétiques et des packs avec tes RidgeCoins",
           "usage": ""
         }
       ]
@@ -40,22 +40,22 @@
         {
           "name": "morpion",
           "description": "Jouez au Morpion contre un autre joueur",
-          "usage": "adversaire:@user mise:100"
+          "usage": "adversaire:@user"
         },
         {
           "name": "puissance4",
           "description": "Jouez au Puissance 4 contre un autre joueur",
-          "usage": "adversaire:@user mise:100"
+          "usage": "adversaire:@user"
         },
         {
           "name": "shifumi",
           "description": "Jouez au Pierre-Feuille-Ciseaux contre un autre joueur",
-          "usage": "adversaire:@user mise:100"
+          "usage": "adversaire:@user"
         },
         {
           "name": "battle",
           "description": "Défiez un joueur dans un combat de stats",
-          "usage": "adversaire:@user mise:100"
+          "usage": "adversaire:@user"
         }
       ]
     },

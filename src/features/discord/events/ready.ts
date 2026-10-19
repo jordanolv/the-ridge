@@ -1,22 +1,6 @@
 import { Events, ActivityType } from 'discord.js';
 import { BotClient } from '../../../bot/client';
 import { VoiceService } from '../../voice/services/voice.service';
-import { panelRegistry } from '../../config-panel/services/config-panel.registry';
-import { ConfigPanelService } from '../../config-panel/services/config-panel.service';
-import { LogService } from '../../../shared/logs/logs.service';
-import { generalPanel } from '../../admin/panels/general.panel';
-import { logsPanel } from '../../admin/panels/logs.panel';
-import { birthdayPanel } from '../../user/panels/birthday.panel';
-import { levelingPanel } from '../../leveling/panels/leveling.panel';
-import { voicePanel } from '../../voice/panels/voice.panel';
-import { partyPanel } from '../../party/panels/party.panel';
-import { chatGamingPanel } from '../../chat-gaming/panels/chat-gaming.panel';
-import { arcadePanel } from '../../arcade/panels/arcade.panel';
-import { peakHuntersPanel } from '../../peak-hunters/panels/peak-hunters.panel';
-import { activityRolesPanel } from '../../activity-roles/panels/activity-roles.panel';
-import { suggestionPanel } from '../../suggestion/panels/suggestion.panel';
-import { personalityTestPanel } from '../../personality-test/panels/personality-test.panel';
-import { quizPanel } from '../../quiz/panels/quiz.panel';
 import { PersonalityTestService } from '../../personality-test/services/personality-test.service';
 import { SpawnService } from '../../peak-hunters/services/spawn.service';
 import { QuizService } from '../../quiz/services/quiz.service';
@@ -28,20 +12,8 @@ import { VoiceSessionService } from '../../voice/services/voice-session.service'
 import { registerPeakHuntersVoiceListeners } from '../../peak-hunters/services/peak-hunters.register';
 import { registerStatsVoiceListeners } from '../../stats/services/stats.voice-listener';
 import { registerRaidListeners } from '../../peak-hunters/services/raid.voice-listener';
-
-panelRegistry.register(generalPanel);
-panelRegistry.register(logsPanel);
-panelRegistry.register(birthdayPanel);
-panelRegistry.register(levelingPanel);
-panelRegistry.register(voicePanel);
-panelRegistry.register(partyPanel);
-panelRegistry.register(chatGamingPanel);
-panelRegistry.register(arcadePanel);
-panelRegistry.register(peakHuntersPanel);
-panelRegistry.register(activityRolesPanel);
-panelRegistry.register(suggestionPanel);
-panelRegistry.register(personalityTestPanel);
-panelRegistry.register(quizPanel);
+import { ProfileCardService } from '../../user/services/profile-card/profile-card.service';
+import { loadCurrencyEmoji } from '../../../shared/economy/currency';
 
 export default {
   name: Events.ClientReady,
@@ -65,10 +37,12 @@ export default {
     setStatus();
     setInterval(setStatus, 8000);
 
+    await loadCurrencyEmoji(client);
     registerStatsVoiceListeners(client);
     registerRaidListeners();
     registerPeakHuntersVoiceListeners(client);
     VoiceSessionService.startTickLoop();
+    ProfileCardService.warmUp().catch(error => console.error('[Ready] Préparation des cartes /me échouée :', error));
 
     await VoiceService.rehydrate(client);
     await SpawnService.rehydrate(client);
@@ -78,13 +52,6 @@ export default {
     await AvalancheService.rehydrate(client);
     await EnigmeService.rehydrate(client);
     await PersonalityTestService.rehydrate(client);
-    await ConfigPanelService.init(client).catch((err) =>
-      console.error('[ConfigPanel] Erreur init:', err),
-    );
-    LogService.init(client).catch((err) =>
-      console.error('[LogService] Erreur init:', err),
-    );
-
     const ownerDiscordId = process.env.OWNER_DISCORD_ID;
     if (ownerDiscordId) {
       try {

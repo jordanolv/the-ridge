@@ -22,9 +22,10 @@ export class BetRepository {
     await BetModel.updateOne({ _id: betId }, { $set: { messageId } });
   }
 
+  /** Null si le bet n'est plus ouvert ou si le joueur a déjà misé : la condition est dans le filtre. */
   static async addEntry(betId: string, userId: string, optionIndex: number, amount: number): Promise<IBet | null> {
-    return BetModel.findByIdAndUpdate(
-      betId,
+    return BetModel.findOneAndUpdate(
+      { _id: betId, status: 'open', 'entries.userId': { $ne: userId } },
       {
         $push: { entries: { userId, optionIndex, amount } },
         $inc: {
@@ -34,6 +35,13 @@ export class BetRepository {
       },
       { new: true },
     );
+  }
+
+  /** Passe le bet de l'un des statuts `from` à `to` en une écriture : un double clic ne clôture qu'une fois. */
+  static async transition(betId: string, from: string[], to: string, winnerIndex?: number): Promise<IBet | null> {
+    const $set: Record<string, unknown> = { status: to };
+    if (winnerIndex !== undefined) $set.winnerIndex = winnerIndex;
+    return BetModel.findOneAndUpdate({ _id: betId, status: { $in: from } }, { $set }, { new: true });
   }
 
   static async setStatus(betId: string, status: string, winnerIndex?: number): Promise<IBet | null> {

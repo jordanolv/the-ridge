@@ -2,6 +2,8 @@ import { Router, Request, Response, NextFunction } from 'express';
 import { ChannelType } from 'discord.js';
 import jwt from 'jsonwebtoken';
 import { createHash, timingSafeEqual } from 'crypto';
+import { requireAdmin, getSecret, TOKEN_TTL } from '../auth';
+import { LogService } from '../../shared/logs/logs.service';
 import { BotClient } from '../../bot/client';
 import { QuizConfigRepository } from '../../features/quiz/repositories/quiz-config.repository';
 import { QuizService } from '../../features/quiz/services/quiz.service';
@@ -11,6 +13,8 @@ import { PeakHuntersConfigRepository } from '../../features/peak-hunters/reposit
 import { MountainService } from '../../features/peak-hunters/services/mountain.service';
 import { SpawnService } from '../../features/peak-hunters/services/spawn.service';
 import { ActivityRolesConfigRepository } from '../../features/activity-roles/repositories/activity-roles-config.repository';
+import { PayrollConfigRepository } from '../../features/payroll/repositories/payroll-config.repository';
+import { computePayroll } from '../../features/payroll/services/payroll.service';
 import { PersonalityTestConfigRepository } from '../../features/personality-test/repositories/personality-test-config.repository';
 import { GamesForumService } from '../../features/discord/services/games-forum.service';
 import { PartyService } from '../../features/party/services/party.service';
@@ -20,7 +24,7 @@ import { PersonalityTestSessionRepository } from '../../features/personality-tes
 import { VoiceService } from '../../features/voice/services/voice.service';
 import { VoiceConfigRepository } from '../../features/voice/repositories/voice-config.repository';
 import { UserMountainsRepository } from '../../features/peak-hunters/repositories/user-mountains.repository';
-import { ActivityRolesService } from '../../features/activity-roles/services/activity-roles.service';
+import { runWeekly } from '../../shared/cron/weekly.cron';
 import { BingoRepository } from '../../features/arcade/bingo/repositories/bingo.repository';
 import { BingoService } from '../../features/arcade/bingo/services/bingo.service';
 import { JustePrixRepository } from '../../features/arcade/juste-prix/repositories/juste-prix.repository';
@@ -32,29 +36,10 @@ import { EnigmeRepository } from '../../features/arcade/enigme/repositories/enig
 import { WeeklyRecapService } from '../../shared/weekly-recap/weekly-recap.service';
 import { EnigmeService } from '../../features/arcade/enigme/services/enigme.service';
 
-const TOKEN_TTL = '7d';
 const ARCADE_GAMES = ['shifumi', 'puissance4', 'morpion', 'battle', 'bingo', 'justePrix', 'avalanche', 'enigme'] as const;
-
-function getSecret(): string {
-  const s = process.env.WEB_JWT_SECRET;
-  if (!s) throw new Error('WEB_JWT_SECRET manquant');
-  return s;
-}
 
 function sha256(input: string): Buffer {
   return createHash('sha256').update(input).digest();
-}
-
-function requireAdmin(req: Request, res: Response, next: NextFunction): void {
-  const token = req.headers.authorization?.replace(/^Bearer /, '');
-  if (!token) { res.status(401).json({ error: 'Token manquant' }); return; }
-  try {
-    const payload = jwt.verify(token, getSecret()) as { admin?: boolean };
-    if (!payload.admin) throw new Error();
-    next();
-  } catch {
-    res.status(401).json({ error: 'Token invalide ou expiré' });
-  }
 }
 
 export default function adminRoute(client: BotClient): Router {
@@ -66,6 +51,22 @@ export default function adminRoute(client: BotClient): Router {
     const channel = guild?.channels.cache.get(channelId);
     return channel ? `#${channel.name}` : `(inconnu : ${channelId})`;
   }
+
+  router.use((req: Request, res: Response, next: NextFunction): void => {
+    if (req.method === 'GET' || req.path === '/api/admin/login') { next(); return; }
+    res.on('finish', () => {
+      if (res.statusCode >= 400) return;
+      const body = JSON.stringify(req.body ?? {});
+      LogService.record({
+        level: 'info',
+        kind: 'dashboard',
+        feature: 'dashboard',
+        title: `${req.method} ${req.path}`,
+        message: `Dashboard : \`${req.method} ${req.path}\`${body === '{}' ? '' : ` ${body.slice(0, 500)}`}`,
+      }).catch(() => {});
+    });
+    next();
+  });
 
   router.post('/api/admin/login', (req: Request, res: Response): void => {
     const expected = process.env.ADMIN_PASSWORD;
@@ -299,6 +300,13 @@ export default function adminRoute(client: BotClient): Router {
     await EnigmeService.spawn(client);
     const after = await EnigmeRepository.get();
     if (!after?.activeThreadId) { res.status(409).json({ error: 'Spawn impossible : configure le forum des jeux (post 🧩) et vérifie qu\'il n\'est pas trop tard (révélation 21h)' }); return; }
+    res.json({ ok: true });
+  });
+
+  router.post('/api/admin/arcade/enigme/resolve', requireAdmin, async (_req: Request, res: Response): Promise<void> => {
+    const state = await EnigmeRepository.get();
+    if (!state?.activeThreadId) { res.status(409).json({ error: 'Aucune énigme en cours' }); return; }
+    await EnigmeService.resolve(client);
     res.json({ ok: true });
   });
 
@@ -659,15 +667,28 @@ export default function adminRoute(client: BotClient): Router {
     const attended = Array.isArray(body.attendedIds) ? body.attendedIds.filter((x: unknown) => typeof x === 'string') : [];
     const money = parseInt(String(body.money ?? '0'), 10) || 0;
     const xp = parseInt(String(body.xp ?? '0'), 10) || 0;
+    const expeditions = parseInt(String(body.expeditions ?? '0'), 10) || 0;
     try {
       await PartyService.endEvent(client, String(req.params.id), {
         attendedParticipants: attended,
         rewardAmount: money > 0 ? money : undefined,
         xpAmount: xp > 0 ? xp : undefined,
+        expeditionAmount: expeditions > 0 ? expeditions : undefined,
       });
       res.json({ ok: true });
     } catch (err) {
       res.status(500).json({ error: err instanceof Error ? err.message : 'Clôture impossible' });
+    }
+  });
+
+  router.post('/api/admin/party/events/:id/image', requireAdmin, async (req: Request, res: Response): Promise<void> => {
+    const image = String(req.body?.image ?? '').trim();
+    if (!image.startsWith('http')) { res.status(400).json({ error: 'URL d\'image invalide' }); return; }
+    try {
+      await PartyService.updateEventImage(client, String(req.params.id), image);
+      res.json({ ok: true });
+    } catch (err) {
+      res.status(500).json({ error: err instanceof Error ? err.message : 'Mise à jour impossible' });
     }
   });
 
@@ -853,8 +874,77 @@ export default function adminRoute(client: BotClient): Router {
     res.json({ ok: true });
   });
 
+  router.get('/api/admin/payroll', requireAdmin, async (_req: Request, res: Response): Promise<void> => {
+    const config = await PayrollConfigRepository.getOrCreate();
+    res.json({
+      enabled: config.enabled,
+      budgetPerActive: config.budgetPerActive,
+      smicPercent: config.smicPercent,
+      qualificationThreshold: config.qualificationThreshold,
+    });
+  });
+
+  router.post('/api/admin/payroll', requireAdmin, async (req: Request, res: Response): Promise<void> => {
+    const body = req.body ?? {};
+    const int = (v: unknown, min: number, max: number) => {
+      const n = parseInt(String(v), 10);
+      return Number.isFinite(n) ? Math.min(Math.max(n, min), max) : undefined;
+    };
+    const budget = int(body.budgetPerActive, 1, 100_000);
+    const smic = int(body.smicPercent, 0, 100);
+    const seuil = int(body.qualificationThreshold, 0, 10_000_000);
+    await PayrollConfigRepository.update({
+      ...(typeof body.enabled === 'boolean' ? { enabled: body.enabled } : {}),
+      ...(budget !== undefined ? { budgetPerActive: budget } : {}),
+      ...(smic !== undefined ? { smicPercent: smic } : {}),
+      ...(seuil !== undefined ? { qualificationThreshold: seuil } : {}),
+    });
+    res.json({ ok: true });
+  });
+
+  // Simule la paie sur la derniere semaine reellement enregistree, sans rien verser.
+  // C'est l'outil de calibrage : les parametres se reglent sur de vrais points.
+  router.get('/api/admin/payroll/preview', requireAdmin, async (req: Request, res: Response): Promise<void> => {
+    const config = await PayrollConfigRepository.getOrCreate();
+    const num = (v: unknown, fallback: number) => {
+      const n = parseInt(String(v), 10);
+      return Number.isFinite(n) ? n : fallback;
+    };
+    const params = {
+      budgetPerActive: num(req.query.budgetPerActive, config.budgetPerActive),
+      smicPercent: num(req.query.smicPercent, config.smicPercent),
+      qualificationThreshold: num(req.query.qualificationThreshold, config.qualificationThreshold),
+    };
+
+    const users = await UserModel.find({ 'stats.lastWeekActivityPoints': { $gt: 0 } })
+      .select('discordId name stats.lastWeekActivityPoints')
+      .lean();
+
+    const scores = users
+      .map(u => ({ userId: u.discordId, name: u.name, points: u.stats?.lastWeekActivityPoints ?? 0 }))
+      .sort((a, b) => b.points - a.points);
+
+    const byId = new Map(scores.map(s => [s.userId, s.name]));
+    const slips = computePayroll(scores, params).map(s => ({ ...s, name: byId.get(s.userId) ?? s.userId }));
+    const totals = slips.map(s => s.total).sort((a, b) => a - b);
+    const median = totals.length
+      ? totals.length % 2 ? totals[(totals.length - 1) / 2] : (totals[totals.length / 2 - 1] + totals[totals.length / 2]) / 2
+      : 0;
+
+    res.json({
+      params,
+      scored: scores.length,
+      qualified: slips.length,
+      totalPaid: slips.reduce((sum, s) => sum + s.total, 0),
+      median,
+      min: totals[0] ?? 0,
+      max: totals[totals.length - 1] ?? 0,
+      slips,
+    });
+  });
+
   router.post('/api/admin/activity-roles/run', requireAdmin, async (_req: Request, res: Response): Promise<void> => {
-    await ActivityRolesService.run(client);
+    await runWeekly(client);
     res.json({ ok: true });
   });
 

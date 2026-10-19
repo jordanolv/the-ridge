@@ -35,6 +35,7 @@ import {
   AVALANCHE_REGISTRATION_END_HOUR,
   AVALANCHE_REWARD,
 } from '../constants/avalanche.constants';
+import { rc } from '../../../../shared/economy/currency';
 
 const TZ = 'Europe/Paris';
 const LOG_FEATURE = '🏔️ Avalanche';
@@ -90,7 +91,7 @@ export class AvalancheService {
           `• Ensuite l'avalanche gronde : elle emporte une position au hasard, régulièrement, jusqu'à ${AVALANCHE_ELIMINATION_END_HOUR}h`,
           '• **Le dernier grimpeur debout remporte tout !**',
           '',
-          `🏆 Le survivant : **${AVALANCHE_REWARD.money}** 💰 · **${AVALANCHE_REWARD.xp}** XP · **${AVALANCHE_REWARD.expeditions}** packs`,
+          `🏆 Le survivant : **${AVALANCHE_REWARD.money}** ${rc()} · **${AVALANCHE_REWARD.xp}** XP · **${AVALANCHE_REWARD.expeditions}** packs`,
           `🤝 Les emportés repartent avec **${AVALANCHE_PARTICIPATION_FRAGMENTS}** fragments`,
         ].join('\n'),
       ));
@@ -106,7 +107,7 @@ export class AvalancheService {
           `🏆 Dernier grimpeur debout : <@${winnerId}> (position **${winnerNum}**)`,
           `👥 ${playerCount} grimpeur${playerCount > 1 ? 's' : ''} au départ`,
           '',
-          `Récompense : **${AVALANCHE_REWARD.money}** 💰 · **${AVALANCHE_REWARD.xp}** XP · **${AVALANCHE_REWARD.expeditions}** packs`,
+          `Récompense : **${AVALANCHE_REWARD.money}** ${rc()} · **${AVALANCHE_REWARD.xp}** XP · **${AVALANCHE_REWARD.expeditions}** packs`,
         ].join('\n'),
       ));
   }
@@ -351,7 +352,7 @@ export class AvalancheService {
       : null;
 
     if (winner) {
-      await UserService.updateUserMoney(winner.userId, AVALANCHE_REWARD.money);
+      await UserService.updateUserMoney(winner.userId, AVALANCHE_REWARD.money, 'Avalanche — gain');
       await LevelingService.giveXpDirectly(client, winner.userId, AVALANCHE_REWARD.xp);
       const expeditions = await awardExpeditions(winner.userId, AVALANCHE_REWARD.expeditions);
       await UserService.recordArcadeWin(winner.userId, 'avalanche');
@@ -374,7 +375,7 @@ export class AvalancheService {
         await thread.send({
           content: [
             `🏆 **L'AVALANCHE S'ARRÊTE !** <@${winner.userId}> est le dernier grimpeur debout avec la position **${winner.num}** !`,
-            `🎉 +**${AVALANCHE_REWARD.money}** 💰 · +**${AVALANCHE_REWARD.xp}** XP · +**${AVALANCHE_REWARD.expeditions}** packs ${expeditions.summary}`,
+            `🎉 +**${AVALANCHE_REWARD.money}** ${rc()} · +**${AVALANCHE_REWARD.xp}** XP · +**${AVALANCHE_REWARD.expeditions}** packs ${expeditions.summary}`,
             ...(eliminated.length > 0
               ? [`🤝 Les ${eliminated.length} emportés repartent avec **${AVALANCHE_PARTICIPATION_FRAGMENTS}** fragments chacun !`]
               : []),

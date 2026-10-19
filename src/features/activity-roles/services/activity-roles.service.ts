@@ -4,16 +4,23 @@ import { BotClient } from '../../../bot/client';
 import { getGuildId } from '../../../shared/guild';
 import { LogService } from '../../../shared/logs/logs.service';
 import UserModel from '../../user/models/user.model';
-import { WeeklyRecapService } from '../../../shared/weekly-recap/weekly-recap.service';
+import { ActivityScore } from '../../../shared/weekly-recap/weekly-recap.service';
 
 const LOG_FEATURE = '🎖️ Activity Roles';
 const userRepo = new UserRepository();
 
 export class ActivityRolesService {
-  static async run(client: BotClient): Promise<void> {
+  /**
+   * Lit le classement de la semaine puis remet les compteurs à zéro, dans cet ordre.
+   * Tout ce qui consomme la semaine écoulée — la paie en premier — part de ce retour :
+   * appeler quoi que ce soit après le reset donnerait zéro partout, sans erreur.
+   * Le reset tourne même si l'attribution de rôles est désactivée, sinon les
+   * activityPoints s'accumulent sans fin.
+   */
+  static async collectAndReset(): Promise<ActivityScore[]> {
     const users = await userRepo.findAllUsers();
     console.log(`[ActivityRoles] ${users.length} users trouvés en BDD`);
-    if (!users.length) return;
+    if (!users.length) return [];
 
     const scores = users
       .map(user => ({ userId: user.discordId, name: user.name, points: user.stats.activityPoints ?? 0 }))
@@ -22,15 +29,17 @@ export class ActivityRolesService {
 
     console.log(`[ActivityRoles] ${scores.length} users actifs:`, scores.map(s => `${s.userId}=${s.points}pts`));
 
-    // Le reset hebdo tourne même si l'attribution de rôles est désactivée,
-    // sinon les activityPoints s'accumulent sans fin.
     await UserModel.updateMany(
       {},
       [{ $set: { 'stats.lastWeekActivityPoints': '$stats.activityPoints', 'stats.activityPoints': 0 } }],
     );
     console.log(`[ActivityRoles] activityPoints remis à 0 pour tous les users`);
 
-    await WeeklyRecapService.post(client, scores).catch((err) => console.error('[ActivityRoles] Erreur récap hebdo:', err));
+    return scores;
+  }
+
+  static async apply(client: BotClient, scores: ActivityScore[]): Promise<void> {
+    if (!scores.length) return;
 
     const config = await ActivityRolesConfigRepository.get();
     if (!config?.enabled) return;

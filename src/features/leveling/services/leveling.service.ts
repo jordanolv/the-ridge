@@ -1,4 +1,5 @@
 import { BotClient } from '../../../bot/client';
+import { LogService } from '../../../shared/logs/logs.service';
 import { LevelingConfig } from '../models/leveling-config.model';
 import { AppConfigService } from '../../discord/services/app-config.service';
 import UserModel, { IUser } from '../../user/models/user.model';
@@ -175,7 +176,7 @@ export class LevelingService {
 
     if (user.profil.exp >= this.getXpToLevelUp(user.profil.lvl)) {
       user.profil.lvl++;
-      console.log(`${user.name} a atteint le niveau ${user.profil.lvl} (récompense soirée)`);
+      await LogService.info(`<@${userId}> passe niveau **${user.profil.lvl}**`, { feature: 'leveling', title: 'Level up' });
     }
 
     await user.save();
@@ -195,6 +196,7 @@ export class LevelingService {
     
     if (user.profil.exp >= xpNeeded) {
       user.profil.lvl++;
+      await LogService.info(`<@${user.discordId}> passe niveau **${user.profil.lvl}**`, { feature: 'leveling', title: 'Level up' });
       
       // Gestion des notifications de level up
       await this.handleLevelUpNotification(client, user, message, config);

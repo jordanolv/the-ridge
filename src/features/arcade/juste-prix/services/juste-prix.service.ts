@@ -31,6 +31,7 @@ import {
   JP_PARTICIPATION_FRAGMENTS,
   JP_REWARD_CLOSEST,
 } from '../constants/juste-prix.constants';
+import { rc } from '../../../../shared/economy/currency';
 
 const LOG_FEATURE = '💰 Juste Prix';
 
@@ -57,7 +58,7 @@ export class JustePrixService {
           `• Révélation <t:${unix}:R> (<t:${unix}:t>)`,
           '• **Le plus proche gagne** — tomber juste double la mise !',
           '',
-          `🏆 Le plus proche : **${JP_REWARD_CLOSEST.money}** 💰 · **${JP_REWARD_CLOSEST.xp}** XP · **${JP_REWARD_CLOSEST.expeditions}** packs`,
+          `🏆 Le plus proche : **${JP_REWARD_CLOSEST.money}** ${rc()} · **${JP_REWARD_CLOSEST.xp}** XP · **${JP_REWARD_CLOSEST.expeditions}** packs`,
           `🎯 Nombre exact : **+${JP_EXACT_BONUS_EXPEDITIONS}** packs bonus !`,
           `🤝 Les autres participants repartent avec **${JP_PARTICIPATION_FRAGMENTS}** fragments`,
         ].join('\n'),
@@ -257,7 +258,7 @@ export class JustePrixService {
       if (winner) {
         const exact = winner.diff === 0;
         const packs = JP_REWARD_CLOSEST.expeditions + (exact ? JP_EXACT_BONUS_EXPEDITIONS : 0);
-        await UserService.updateUserMoney(winner.userId, JP_REWARD_CLOSEST.money);
+        await UserService.updateUserMoney(winner.userId, JP_REWARD_CLOSEST.money, 'Juste Prix — gain');
         await LevelingService.giveXpDirectly(client, winner.userId, JP_REWARD_CLOSEST.xp);
         const expeditions = await awardExpeditions(winner.userId, packs);
         await UserService.recordArcadeWin(winner.userId, 'justePrix' as any);
@@ -274,7 +275,7 @@ export class JustePrixService {
             exact
               ? `🎯 **INCROYABLE !** <@${winner.userId}> a trouvé le nombre EXACT : **${target}** !`
               : `💰 **RÉVÉLATION !** Le nombre était **${target}** — <@${winner.userId}> gagne avec **${winner.value}** (à ${winner.diff} près) !`,
-            `🏆 +**${JP_REWARD_CLOSEST.money}** 💰 · +**${JP_REWARD_CLOSEST.xp}** XP · +**${packs}** pack${packs > 1 ? 's' : ''} ${expeditions.summary}`,
+            `🏆 +**${JP_REWARD_CLOSEST.money}** ${rc()} · +**${JP_REWARD_CLOSEST.xp}** XP · +**${packs}** pack${packs > 1 ? 's' : ''} ${expeditions.summary}`,
             ...(participants.length > 0 ? [`🤝 ${participants.length} participant${participants.length > 1 ? 's' : ''} repartent avec **${JP_PARTICIPATION_FRAGMENTS}** fragments chacun !`] : []),
           ].join('\n'),
         }).catch(() => {});

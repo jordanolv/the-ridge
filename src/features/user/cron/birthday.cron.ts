@@ -84,7 +84,7 @@ export class BirthdayCron {
         const { moneyGift } = await sendBirthdayAnnouncement(this.client, textChannel, user.discordId, user.name, user.infos.birthDate);
 
         await LogService.success(
-                    `🎂 Anniversaire de ${user.name} — +${moneyGift} pièces, +${BIRTHDAY_EXPEDITIONS} expéditions`,
+                    `🎂 Anniversaire de ${user.name} — +${moneyGift} 💰, +${BIRTHDAY_EXPEDITIONS} expéditions`,
           { feature: 'birthday' },
         );
       }

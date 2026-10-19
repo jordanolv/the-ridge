@@ -22,6 +22,7 @@ import { BotClient } from '../../../bot/client';
 import { BetRepository } from '../repositories/bet.repository';
 import { BetService } from '../services/bet.service';
 import { buildBetMessage } from '../utils/bet-renderer';
+import { rc } from '../../../shared/economy/currency';
 
 // ─── Setup state ─────────────────────────────────────────────────────────────
 
@@ -294,7 +295,7 @@ export async function handleBetButton(interaction: ButtonInteraction, client: Bo
           new StringSelectMenuOptionBuilder()
             .setLabel(opt.name)
             .setValue(String(i))
-            .setDescription(`${opt.totalAmount.toLocaleString('fr-FR')} coins misés (${opt.entryCount} parieurs)`),
+            .setDescription(`${opt.totalAmount.toLocaleString('fr-FR')} 💰 misés (${opt.entryCount} parieurs)`),
         ),
       );
 
@@ -337,7 +338,7 @@ export async function handleBetSelectMenu(interaction: StringSelectMenuInteracti
 
   const winner = result.bet!.options[winnerIndex];
   const payoutLines = result.payouts!.length > 0
-    ? result.payouts!.map(p => `<@${p.userId}> récupère **${p.amount.toLocaleString('fr-FR')} coins** (+${p.gain.toLocaleString('fr-FR')})`).join('\n')
+    ? result.payouts!.map(p => `<@${p.userId}> récupère **${p.amount.toLocaleString('fr-FR')}** ${rc()} (+${p.gain.toLocaleString('fr-FR')})`).join('\n')
     : '*Aucun parieur sur le vainqueur — remboursement automatique.*';
 
   await interaction.update({ content: `🏆 **${winner.name}** a gagné !\n\n${payoutLines}`, components: [] });
@@ -365,7 +366,7 @@ export async function handleBetPlaceSelect(interaction: StringSelectMenuInteract
     new ActionRowBuilder<TextInputBuilder>().addComponents(
       new TextInputBuilder()
         .setCustomId('amount')
-        .setLabel('Montant à miser (en coins)')
+        .setLabel('Montant à miser (en 💰)')
         .setStyle(TextInputStyle.Short)
         .setPlaceholder('Ex: 500')
         .setRequired(true),
@@ -397,7 +398,7 @@ export async function handleBetPlaceModal(interaction: ModalSubmitInteraction, c
   await updateBetMessage(result.bet!, client);
   const optionName = result.bet!.options[optionIndex].name;
   await interaction.reply({
-    content: `✅ **${amount.toLocaleString('fr-FR')} coins** misés sur **${optionName}** !`,
+    content: `✅ **${amount.toLocaleString('fr-FR')}** ${rc()} misés sur **${optionName}** !`,
     flags: MessageFlags.Ephemeral,
   });
 }

@@ -145,7 +145,7 @@ export const ENIGME_TYPE_LABELS: Record<EnigmeType, string> = {
   calcul: '🧮 Calcul mental',
   devinette: '💭 Devinette',
   charade: '🎭 Charade',
-  emoji: '🎬 Emojis',
+  emoji: '🔣 Rébus emoji',
 };
 
 export class EnigmeBankService {

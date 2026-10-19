@@ -10,7 +10,7 @@ export const BINGO_THREAD_SLOWMODE_SECONDS = 300;
 export const BINGO_THREAD_AUTO_ARCHIVE_MINUTES = 1440;
 
 export const BINGO_REWARD = {
-  money: 750,
+  money: 40,
   xp: 600,
   expeditions: 4,
 };

@@ -105,6 +105,23 @@
     padding: 10px 18px; font-size: 14px; opacity: 0; transition: opacity .2s; z-index: 10;
   }
   .toast.show { opacity: 1; }
+  .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+  .filters select, .filters input { width: auto; min-width: 150px; margin-top: 0; }
+  .logline {
+    display: grid; grid-template-columns: 132px 1fr; gap: 12px;
+    padding: 8px 0; border-top: 1px solid var(--border); font-size: 13px;
+  }
+  .logline .t { color: var(--muted); font-variant-numeric: tabular-nums; }
+  .logline .msg { white-space: pre-wrap; word-break: break-word; }
+  .logline .tag {
+    font-size: 11px; padding: 1px 6px; border-radius: 5px;
+    background: rgba(255,255,255,.06); color: var(--muted); margin-right: 6px;
+  }
+  .lv-success { color: var(--green); }
+  .lv-warning { color: var(--amber); }
+  .lv-error { color: var(--red); }
+  .amount.pos { color: var(--green); }
+  .amount.neg { color: var(--red); }
   #login { max-width: 360px; margin: 15vh auto 0; }
   .hidden { display: none; }
 </style>
@@ -125,6 +142,7 @@
     <h1><span class="dot"></span> The Ridge — Admin</h1>
     <div style="display:flex;gap:8px">
       <button class="ghost" id="navUsers" onclick="switchTab('users')">👥 Joueurs</button>
+      <button class="ghost" id="navLogs" onclick="switchTab('logs')">📋 Logs</button>
       <button class="ghost" onclick="logout()">Déconnexion</button>
     </div>
   </div>
@@ -214,6 +232,38 @@
     </div>
   </section>
 
+  <!-- ═══════════ Paie hebdomadaire ═══════════ -->
+  <section id="tab-payroll" class="hidden">
+    <button class="ghost back" onclick="switchTab('overview')">← Accueil</button>
+    <div class="card">
+      <div class="row">
+        <strong>💰 Paie hebdomadaire</strong>
+        <span class="muted" id="payrollState"></span>
+      </div>
+      <p class="muted" style="margin:10px 0 0">
+        Versée le lundi à minuit, sur les points d'activité de la semaine écoulée.
+        Règles et invariants : <code>economy.md</code>.
+      </p>
+      <div class="row" style="margin-top:14px;justify-content:flex-start;gap:18px;flex-wrap:wrap">
+        <label class="muted">Budget par actif (RC/sem) <input id="pBudget" class="small" type="number" min="1" max="100000"></label>
+        <label class="muted">Part SMIC (%) <input id="pSmic" class="small" type="number" min="0" max="100"></label>
+        <label class="muted">Seuil de qualification (pts) <input id="pSeuil" class="small" type="number" min="0"></label>
+      </div>
+      <div class="row" style="margin-top:14px;justify-content:flex-start;gap:10px">
+        <button onclick="savePayroll()">Enregistrer</button>
+        <button class="ghost" onclick="previewPayroll()">🔍 Simuler sur la semaine écoulée</button>
+      </div>
+      <p class="muted" style="margin:10px 0 0">
+        La simulation n'écrit rien. Elle rejoue le calcul sur les points réellement
+        enregistrés la semaine dernière, avec les valeurs saisies ci-dessus.
+      </p>
+    </div>
+    <div class="card hidden" id="payrollPreview">
+      <div class="row"><strong>Simulation</strong><span class="muted" id="pvSummary"></span></div>
+      <table id="pvTable" style="margin-top:12px"></table>
+    </div>
+  </section>
+
   <!-- ═══════════ Rôles d'activité ═══════════ -->
   <section id="tab-roles" class="hidden">
     <button class="ghost back" onclick="switchTab('overview')">← Accueil</button>
@@ -290,7 +340,10 @@
           <strong>🧩 Énigme</strong>
           <div id="enigmeStatus" class="muted" style="margin-top:4px"></div>
         </div>
-        <button class="success" onclick="spawnEnigme()">⚡ Lancer une énigme</button>
+        <div style="display:flex;gap:8px">
+          <button class="success" onclick="spawnEnigme()">⚡ Lancer une énigme</button>
+          <button onclick="resolveEnigme()">🏁 Terminer maintenant</button>
+        </div>
       </div>
     </div>
     <div class="card">
@@ -434,6 +487,48 @@
     </div>
   </section>
 
+  <!-- ═══════════ Logs ═══════════ -->
+  <section id="tab-logs" class="hidden">
+    <button class="ghost back" onclick="switchTab('overview')">← Accueil</button>
+
+    <div class="card">
+      <div class="row">
+        <strong>💰 Économie</strong>
+        <select id="ecoDays" onchange="loadEconomy()" class="cfg" style="width:150px;margin-top:0">
+          <option value="7">7 jours</option>
+          <option value="30" selected>30 jours</option>
+          <option value="90">90 jours</option>
+        </select>
+      </div>
+      <div id="ecoStats" class="grid"></div>
+      <div class="row" style="margin-top:16px">
+        <table id="ecoReasons"></table>
+      </div>
+      <table id="ecoDaysTable" style="margin-top:16px"></table>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <strong>📋 Journal</strong>
+        <button class="ghost mini" onclick="loadLogs()">↻ Rafraîchir</button>
+      </div>
+      <div class="filters">
+        <select id="logLevel" onchange="loadLogs()" class="cfg">
+          <option value="">Tous les niveaux</option>
+          <option value="info">Info</option>
+          <option value="success">Succès</option>
+          <option value="warning">Avertissement</option>
+          <option value="error">Erreur</option>
+        </select>
+        <select id="logFeature" onchange="loadLogs()" class="cfg"></select>
+        <select id="logKind" onchange="loadLogs()" class="cfg"></select>
+        <input id="logQ" placeholder="Rechercher…" onchange="loadLogs()">
+      </div>
+      <div id="logList" style="margin-top:12px"></div>
+      <button class="ghost" id="logMore" style="margin-top:12px" onclick="loadLogs(true)">Charger plus</button>
+    </div>
+  </section>
+
   <!-- ═══════════ Général ═══════════ -->
   <section id="tab-general" class="hidden">
     <button class="ghost back" onclick="switchTab('overview')">← Accueil</button>
@@ -531,6 +626,8 @@ function switchTab(id) {
   document.querySelectorAll('section[id^="tab-"]').forEach((s) => s.classList.add('hidden'));
   $('tab-' + id).classList.remove('hidden');
   $('navUsers').classList.toggle('on', id === 'users');
+  $('navLogs').classList.toggle('on', id === 'logs');
+  if (id === 'logs') logCursor = null;
   (TAB_LOADERS[id] ?? (() => Promise.resolve()))().catch((err) => toast(err.message));
 }
 
@@ -546,20 +643,22 @@ const FEATURES = [
   { key: 'leveling', name: 'Leveling', ico: '📈', tab: 'leveling', kind: 'config' },
   { key: 'voice', name: 'Vocaux', ico: '🔊', tab: 'voice', kind: 'voice' },
   { key: 'activity-roles', name: 'Rôles d\'activité', ico: '🎖️', tab: 'roles', kind: 'roles' },
+  { key: 'payroll', name: 'Paie hebdo', ico: '💰', tab: 'payroll', kind: 'payroll' },
   { key: 'personality-test', name: 'Test perso', ico: '🧬', tab: 'ptest', kind: null },
   { key: 'daily-games', name: 'Jeux du jour', ico: '🎮', tab: 'games', kind: null },
   { key: 'general', name: 'Général', ico: '⚙️', tab: 'general', kind: null },
 ];
 
 async function loadHome() {
-  const [cfg, arcade, roles, voice, o] = await Promise.all([
+  const [cfg, arcade, roles, voice, payroll, o] = await Promise.all([
     api('/api/admin/config'), api('/api/admin/arcade'), api('/api/admin/activity-roles'),
-    api('/api/admin/voice'), api('/api/admin/overview'),
+    api('/api/admin/voice'), api('/api/admin/payroll'), api('/api/admin/overview'),
   ]);
   const stateOf = (f) => {
     if (f.kind === 'arcade') return arcade.enabled;
     if (f.kind === 'roles') return roles.enabled;
     if (f.kind === 'voice') return voice.enabled;
+    if (f.kind === 'payroll') return payroll.enabled;
     if (f.kind === 'config') return cfg[f.key]?.enabled ?? false;
     return null;
   };
@@ -595,6 +694,7 @@ async function featClick(key, state) {
     if (f.kind === 'arcade') await api('/api/admin/arcade/toggle-all', { method: 'POST', body: JSON.stringify({ enabled: !state }) });
     else if (f.kind === 'roles') await api('/api/admin/activity-roles', { method: 'POST', body: JSON.stringify({ enabled: !state }) });
     else if (f.kind === 'voice') await api('/api/admin/voice', { method: 'POST', body: JSON.stringify({ enabled: !state }) });
+    else if (f.kind === 'payroll') await api('/api/admin/payroll', { method: 'POST', body: JSON.stringify({ enabled: !state }) });
     else await api('/api/admin/config/' + key, { method: 'POST', body: JSON.stringify({ enabled: !state }) });
     await loadHome();
   } catch (err) { toast(err.message); }
@@ -699,6 +799,11 @@ async function spawnEnigme() {
   try { await api('/api/admin/arcade/enigme/spawn', { method: 'POST' }); toast('Énigme lancée 🧩'); await loadArcade(); }
   catch (err) { toast(err.message); }
 }
+async function resolveEnigme() {
+  if (!confirm('Terminer l\'énigme en cours ? La réponse est révélée et les récompenses distribuées, comme à 21h.')) return;
+  try { await api('/api/admin/arcade/enigme/resolve', { method: 'POST' }); toast('Énigme terminée 🏁'); await loadArcade(); }
+  catch (err) { toast(err.message); }
+}
 async function generateSchedule() {
   if (!confirm('Regénérer le planning d\'aujourd\'hui à dimanche ? L\'annonce sera repostée.')) return;
   try { await api('/api/admin/arcade/schedule/generate', { method: 'POST' }); toast('Planning posté 📅'); await loadArcade(); }
@@ -791,8 +896,48 @@ async function saveRoles() {
     await loadRolesTab();
   } catch (err) { toast(err.message); }
 }
+async function loadPayrollTab() {
+  const p = await api('/api/admin/payroll');
+  $('pBudget').value = p.budgetPerActive;
+  $('pSmic').value = p.smicPercent;
+  $('pSeuil').value = p.qualificationThreshold;
+  $('payrollState').textContent = p.enabled ? 'Activée' : 'Désactivée';
+  $('payrollPreview').classList.add('hidden');
+}
+async function savePayroll() {
+  try {
+    await api('/api/admin/payroll', {
+      method: 'POST',
+      body: JSON.stringify({
+        budgetPerActive: $('pBudget').value,
+        smicPercent: $('pSmic').value,
+        qualificationThreshold: $('pSeuil').value,
+      }),
+    });
+    toast('Paramètres de paie enregistrés ✅');
+    await loadPayrollTab();
+  } catch (err) { toast(err.message); }
+}
+async function previewPayroll() {
+  try {
+    const q = new URLSearchParams({
+      budgetPerActive: $('pBudget').value,
+      smicPercent: $('pSmic').value,
+      qualificationThreshold: $('pSeuil').value,
+    });
+    const r = await api('/api/admin/payroll/preview?' + q);
+    $('pvSummary').textContent =
+      `${r.qualified} qualifiés sur ${r.scored} · masse ${fmt(r.totalPaid)} RC · médiane ${fmt(r.median)} · min ${fmt(r.min)} · max ${fmt(r.max)}`;
+    $('pvTable').innerHTML =
+      '<tr><th>#</th><th>Joueur</th><th>Points</th><th>Part</th><th>Base</th><th>Variable</th><th>Paie</th></tr>' +
+      (r.slips.length
+        ? r.slips.map((s, i) => `<tr><td>${i + 1}</td><td>${esc(s.name)}</td><td>${fmt(s.points)}</td><td>${(s.share * 100).toFixed(1)}%</td><td>${fmt(s.base)}</td><td>${fmt(s.variable)}</td><td><strong>${fmt(s.total)}</strong></td></tr>`).join('')
+        : '<tr><td colspan="7" class="muted">Aucun qualifié — seuil trop haut, ou aucune semaine enregistrée.</td></tr>');
+    $('payrollPreview').classList.remove('hidden');
+  } catch (err) { toast(err.message); }
+}
 async function runRolesNow() {
-  if (!confirm('Lancer la rotation des rôles maintenant ? Les points d\'activité seront remis à zéro.')) return;
+  if (!confirm('Lancer la rotation hebdomadaire maintenant ?\n\nLa paie sera versée, les rôles réattribués et les points d\'activité remis à zéro.')) return;
   try { await api('/api/admin/activity-roles/run', { method: 'POST' }); toast('Rotation lancée ✅'); }
   catch (err) { toast(err.message); }
 }
@@ -857,6 +1002,7 @@ async function loadParty() {
             <div style="display:flex;gap:6px;flex-wrap:wrap">
               ${e.status === 'pending' ? `<button class="mini success" onclick="startParty('${e.id}')">▶️ Démarrer</button>` : ''}
               ${e.status === 'started' ? `<button class="mini" onclick="toggleEndForm('${e.id}')">🏁 Clôturer</button>` : ''}
+              <button class="mini ghost" onclick="setPartyImage('${e.id}')">🖼️</button>
               <button class="mini danger" onclick="deleteParty('${e.id}')">🗑️</button>
             </div>
           </div>
@@ -864,8 +1010,9 @@ async function loadParty() {
             <div class="muted" style="margin-bottom:6px">Qui était présent ?</div>
             ${e.participants.map((x) => `<label class="muted" style="display:inline-flex;gap:6px;margin-right:14px"><input type="checkbox" class="att-${e.id}" value="${x.id}" checked> ${esc(x.name)}</label>`).join('') || '<span class="muted">Aucun inscrit</span>'}
             <div class="row" style="margin-top:10px;justify-content:flex-start;align-items:flex-end">
-              <label class="muted">💰 / présent<input id="endMoney-${e.id}" class="small" style="display:block;margin-top:4px" type="number" min="0" value="0"></label>
+              <label class="muted" title="Une prime de soirée : 10 à 40 conseillé, 100 au maximum">💰 / présent (10–40)<input id="endMoney-${e.id}" class="small" style="display:block;margin-top:4px" type="number" min="0" max="100" value="0"></label>
               <label class="muted">XP / présent<input id="endXp-${e.id}" class="small" style="display:block;margin-top:4px" type="number" min="0" value="0"></label>
+              <label class="muted">🏔️ expé / présent<input id="endExpe-${e.id}" class="small" style="display:block;margin-top:4px" type="number" min="0" value="0"></label>
               <button class="mini success" onclick="endParty('${e.id}')">Confirmer la clôture</button>
             </div>
           </div>
@@ -904,11 +1051,17 @@ async function endParty(id) {
   try {
     await api(`/api/admin/party/events/${id}/end`, {
       method: 'POST',
-      body: JSON.stringify({ attendedIds, money: $('endMoney-' + id).value, xp: $('endXp-' + id).value }),
+      body: JSON.stringify({ attendedIds, money: $('endMoney-' + id).value, xp: $('endXp-' + id).value, expeditions: $('endExpe-' + id).value }),
     });
     toast('Soirée clôturée 🏁');
     await loadParty();
   } catch (err) { toast(err.message); }
+}
+async function setPartyImage(id) {
+  const image = prompt('URL de l\'image de la soirée :');
+  if (!image) return;
+  try { await api(`/api/admin/party/events/${id}/image`, { method: 'POST', body: JSON.stringify({ image }) }); toast('Image mise à jour 🖼️'); await loadParty(); }
+  catch (err) { toast(err.message); }
 }
 async function deleteParty(id) {
   if (!confirm('Supprimer cette soirée ? Le post Discord sera supprimé.')) return;
@@ -1129,6 +1282,72 @@ async function saveConfig(featId) {
 }
 
 // ── Routing des onglets ──
+// ── Logs ──
+let logCursor = null;
+
+function logQuery() {
+  const p = new URLSearchParams();
+  for (const [key, id] of [['level', 'logLevel'], ['feature', 'logFeature'], ['kind', 'logKind'], ['q', 'logQ']]) {
+    const v = $(id).value;
+    if (v) p.set(key, v);
+  }
+  return p;
+}
+
+function fillFilter(el, values, label) {
+  const current = el.value;
+  el.innerHTML = `<option value="">${label}</option>` +
+    values.map((v) => `<option value="${esc(v)}">${esc(v)}</option>`).join('');
+  el.value = current;
+}
+
+function logLine(l) {
+  const when = new Date(l.createdAt).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  const tags = [l.feature, l.title].filter(Boolean).map((t) => `<span class="tag">${esc(t)}</span>`).join('');
+  const amount = l.amount === null ? '' :
+    ` <span class="amount ${l.amount > 0 ? 'pos' : 'neg'}">${l.amount > 0 ? '+' : ''}${fmt(l.amount)}</span>`;
+  return `<div class="logline">
+    <span class="t">${when}</span>
+    <span class="msg lv-${l.level}">${tags}${esc(l.message)}${amount}</span>
+  </div>`;
+}
+
+async function loadLogs(append = false) {
+  const p = logQuery();
+  if (append && logCursor) p.set('before', logCursor);
+  const data = await api('/api/admin/logs?' + p.toString());
+
+  fillFilter($('logFeature'), data.filters.features, 'Toutes les features');
+  fillFilter($('logKind'), data.filters.kinds, 'Tous les types');
+
+  const html = data.logs.map(logLine).join('') || '<p class="muted">Aucun log.</p>';
+  $('logList').innerHTML = append ? $('logList').innerHTML + html : html;
+  logCursor = data.logs.length ? data.logs[data.logs.length - 1].createdAt : null;
+  $('logMore').classList.toggle('hidden', !logCursor);
+}
+
+const FLOW_LABELS = { mint: '🪙 Création', burn: '🔥 Destruction', transfer: '🔁 Transfert' };
+
+async function loadEconomy() {
+  const eco = await api('/api/admin/logs/economy?days=' + $('ecoDays').value);
+  const sum = (key) => eco.byDay.reduce((a, d) => a + d[key], 0);
+  const mint = sum('mint'), burn = sum('burn'), transfer = sum('transfer');
+
+  $('ecoStats').innerHTML = [
+    ['Masse monétaire', fmt(eco.supply)],
+    [`Créé (${eco.days} j)`, '+' + fmt(mint)],
+    [`Détruit (${eco.days} j)`, fmt(burn)],
+    ['Inflation nette', (mint + burn > 0 ? '+' : '') + fmt(mint + burn)],
+    ['Échangé entre joueurs', fmt(transfer)],
+  ].map(([l, v]) => `<div class="stat"><div class="v">${v}</div><div class="l">${l}</div></div>`).join('');
+
+  $('ecoReasons').innerHTML = '<tr><th>Source</th><th>Flux</th><th>Total</th><th>Opérations</th></tr>' +
+    eco.byReason.map((r) => `<tr><td>${esc(r.reason)}</td><td class="muted">${FLOW_LABELS[r.flow] ?? r.flow}</td><td class="amount ${r.total < 0 ? 'neg' : 'pos'}">${r.total > 0 ? '+' : ''}${fmt(r.total)}</td><td>${fmt(r.count)}</td></tr>`).join('');
+
+  $('ecoDaysTable').innerHTML = '<tr><th>Jour</th><th>Créé</th><th>Détruit</th><th>Net</th><th>Échangé</th></tr>' +
+    eco.byDay.map((d) => `<tr><td>${d.date}</td><td class="amount pos">+${fmt(d.mint)}</td><td class="amount neg">${fmt(d.burn)}</td><td>${fmt(d.mint + d.burn)}</td><td class="muted">${fmt(d.transfer)}</td></tr>`).join('');
+}
+
 const TAB_LOADERS = {
   overview: loadHome,
   quiz: loadQuiz,
@@ -1136,6 +1355,7 @@ const TAB_LOADERS = {
   ph: loadPh,
   users: loadUsers,
   roles: loadRolesTab,
+  payroll: loadPayrollTab,
   games: () => Promise.all([loadArcade(), loadForum()]),
   party: loadParty,
   birthday: () => loadFeatureCard('birthday'),
@@ -1145,6 +1365,7 @@ const TAB_LOADERS = {
   ptest: loadPtest,
   voice: loadVoice,
   general: loadGeneral,
+  logs: () => Promise.all([loadEconomy(), loadLogs()]),
 };
 
 $('loginForm').addEventListener('submit', async (e) => {
@@ -1174,7 +1395,7 @@ async function show() {
 
 if (token) show();
 setInterval(() => {
-  if (token && !$('app').classList.contains('hidden') && ['overview', 'quiz'].includes(currentTab)) {
+  if (token && !$('app').classList.contains('hidden') && ['overview', 'quiz', 'logs'].includes(currentTab)) {
     (TAB_LOADERS[currentTab] ?? (() => Promise.resolve()))().catch(() => {});
   }
 }, 30000);
