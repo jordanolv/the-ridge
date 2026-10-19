@@ -43,6 +43,7 @@ import {
   ENIGME_SOLVER_FRAGMENTS,
   ENIGME_SPAWN_HOUR,
 } from '../constants/enigme.constants';
+import { rc } from '../../../../shared/economy/currency';
 
 const LOG_FEATURE = '🧩 Énigme';
 const MEDALS = ['🥇', '🥈', '🥉'];
@@ -64,7 +65,7 @@ export class EnigmeService {
   }
 
   private static buildRewardLines(): string[] {
-    const podium = ENIGME_PODIUM_REWARDS.map((r, i) => `${MEDALS[i]} **${r.money}** 💰 · **${r.xp}** XP · **${r.expeditions}** pack${r.expeditions > 1 ? 's' : ''}`);
+    const podium = ENIGME_PODIUM_REWARDS.map((r, i) => `${MEDALS[i]} **${r.money}** ${rc()} · **${r.xp}** XP · **${r.expeditions}** pack${r.expeditions > 1 ? 's' : ''}`);
     return [
       ...podium,
       `🧠 Bonne réponse hors podium ou avec indice : **${ENIGME_SOLVER_FRAGMENTS}** fragments · tentative : **${ENIGME_PARTICIPATION_FRAGMENTS}** fragments`,
@@ -419,7 +420,7 @@ export class EnigmeService {
       await LevelingService.giveXpDirectly(client, solver.userId, reward.xp);
       const expeditions = await awardExpeditions(solver.userId, reward.expeditions);
       await GameResultRepository.record('enigme', solver.userId, i + 1, { timeMs: solver.durationMs, type: state.riddle.type, players: Object.keys(state.attempts ?? {}).length });
-      podiumLines.push(`${MEDALS[i]} <@${solver.userId}> · ${formatDuration(solver.durationMs)} · +${reward.money} 💰 · +${reward.xp} XP · +${reward.expeditions} pack${reward.expeditions > 1 ? 's' : ''} ${expeditions.summary}`);
+      podiumLines.push(`${MEDALS[i]} <@${solver.userId}> · ${formatDuration(solver.durationMs)} · +${reward.money} ${rc()} · +${reward.xp} XP · +${reward.expeditions} pack${reward.expeditions > 1 ? 's' : ''} ${expeditions.summary}`);
     }
     for (const solver of solvers.filter((s) => !winnerIds.has(s.userId))) {
       await addFragmentsAndAward(solver.userId, ENIGME_SOLVER_FRAGMENTS).catch(() => {});

@@ -10,6 +10,7 @@ import {
 } from 'discord.js';
 import { IBet } from '../models/bet.model';
 import { BetService } from '../services/bet.service';
+import { rc } from '../../../shared/economy/currency';
 
 const STATUS_LABELS: Record<string, string> = {
   open: '🟢 Ouvert',
@@ -33,7 +34,7 @@ export function buildBetMessage(bet: IBet): ContainerBuilder[] {
 
   const headerLines = [
     `# 🎲 ${bet.title}`,
-    `${STATUS_LABELS[bet.status]}  ·  Pot total : **${totalPot.toLocaleString('fr-FR')}** 💰`,
+    `${STATUS_LABELS[bet.status]}  ·  Pot total : **${totalPot.toLocaleString('fr-FR')}** ${rc()}`,
   ];
 
   if (bet.status === 'closed' && bet.winnerIndex !== undefined) {
@@ -50,13 +51,13 @@ export function buildBetMessage(bet: IBet): ContainerBuilder[] {
     const odds = BetService.getOddsMultiplier(bet, i);
     const oddsLabel = totalPot === 0 ? '—' : `×${odds.toFixed(1)}`;
     const isWinner = bet.status === 'closed' && bet.winnerIndex === i;
-    const header = `${isWinner ? '✅ ' : ''}${emoji} **${opt.name}** — ${opt.totalAmount.toLocaleString('fr-FR')} 💰 (${opt.entryCount} parieur${opt.entryCount !== 1 ? 's' : ''})  ·  cote ${oddsLabel}`;
+    const header = `${isWinner ? '✅ ' : ''}${emoji} **${opt.name}** — ${opt.totalAmount.toLocaleString('fr-FR')} ${rc()} (${opt.entryCount} parieur${opt.entryCount !== 1 ? 's' : ''})  ·  cote ${oddsLabel}`;
 
     if (!showEntries) return [header];
 
     const entries = bet.entries.filter(e => e.optionIndex === i);
     const entriesLine = entries.length > 0
-      ? `-# ${entries.map(e => `<@${e.userId}> ${e.amount.toLocaleString('fr-FR')} 💰`).join('  ·  ')}`
+      ? `-# ${entries.map(e => `<@${e.userId}> ${e.amount.toLocaleString('fr-FR')} ${rc()}`).join('  ·  ')}`
       : '-# *Aucun pari*';
 
     return [header, entriesLine];

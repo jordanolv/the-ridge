@@ -12,6 +12,7 @@ import { toZonedTime } from 'date-fns-tz';
 import UserModel from '../models/user.model';
 import { UserMountainsRepository } from '../../peak-hunters/repositories/user-mountains.repository';
 import { LogService } from '../../../shared/logs/logs.service';
+import { rc } from '../../../shared/economy/currency';
 
 export const BIRTHDAY_TZ = 'Europe/Paris';
 export const BIRTHDAY_EXPEDITIONS = 5;
@@ -63,7 +64,7 @@ export async function sendBirthdayAnnouncement(
       new TextDisplayBuilder().setContent(
         [
           '### 🎁 Cadeaux du jour',
-          `-# 💰 **+${moneyGift} pièces** ajoutées à ton solde`,
+          `-# **+${moneyGift}** ${rc()} ajoutés à ton solde`,
           `-# 🗺️ **+${BIRTHDAY_EXPEDITIONS} expéditions** pour découvrir des montagnes`,
         ].join('\n')
       ),

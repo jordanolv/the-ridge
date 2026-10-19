@@ -32,6 +32,7 @@ import {
 } from '../catalog';
 import { packOpenId } from '../../peak-hunters/services/pack.service';
 import type { ExpeditionTier } from '../../peak-hunters/types/peak-hunters.types';
+import { rc } from '../../../shared/economy/currency';
 
 export const SHOP_PREFIX = 'shop';
 const ACCENT = 0x2ecc71;
@@ -58,7 +59,7 @@ function buyId(itemId: string, variantId: string | undefined, qty: number): stri
 }
 
 function priceLine(item: ShopItem): string {
-  return `**${item.price}** 💰${item.durationDays ? ` · ${item.durationDays} jours` : ''}`;
+  return `**${item.price}** ${rc()}${item.durationDays ? ` · ${item.durationDays} jours` : ''}`;
 }
 
 function relative(date: Date): string {
@@ -108,20 +109,20 @@ function canBuyFromCatalog(item: ShopItem, qty: number, wallet: ShopWallet): boo
 function packBudgetLine(left: number): string {
   const spent = PACK_WEEKLY_BUDGET - left;
   return left > 0
-    ? `-# 🧗 Limite de la semaine : **${spent} / ${PACK_WEEKLY_BUDGET}** 💰 dépensés en packs`
-    : `-# 🧗 Limite de la semaine atteinte (${PACK_WEEKLY_BUDGET} 💰 en packs) — elle repart à zéro lundi`;
+    ? `-# 🧗 Limite de la semaine : **${spent} / ${PACK_WEEKLY_BUDGET}** ${rc()} dépensés en packs`
+    : `-# 🧗 Limite de la semaine atteinte (${PACK_WEEKLY_BUDGET} ${rc()} en packs) — elle repart à zéro lundi`;
 }
 
 function catalogButtonLabel(item: ShopItem, qty: number): string {
   if (item.soon) return 'Bientôt';
-  if (item.durationDays || qty === 1) return `${item.price} 💰`;
-  return `×${qty} — ${item.price * qty} 💰`;
+  if (item.durationDays || qty === 1) return `${item.price}`;
+  return `×${qty} — ${item.price * qty}`;
 }
 
 export function buildCatalogContainer(user: User, wallet: ShopWallet, category: ShopCategoryId, qty: number): ContainerBuilder {
   const header = [
     '## 🛒 Boutique',
-    `-# **${user.displayName}** · solde **${wallet.balance}** 💰`,
+    `-# **${user.displayName}** · solde **${wallet.balance}** ${rc()}`,
   ].join('\n');
 
   const container = new ContainerBuilder()
@@ -134,6 +135,13 @@ export function buildCatalogContainer(user: User, wallet: ShopWallet, category: 
 
   const items = itemsOf(category);
   for (const item of items) {
+    const button = new ButtonBuilder()
+      .setCustomId(catalogButtonId(item, qty))
+      .setLabel(catalogButtonLabel(item, qty))
+      .setStyle(item.soon ? ButtonStyle.Secondary : ButtonStyle.Primary)
+      .setDisabled(!canBuyFromCatalog(item, qty, wallet));
+    if (!item.soon) button.setEmoji(rc());
+
     container.addSeparatorComponents(new SeparatorBuilder());
     container.addSectionComponents(
       new SectionBuilder()
@@ -142,13 +150,7 @@ export function buildCatalogContainer(user: User, wallet: ShopWallet, category: 
             `${item.emoji} **${item.label}** — ${priceLine(item)}\n-# ${item.description}`,
           ),
         )
-        .setButtonAccessory(
-          new ButtonBuilder()
-            .setCustomId(catalogButtonId(item, qty))
-            .setLabel(catalogButtonLabel(item, qty))
-            .setStyle(item.soon ? ButtonStyle.Secondary : ButtonStyle.Primary)
-            .setDisabled(!canBuyFromCatalog(item, qty, wallet)),
-        ),
+        .setButtonAccessory(button),
     );
   }
 
@@ -190,11 +192,11 @@ export function buildItemContainer(
     '',
     ...(item.colorPicker && variant ? [colorLine(variant)] : []),
     `Quantité : **${quantityLabel(item, qty)}**`,
-    `Total : **${total}** 💰  ·  solde **${balance}** 💰`,
+    `Total : **${total}** ${rc()}  ·  solde **${balance}** ${rc()}`,
   ];
 
   if (needsVariant) lines.push('', item.colorPicker ? '-# Choisis une couleur toute prête, ou tape la tienne.' : '-# Choisis une couleur ci-dessous.');
-  else if (!affordable) lines.push('', `-# ❌ Il te manque **${total - balance}** 💰.`);
+  else if (!affordable) lines.push('', `-# ❌ Il te manque **${total - balance}** ${rc()}.`);
 
   const container = new ContainerBuilder()
     .setAccentColor(variant?.color ?? ACCENT)
@@ -209,7 +211,8 @@ export function buildItemContainer(
     new ActionRowBuilder<ButtonBuilder>().addComponents(
       new ButtonBuilder()
         .setCustomId(buyId(item.id, variant?.id, qty))
-        .setLabel(`Acheter — ${total} 💰`)
+        .setLabel(`Acheter — ${total}`)
+        .setEmoji(rc())
         .setStyle(ButtonStyle.Success)
         .setDisabled(needsVariant || !affordable),
       new ButtonBuilder()
@@ -350,7 +353,7 @@ export function buildResultContainer(
     `## ✅ ${label}`,
     expiresAt ? `-# Actif jusqu'au ${relative(expiresAt)}` : `-# ${quantityLabel(item, qty)} ajouté à ton inventaire.`,
     '',
-    `Il te reste **${wallet.balance}** 💰`,
+    `Il te reste **${wallet.balance}** ${rc()}`,
   ];
   if (packTier) {
     lines.push('', '-# Tes packs t\'attendent dans `/me onglet:Inventaire`, tu peux les ouvrir quand tu veux.', packBudgetLine(wallet.packBudgetLeft));
@@ -366,7 +369,8 @@ export function buildResultContainer(
         .setStyle(ButtonStyle.Success),
       new ButtonBuilder()
         .setCustomId(buyId(item.id, undefined, 1))
-        .setLabel(`Encore un — ${item.price} 💰`)
+        .setLabel(`Encore un — ${item.price}`)
+        .setEmoji(rc())
         .setStyle(ButtonStyle.Primary)
         .setDisabled(!canBuyFromCatalog(item, 1, wallet)),
     );

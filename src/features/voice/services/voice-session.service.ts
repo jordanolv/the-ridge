@@ -12,6 +12,7 @@ import { VOICE_XP_PER_MINUTE, VOICE_MIN_RECAP_SECONDS } from '../constants/voice
 import { estimateWeeklySalary, SalaryEstimate } from '../../../shared/economy/salary-estimate';
 import UserModel from '../../user/models/user.model';
 import { LevelingService } from '../../leveling/services/leveling.service';
+import { rc } from '../../../shared/economy/currency';
 
 // ─── Plugin contract ────────────────────────────────────────────────────────
 
@@ -483,7 +484,7 @@ export class VoiceSessionService {
     let rewardLines = `+**${rewards.xpGained}** XP ✨  ·  +**${rewards.pointsGained.toLocaleString('fr-FR')}** pts d'activité 📊`;
     if (rewards.salary) {
       const { rank, qualified, estimate } = rewards.salary;
-      rewardLines += `\n-# ${rank}ᵉ/${qualified} cette semaine · ≈ **${estimate.toLocaleString('fr-FR')}** <:ridgecoin:1424543836029325492> lundi`;
+      rewardLines += `\n-# ${rank}ᵉ/${qualified} cette semaine · ≈ **${estimate.toLocaleString('fr-FR')}** ${rc()} lundi`;
     }
     if (rewards.leveledUp) rewardLines += `\n🎉 **Level up !** Niveau **${rewards.newLevel}**`;
 

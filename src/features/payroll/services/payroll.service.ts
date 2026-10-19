@@ -5,6 +5,7 @@ import { LogService } from '../../../shared/logs/logs.service';
 import { parisWeekKey } from '../../../shared/time/week-key';
 import { PayrollConfigRepository } from '../repositories/payroll-config.repository';
 import PayrollRunModel from '../models/payroll-run.model';
+import { rc } from '../../../shared/economy/currency';
 
 const LOG_FEATURE = '💰 Paie';
 const ACCENT_COLOR = 0xf1c40f;
@@ -118,15 +119,15 @@ export class PayrollService {
     const container = new ContainerBuilder()
       .setAccentColor(ACCENT_COLOR)
       .addTextDisplayComponents(new TextDisplayBuilder().setContent(
-        `# 💰 Ta paie de la semaine\n-# ${fmt(slip.points)} points d'activité · ${rank}ᵉ sur ${qualified} qualifié${qualified > 1 ? 's' : ''}`,
+        `# ${rc()} Ta paie de la semaine\n-# ${fmt(slip.points)} points d'activité · ${rank}ᵉ sur ${qualified} qualifié${qualified > 1 ? 's' : ''}`,
       ))
       .addSeparatorComponents(new SeparatorBuilder().setDivider(true))
       .addTextDisplayComponents(new TextDisplayBuilder().setContent(
         [
-          `Base fixe — **${fmt(slip.base)}** 💰`,
-          `Part d'activité — **${fmt(slip.variable)}** 💰`,
+          `Base fixe — **${fmt(slip.base)}** ${rc()}`,
+          `Part d'activité — **${fmt(slip.variable)}** ${rc()}`,
           '',
-          `## **${fmt(slip.total)}** 💰 versés`,
+          `## **${fmt(slip.total)}** ${rc()} versés`,
           '-# Voc et messages comptent · rendez-vous lundi prochain',
         ].join('\n'),
       ));

@@ -13,6 +13,7 @@ import { registerPeakHuntersVoiceListeners } from '../../peak-hunters/services/p
 import { registerStatsVoiceListeners } from '../../stats/services/stats.voice-listener';
 import { registerRaidListeners } from '../../peak-hunters/services/raid.voice-listener';
 import { ProfileCardService } from '../../user/services/profile-card/profile-card.service';
+import { loadCurrencyEmoji } from '../../../shared/economy/currency';
 
 export default {
   name: Events.ClientReady,
@@ -36,6 +37,7 @@ export default {
     setStatus();
     setInterval(setStatus, 8000);
 
+    await loadCurrencyEmoji(client);
     registerStatsVoiceListeners(client);
     registerRaidListeners();
     registerPeakHuntersVoiceListeners(client);

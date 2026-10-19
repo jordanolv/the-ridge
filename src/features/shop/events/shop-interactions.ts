@@ -12,17 +12,18 @@ import {
   COLOR_SECONDARY_INPUT,
   SHOP_PREFIX,
 } from '../services/shop-ui.service';
+import { rc } from '../../../shared/economy/currency';
 
 export { SHOP_PREFIX, COLOR_MODAL_ID };
 
-const FAILURE_MESSAGE: Record<PurchaseFailure, string> = {
+const failureMessage = (reason: PurchaseFailure): string => ({
   closed: "🔧 La boutique ouvre dans quelques minutes, reviens d'ici peu.",
-  limit: `🧗 Ça dépasse ta limite de packs de la semaine (${PACK_WEEKLY_BUDGET} 💰). Elle repart à zéro lundi.`,
+  limit: `🧗 Ça dépasse ta limite de packs de la semaine (${PACK_WEEKLY_BUDGET} ${rc()}). Elle repart à zéro lundi.`,
   soon: "⏳ Cet article n'est pas encore disponible.",
   variant: "❌ Choisis une couleur avant d'acheter.",
   funds: '❌ Solde insuffisant — un autre achat est peut-être passé avant celui-ci.',
   grant: '❌ La livraison a échoué, tu as été remboursé. Préviens un admin si ça se reproduit.',
-};
+})[reason];
 
 type ShopInteraction = ButtonInteraction | StringSelectMenuInteraction | ModalSubmitInteraction;
 
@@ -76,7 +77,7 @@ async function buy(
   const result = await ShopService.purchase(member, item, variantId, quantity);
 
   if (result.ok === false) {
-    await interaction.followUp({ content: FAILURE_MESSAGE[result.reason], flags: MessageFlags.Ephemeral });
+    await interaction.followUp({ content: failureMessage(result.reason), flags: MessageFlags.Ephemeral });
     return;
   }
 
