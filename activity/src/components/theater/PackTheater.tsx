@@ -67,7 +67,6 @@ function ProgressDots({ show, segment }: { show: PackShow; segment: ShowSegment 
   );
 }
 
-/** Sur le récap : relancer un pack, du même type en premier, sans repasser par la page Packs. */
 function NextPacks({ session, show }: { session: Session; show: PackShow }) {
   const { opening, packs } = useOpening();
   const available = packs.filter(pack => pack.owned > 0).sort((a, b) => Number(b.id === show.tier) - Number(a.id === show.tier));
@@ -182,7 +181,7 @@ function Theater({ session, show, now, me, participants, mapboxToken, onHide }: 
 }
 
 /** Un autre joueur ouvre un pack : on le signale sans interrompre, libre à chacun de venir regarder. */
-function LiveBanner({ show, segment, onWatch, onDismiss }: { show: PackShow; segment: ShowSegment; onWatch: () => void; onDismiss: () => void }) {
+function LiveBanner({ show, segment, onWatch, onDismiss }: { show: PackShow; segment: ShowSegment; onWatch?: () => void; onDismiss: () => void }) {
   const revealed = revealedCount(show, segment);
   const latest = revealed > 0 ? show.cards[revealed - 1] : null;
   return (
@@ -208,9 +207,11 @@ function LiveBanner({ show, segment, onWatch, onDismiss }: { show: PackShow; seg
           </div>
         )}
       </div>
-      <button onClick={onWatch} className="flex items-center gap-1.5 rounded-xl bg-white px-3 py-1.5 text-sm font-bold text-night-950 transition hover:brightness-90">
-        <Eye size={15} /> Regarder
-      </button>
+      {onWatch && (
+        <button onClick={onWatch} className="flex items-center gap-1.5 rounded-xl bg-white px-3 py-1.5 text-sm font-bold text-night-950 transition hover:brightness-90">
+          <Eye size={15} /> Regarder
+        </button>
+      )}
       <button onClick={onDismiss} aria-label="Ignorer" className="grid h-8 w-8 place-items-center rounded-lg text-white/50 transition hover:bg-white/10 hover:text-white">
         <X size={16} />
       </button>
@@ -241,39 +242,41 @@ export function PackTheater({ session, me, mapboxToken, onOwnShowEnd }: { sessio
     previousOwnShow.current = ownShowId;
   }, [ownShowId, onOwnShowEnd]);
 
-  if (!current) {
-    if (playing.length === 0) return null;
-    return (
-      <div className="fixed bottom-24 right-3 z-40 flex w-[min(22rem,calc(100%-1.5rem))] flex-col gap-2 md:bottom-4">
-        {playing.map(show => (
-          <LiveBanner
-            key={show.id}
-            show={show}
-            segment={segmentAt(show, now)!.segment}
-            onWatch={() => setWatching(withId(watching, show.id))}
-            onDismiss={() => setDismissed(withId(dismissed, show.id))}
-          />
-        ))}
-      </div>
-    );
-  }
+  const isOpener = current?.opener.id === me.id;
+  const others = playing.filter(show => show !== current);
+  const banners = others.length > 0 && (
+    <div className={`fixed right-3 flex w-[min(22rem,calc(100%-1.5rem))] flex-col gap-2 ${current ? 'top-20 z-[60]' : 'bottom-24 z-40 md:bottom-4'}`}>
+      {others.map(show => (
+        <LiveBanner
+          key={show.id}
+          show={show}
+          segment={segmentAt(show, now)!.segment}
+          onWatch={isOpener ? undefined : () => setWatching(new Set([show.id]))}
+          onDismiss={() => setDismissed(withId(dismissed, show.id))}
+        />
+      ))}
+    </div>
+  );
 
-  const isOpener = current.opener.id === me.id;
+  if (!current) return banners || null;
 
   return (
-    <Theater
-      key={current.id}
-      session={session}
-      show={current}
-      now={now}
-      me={me}
-      participants={participants}
-      mapboxToken={mapboxToken}
-      onHide={() => {
-        const closing = isOpener || segmentAt(current, serverNow())?.segment.kind === 'summary';
-        if (closing) setDismissed(withId(dismissed, current.id));
-        else setWatching(withoutId(watching, current.id));
-      }}
-    />
+    <>
+      <Theater
+        key={current.id}
+        session={session}
+        show={current}
+        now={now}
+        me={me}
+        participants={participants}
+        mapboxToken={mapboxToken}
+        onHide={() => {
+          const closing = isOpener || segmentAt(current, serverNow())?.segment.kind === 'summary';
+          if (closing) setDismissed(withId(dismissed, current.id));
+          else setWatching(withoutId(watching, current.id));
+        }}
+      />
+      {banners}
+    </>
   );
 }
