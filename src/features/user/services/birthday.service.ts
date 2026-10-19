@@ -16,6 +16,7 @@ import { rc } from '../../../shared/economy/currency';
 
 export const BIRTHDAY_TZ = 'Europe/Paris';
 export const BIRTHDAY_EXPEDITIONS = 5;
+export const BIRTHDAY_MONEY_GIFT = 200;
 
 export async function sendBirthdayAnnouncement(
   client: Client,
@@ -31,7 +32,7 @@ export async function sendBirthdayAnnouncement(
   const discordUser = await client.users.fetch(discordId).catch(() => null);
   const avatarUrl = discordUser?.displayAvatarURL({ size: 256 });
 
-  const moneyGift = Math.floor(Math.random() * 91) + 10;
+  const moneyGift = BIRTHDAY_MONEY_GIFT;
 
   await Promise.all([
     UserModel.updateOne({ discordId }, { $inc: { 'profil.money': moneyGift } }),
