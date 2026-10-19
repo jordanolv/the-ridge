@@ -144,7 +144,7 @@ Le détail est dans `economy.md` §10. En résumé :
 - [ ] Mettre le `timestamp` du patchnote 1.11.0 au jour J
 - [ ] Prod, avant la fusion : clôturer les bets ouverts et les soirées avec récompense
 - [ ] PR `dev` → `main` en **merge commit**, à une heure creuse
-- [ ] Aucune partie d'arcade en cours, puis `docker exec <conteneur-bot> node scripts/redenominate.mjs`
+- [ ] `docker exec <conteneur-bot> node scripts/redenominate.mjs`
       (lire les chiffres : masse ~60 500, médiane ~50, 5 comptes plafonnés) puis `--apply`
 - [ ] Dashboard → *Paie hebdo* → **activer** (250 / 40 % / 1 800)
 - [ ] `/patchnote` dans le salon des annonces

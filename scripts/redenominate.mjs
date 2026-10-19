@@ -59,8 +59,6 @@ try {
     console.error('Etat non migrable — des montants en ancienne echelle seront verses apres coup :');
     if (bets) console.error(`  ${bets} bet(s) ouvert(s) ou verrouille(s) : les cloturer ou les rembourser d abord.`);
     if (parties) console.error(`  ${parties} soiree(s) non terminee(s) avec une recompense : les cloturer, ou remettre rewardAmount a zero.`);
-    console.error('\nLes paris d arcade en cours (shifumi, morpion, P4, battle) vivent en memoire :');
-    console.error('ne pas migrer pendant une partie, elle se reglerait a l ancienne echelle.');
     process.exit(1);
   }
 

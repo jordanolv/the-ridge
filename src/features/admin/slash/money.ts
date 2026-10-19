@@ -47,7 +47,7 @@ export default {
               .setStyle(TextInputStyle.Short)
               .setRequired(false)
               .setMaxLength(100)
-              .setPlaceholder(`Solde actuel : ${currentMoney} coins`),
+              .setPlaceholder(`Solde actuel : ${currentMoney} 💰`),
           ),
         );
 
@@ -91,8 +91,8 @@ export default {
       .setTitle(`${amount > 0 ? '➕' : '➖'} Argent ${action}`)
       .addFields(
         { name: 'Utilisateur', value: `<@${targetId}>`, inline: true },
-        { name: 'Montant', value: `${amount > 0 ? '+' : ''}${amount} coins`, inline: true },
-        { name: 'Nouveau solde', value: `${newBalance} coins`, inline: true },
+        { name: 'Montant', value: `${amount > 0 ? '+' : ''}${amount} 💰`, inline: true },
+        { name: 'Nouveau solde', value: `${newBalance} 💰`, inline: true },
       )
       .setFooter({ text: `Par ${interaction.user.username}${reason ? ` · ${reason}` : ''}` });
 
@@ -105,11 +105,11 @@ export default {
         embeds: [
           new EmbedBuilder()
             .setColor(amount > 0 ? 0x57f287 : 0xed4245)
-            .setTitle(`${amount > 0 ? '💰 Vous avez reçu des coins !' : '💸 Des coins ont été retirés'}`)
+            .setTitle(`${amount > 0 ? "💰 Vous avez reçu de l'argent !" : "💸 De l'argent a été retiré"}`)
             .setDescription(
-              `Un administrateur a ${action} **${absAmount} coins** de votre compte.${reason ? `\n**Raison :** ${reason}` : ''}`
+              `Un administrateur a ${action} **${absAmount}** 💰 de votre compte.${reason ? `\n**Raison :** ${reason}` : ''}`
             )
-            .addFields({ name: 'Nouveau solde', value: `${newBalance} coins` }),
+            .addFields({ name: 'Nouveau solde', value: `${newBalance} 💰` }),
         ],
       });
     } catch {

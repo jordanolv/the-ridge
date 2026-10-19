@@ -14,7 +14,6 @@ export interface ChallengeOptions {
   opponent: User;
   gameName: string;
   gameEmoji: string;
-  bet?: number;
   targetScore?: number;
   customDescription?: string;
 }
@@ -24,12 +23,11 @@ export class ChallengeService {
     interaction: ChatInputCommandInteraction,
     options: ChallengeOptions,
   ): Promise<boolean> {
-    const { challenger, opponent, gameName, gameEmoji, bet = 0, targetScore, customDescription } = options;
+    const { challenger, opponent, gameName, gameEmoji, targetScore, customDescription } = options;
 
     let description = `${challenger} vous défie à une partie de **${gameName}** !\n\n`;
     if (customDescription) description += `${customDescription}\n\n`;
     else if (targetScore) description += `🎯 Premier à **${targetScore}** points\n`;
-    if (bet > 0) description += `💰 Mise : **${bet}** RidgeCoins\n\n`;
     description += `${opponent}, acceptez-vous ce défi ?`;
 
     const challengeEmbed = new EmbedBuilder()

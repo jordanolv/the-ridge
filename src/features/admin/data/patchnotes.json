@@ -635,6 +635,23 @@
             "items": [
               "Certains jours, une **question spéciale** remplace le choix des thèmes"
             ]
+          },
+          {
+            "title": "⚔️ Duels",
+            "items": [
+              "Shifumi, morpion, puissance 4 et battle se jouent maintenant **pour la gloire** : plus de mise en 💰. Les victoires comptent toujours dans tes stats `/me`"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "fix",
+        "blocks": [
+          {
+            "title": "🎉 Soirées",
+            "items": [
+              "Les récompenses en 💰 des soirées n'étaient jamais versées : elles le sont maintenant"
+            ]
           }
         ]
       }

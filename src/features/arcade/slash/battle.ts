@@ -19,7 +19,6 @@ interface BattleGame {
   player1: User;
   player2: User;
   ropePosition: number; // -3 à +3 (négatif = player2 gagne, positif = player1 gagne)
-  bet: number;
   currentRound: number;
   timeout?: NodeJS.Timeout;
 }
@@ -35,13 +34,6 @@ export default {
         .setName('adversaire')
         .setDescription('L\'adversaire à défier')
         .setRequired(true)
-    )
-    .addIntegerOption(option =>
-      option
-        .setName('mise')
-        .setDescription('Montant des RidgeCoins à miser')
-        .setRequired(false)
-        .setMinValue(0)
     ),
 
   async execute(interaction: ChatInputCommandInteraction) {
@@ -49,9 +41,8 @@ export default {
 
     const opponent = interaction.options.getUser('adversaire', true);
     const challenger = interaction.user;
-    const bet = interaction.options.getInteger('mise') || 0;
 
-    const error = await ArcadeValidationService.validatePvPGame(challenger, opponent, bet, 'battle');
+    const error = await ArcadeValidationService.validatePvPGame(challenger, opponent, 'battle');
     if (error) {
       await interaction.editReply({ content: error });
       return;
@@ -62,12 +53,11 @@ export default {
       opponent,
       gameName: 'Battle',
       gameEmoji: '⚔️',
-      bet,
     });
     if (!accepted) return;
 
     const gameId = `${challenger.id}-${opponent.id}-${Date.now()}`;
-    const game: BattleGame = { player1: challenger, player2: opponent, ropePosition: 0, bet, currentRound: 1 };
+    const game: BattleGame = { player1: challenger, player2: opponent, ropePosition: 0, currentRound: 1 };
     pendingGames.set(gameId, game);
     await this.startChallenge(game, interaction, gameId);
   },
@@ -116,7 +106,6 @@ export default {
       .setColor(0xff6b00)
       .setFooter({
         text: `Premier à tirer la corde jusqu'au bout gagne` +
-              (game.bet > 0 ? ` • Mise: ${game.bet} RidgeCoins` : '') +
               ` • /battle`
       });
 
@@ -184,7 +173,6 @@ export default {
             .setColor(0x00ff00)
             .setFooter({
               text: `Premier à tirer la corde jusqu'au bout gagne` +
-                    (game.bet > 0 ? ` • Mise: ${game.bet} RidgeCoins` : '') +
                     ` • /battle`
             });
 
@@ -225,11 +213,6 @@ export default {
       await UserService.recordArcadeLoss(loser.id, 'battle');
       await ArcadeStatsService.incrementGameCount('battle');
 
-      if (game.bet > 0) {
-        await UserService.updateUserMoney(loser.id, -game.bet, 'Battle — pari perdu', 'transfer');
-        await UserService.updateUserMoney(winner.id, game.bet, 'Battle — pari gagné', 'transfer');
-        victoryMsg += `\n\n💰 **+${game.bet}** RidgeCoins pour ${winner.username}`;
-      }
     } catch (error) {
       console.error('Erreur lors de la fin de partie:', error);
     }
@@ -243,7 +226,6 @@ export default {
       .setColor(0xffd700)
       .setFooter({
         text: `Partie terminée en ${game.currentRound} rounds` +
-              (game.bet > 0 ? ` • Mise: ${game.bet} RidgeCoins` : '') +
               ` • /battle`
       });
 

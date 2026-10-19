@@ -1,6 +1,7 @@
 import { Guild, GuildMember } from 'discord.js';
 import mongoose from 'mongoose';
 import UserModel from '../../user/models/user.model';
+import { UserService } from '../../user/services/user.service';
 import { LogService } from '../../../shared/logs/logs.service';
 import { ShopRentalRepository } from '../repositories/shop-rental.repository';
 import { PackBudgetRepository } from '../repositories/pack-budget.repository';
@@ -42,18 +43,6 @@ export type PurchaseFailure = 'closed' | 'soon' | 'variant' | 'limit' | 'funds' 
 export type PurchaseResult =
   | { ok: true; expiresAt?: Date; wallet: ShopWallet }
   | { ok: false; reason: PurchaseFailure };
-
-/**
- * Débit conditionnel : la condition sur le solde est dans le filtre, donc deux
- * clics simultanés ne peuvent pas passer tous les deux.
- */
-async function debit(userId: string, amount: number): Promise<boolean> {
-  const res = await UserModel.updateOne(
-    { discordId: userId, 'profil.money': { $gte: amount } },
-    { $inc: { 'profil.money': -amount } },
-  );
-  return res.modifiedCount === 1;
-}
 
 async function grant(member: GuildMember, item: ShopItem, variant: ShopVariant | undefined, qty: number): Promise<void> {
   const packTier = packTierOf(item);
@@ -108,7 +97,7 @@ export class ShopService {
     if (isPack && !(await PackBudgetRepository.reserve(member.id, weekKey, total, PACK_WEEKLY_BUDGET))) {
       return { ok: false, reason: 'limit' };
     }
-    if (!(await debit(member.id, total))) {
+    if (!(await UserService.tryDebit(member.id, total))) {
       await releaseBudget();
       return { ok: false, reason: 'funds' };
     }

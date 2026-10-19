@@ -1010,7 +1010,7 @@ async function loadParty() {
             <div class="muted" style="margin-bottom:6px">Qui était présent ?</div>
             ${e.participants.map((x) => `<label class="muted" style="display:inline-flex;gap:6px;margin-right:14px"><input type="checkbox" class="att-${e.id}" value="${x.id}" checked> ${esc(x.name)}</label>`).join('') || '<span class="muted">Aucun inscrit</span>'}
             <div class="row" style="margin-top:10px;justify-content:flex-start;align-items:flex-end">
-              <label class="muted">💰 / présent<input id="endMoney-${e.id}" class="small" style="display:block;margin-top:4px" type="number" min="0" value="0"></label>
+              <label class="muted" title="Une prime de soirée : 10 à 40 conseillé, 100 au maximum">💰 / présent (10–40)<input id="endMoney-${e.id}" class="small" style="display:block;margin-top:4px" type="number" min="0" max="100" value="0"></label>
               <label class="muted">XP / présent<input id="endXp-${e.id}" class="small" style="display:block;margin-top:4px" type="number" min="0" value="0"></label>
               <label class="muted">🏔️ expé / présent<input id="endExpe-${e.id}" class="small" style="display:block;margin-top:4px" type="number" min="0" value="0"></label>
               <button class="mini success" onclick="endParty('${e.id}')">Confirmer la clôture</button>

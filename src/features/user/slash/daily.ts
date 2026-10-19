@@ -3,6 +3,7 @@ import { isSilentDiscordError } from '../../../shared/utils/discord-errors';
 import { BotClient } from '../../../bot/client';
 import UserModel from '../models/user.model';
 import { LogService } from '../../../shared/logs/logs.service';
+import { parisMidnightUTC, toParisDayYMD } from '../../../shared/time/day-split';
 import { DailyStoryService } from '../services/daily-story.service';
 import { awardExpeditions } from '../../peak-hunters/services/expedition.service';
 import { dropMountain } from '../../peak-hunters/services/mountain.service';
@@ -40,7 +41,7 @@ export default {
     try {
       await interaction.deferReply();
 
-      let user = await UserModel.findOne({
+      const user = await UserModel.findOne({
         discordId: interaction.user.id
       });
 
@@ -52,29 +53,18 @@ export default {
       }
 
       const now = new Date();
-      const lastClaim = user.stats.lastDailyClaimDate;
-      const toParisDay = (d: Date) => d.toLocaleDateString('sv', { timeZone: 'Europe/Paris' });
-
-      if (lastClaim && toParisDay(new Date(lastClaim)) === toParisDay(now)) {
-        const parisNow = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Paris' }));
-        const nextParisMidnight = new Date(parisNow);
-        nextParisMidnight.setDate(nextParisMidnight.getDate() + 1);
-        nextParisMidnight.setHours(0, 0, 0, 0);
-        const tomorrowTimestamp = Math.floor((nextParisMidnight.getTime() + (now.getTime() - parisNow.getTime())) / 1000);
-
-        await interaction.editReply({
-          content: `⏰ Vous avez déjà réclamé votre récompense quotidienne aujourd'hui !\n` +
-                   `Revenez <t:${tomorrowTimestamp}:R>.`
-        });
-        return;
-      }
-
       const moneyReward = randomUpTo(MAX_MONEY);
       const xpReward = randomUpTo(MAX_XP);
       const packsReward = rollPacks();
 
-      user = await UserModel.findOneAndUpdate(
-        { discordId: interaction.user.id },
+      const claimed = await UserModel.findOneAndUpdate(
+        {
+          discordId: interaction.user.id,
+          $or: [
+            { 'stats.lastDailyClaimDate': null },
+            { 'stats.lastDailyClaimDate': { $lt: parisMidnightUTC(toParisDayYMD(now)) } },
+          ],
+        },
         {
           $inc: {
             'profil.money': moneyReward,
@@ -88,9 +78,16 @@ export default {
         { new: true }
       );
 
-      if (!user) {
+      if (!claimed) {
+        const parisNow = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Paris' }));
+        const nextParisMidnight = new Date(parisNow);
+        nextParisMidnight.setDate(nextParisMidnight.getDate() + 1);
+        nextParisMidnight.setHours(0, 0, 0, 0);
+        const tomorrowTimestamp = Math.floor((nextParisMidnight.getTime() + (now.getTime() - parisNow.getTime())) / 1000);
+
         await interaction.editReply({
-          content: '❌ Erreur lors de la mise à jour.'
+          content: `⏰ Vous avez déjà réclamé votre récompense quotidienne aujourd'hui !\n` +
+                   `Revenez <t:${tomorrowTimestamp}:R>.`
         });
         return;
       }
@@ -109,7 +106,7 @@ export default {
       const fields = [
         {
           name: '💰 Argent',
-          value: `+${moneyReward} 💵`,
+          value: `+${moneyReward} 💰`,
           inline: true
         },
         {
