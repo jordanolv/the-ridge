@@ -177,9 +177,9 @@ Les fragments sont le **chemin gratuit** : celui des 73 comptes sur 83 qui ne to
 pas de paie, et la valeur résiduelle des doublons. Ne pas les rendre plus chers pour
 « protéger » la boutique.
 
-### Une limite de 150 RC de packs par semaine
+### Une limite de 200 RC de packs par semaine
 
-Chaque joueur peut dépenser au plus **150 RC en packs par semaine** (lundi → dimanche,
+Chaque joueur peut dépenser au plus **200 RC en packs par semaine** (lundi → dimanche,
 heure de Paris), tous packs confondus. Constante `PACK_WEEKLY_BUDGET` dans `catalog.ts`,
 dépense suivie dans la collection `shop_pack_budgets` ; `/shop` affiche où on en est.
 
@@ -188,13 +188,16 @@ La boutique est à prix fixes : sans limite, un gros solde ne fait monter aucun 
 collection perd son sens pour lui, et devant tout le serveur.
 
 La limite ne gêne pas un joueur ordinaire : la paie médiane est de ~237 RC par semaine,
-et personne n'en met 150 dans les packs. Elle ne touche que ceux qui ont un stock. Elle
+et rares sont ceux qui en mettraient 200 dans les packs. Elle ne touche que ceux qui ont
+un stock. À 200, on peut encore s'offrir 4 Sommets par semaine (150 n'en laissait que 3,
+ce qui frustrait plus qu'il ne protégeait). Elle
 fixe aussi la vitesse maximale de complétion, la même pour tous :
 
 | Limite / semaine | Collection complète au plus tôt (en Falaises) |
 |---|---:|
 | 100 | ~2 ans |
-| **150** | **~16 mois** |
+| 150 | ~16 mois |
+| **200** | **~1 an** |
 | 250 | ~10 mois |
 
 Les expéditions gratuites et les fragments raccourcissent ces durées, pour tout le monde
